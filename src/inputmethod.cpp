@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <dlog.h>
 #include <sclcore.h>
+#include "inputmethod_private.h"
 #include <inputmethod.h>
 
 #ifdef LOG_TAG
@@ -28,9 +28,6 @@
 #define LOG_TAG "INPUTMETHOD"
 
 using namespace scl;
-
-inputmethod_primitive_callback_s g_inputmethod_primitive_callback = {NULL};
-inputmethod_extended_callback_s g_inputmethod_extended_callback = {NULL};
 
 class CCoreEventCallback : public ISCLCoreEventCallback
 {
@@ -58,83 +55,133 @@ class CCoreEventCallback : public ISCLCoreEventCallback
     void on_destroy_option_window(sclwindow window);
 };
 
+typedef struct
+{
+    inputmethod_focus_in_cb focus_in;   /**< Called when an edit field has focus */
+    inputmethod_focus_out_cb focus_out; /**< Called when an edit field loses focus */
+    inputmethod_surrounding_text_updated_cb surrounding_text_updated;   /**< Called when an edit field responds to a request with the surrounding text */
+    inputmethod_input_context_reset_cb input_context_reset;             /**< Called to reset the input context of an edit field */
+    inputmethod_cursor_position_updated_cb cursor_position_updated;     /**< Called when the position of the cursor in an edit field changes */
+    inputmethod_language_requested_cb language_requested;   /**< Called when an edit field requests for the language of the input panel */
+    inputmethod_language_set_cb language_set;   /**< Called to set the preferred language to the input panel */
+    inputmethod_imdata_set_cb imdata_set;       /**< Called to set the application specific data to deliver to the input panel */
+    inputmethod_layout_set_cb layout_set;       /**< Called when an edit field requests the input panel to set its layout */
+    inputmethod_return_key_type_set_cb return_key_type_set;     /**< Called when an edit field requests the input panel to set the "return" key label */
+    inputmethod_return_key_state_set_cb return_key_state_set;   /**< Called when an edit field requests the input panel to enable or disable the "return" key state. */
+    inputmethod_geometry_requested_cb geometry_requested;       /**< Called when an edit field requests for the position and size of the input panel */
+    inputmethod_display_language_changed_cb display_language_changed;   /**< Called when the system display language is changed */
+    inputmethod_rotation_degree_changed_cb rotation_degree_changed;     /**< Called when the device is rotated */
+    inputmethod_accessibility_state_changed_cb accessibility_state_changed; /**< Called when Accessibility in Settings application is on or off */
+    inputmethod_option_window_created_cb option_window_created;     /**< Called to create the option window */
+    inputmethod_option_window_destroyed_cb option_window_destroyed; /**< Called to destroy the option window */
+    void *focus_in_user_data;
+    void *focus_out_user_data;
+    void *surrounding_text_updated_user_data;
+    void *input_context_reset_user_data;
+    void *cursor_position_updated_user_data;
+    void *language_requested_user_data;
+    void *language_set_user_data;
+    void *imdata_set_user_data;
+    void *layout_set_user_data;
+    void *return_key_type_set_user_data;
+    void *return_key_state_set_user_data;
+    void *geometry_requested_user_data;
+    void *display_language_changed_user_data;
+    void *rotation_degree_changed_user_data;
+    void *accessibility_state_changed_user_data;
+    void *option_window_created_user_data;
+    void *option_window_destroyed_user_data;
+} inputmethod_event_callback_s;
+
+static inputmethod_callback_s g_basic_callback = {NULL};
+static inputmethod_event_callback_s g_event_callback = {NULL};
+static void *g_user_data = NULL;
+static bool g_running = false;
+
 static CCoreEventCallback g_core_event_callback;
 CSCLCore g_core(&g_core_event_callback);
 
+extern "C" {
+    extern void inputmethod_app_main(int argc, char **argv);
+}
+
 void CCoreEventCallback::on_init()
 {
-    if (g_inputmethod_primitive_callback.create) {
-        g_inputmethod_primitive_callback.create();
+    if (g_basic_callback.create) {
+        g_basic_callback.create(g_user_data);
     }
 }
 
 void CCoreEventCallback::on_run(int argc, char **argv)
 {
-    LOGD ("on_run\n");
-    inputmethod_efl_main(argc, argv);
+    LOGD ("on_run");
+    inputmethod_app_main(argc, argv);
 }
 
 void CCoreEventCallback::on_exit()
 {
-    if (g_inputmethod_primitive_callback.terminate) {
-        g_inputmethod_primitive_callback.terminate();
+    LOGD ("on_exit");
+    if (g_basic_callback.terminate) {
+        g_basic_callback.terminate(g_user_data);
     }
 }
 
 void CCoreEventCallback::on_update_cursor_position(sclint ic, const sclchar *ic_uuid, sclint cursor_pos)
 {
-    if (g_inputmethod_extended_callback.update_cursor_position) {
-        g_inputmethod_extended_callback.update_cursor_position(cursor_pos);
+    if (g_event_callback.cursor_position_updated) {
+        g_event_callback.cursor_position_updated(cursor_pos, g_event_callback.cursor_position_updated_user_data);
     }
 }
 
 void CCoreEventCallback::on_update_surrounding_text(sclint ic, const sclchar *text, sclint cursor)
 {
-    if (g_inputmethod_extended_callback.update_surrounding_text) {
-        g_inputmethod_extended_callback.update_surrounding_text(ic, text, cursor);
+    if (g_event_callback.surrounding_text_updated) {
+        g_event_callback.surrounding_text_updated(ic, text, cursor, g_event_callback.surrounding_text_updated_user_data);
     }
 }
 
 void CCoreEventCallback::on_focus_out(sclint ic, const sclchar *ic_uuid)
 {
-    if (g_inputmethod_extended_callback.focus_out) {
-        g_inputmethod_extended_callback.focus_out(ic);
+    if (g_event_callback.focus_out) {
+        g_event_callback.focus_out(ic, g_event_callback.focus_out_user_data);
     }
 }
 
 void CCoreEventCallback::on_focus_in(sclint ic, const sclchar *ic_uuid)
 {
-    if (g_inputmethod_extended_callback.focus_in) {
-        g_inputmethod_extended_callback.focus_in(ic);
+    if (g_event_callback.focus_in) {
+        g_event_callback.focus_in(ic, g_event_callback.focus_in_user_data);
     }
 }
 
 void CCoreEventCallback::on_ise_show(sclint ic, const int degree, Ise_Context context)
 {
-    input_context_s input_context;
-    input_context.language = context.language;
-    input_context.layout = context.layout;
-    input_context.return_key_type = context.return_key_type;
-    input_context.client_window = context.client_window;
-    input_context.imdata_size = context.imdata_size;
-    input_context.cursor_pos = context.cursor_pos;
-    input_context.return_key_disabled = context.return_key_disabled;
-    input_context.prediction_allow = context.prediction_allow;
-    input_context.password_mode = context.password_mode;
-    input_context.layout_variation = context.layout_variation;
-    input_context.autocapital_type = context.autocapital_type;
-    input_context.input_hint = context.input_hint;
-    input_context.bidi_direction = context.bidi_direction;
+    if (g_basic_callback.show) {
+        struct _inputmethod_context input_context;
 
-    if (g_inputmethod_primitive_callback.show) {
-        g_inputmethod_primitive_callback.show(ic, input_context);
+        memset(&input_context, 0, sizeof(struct _inputmethod_context));
+        input_context.layout = context.layout;
+        input_context.layout_variation = context.layout_variation;
+        input_context.cursor_pos = context.cursor_pos;
+        input_context.autocapital_type = context.autocapital_type;
+        input_context.return_key_type = context.return_key_type;
+        input_context.return_key_disabled = context.return_key_disabled;
+        input_context.prediction_allow = context.prediction_allow;
+        input_context.password_mode = context.password_mode;
+        input_context.imdata_size = context.imdata_size;
+        input_context.input_hint = context.input_hint;
+        input_context.bidi_direction = context.bidi_direction;
+        input_context.language = context.language;
+        input_context.client_window = context.client_window;
+
+        g_basic_callback.show(ic, (inputmethod_context_h)&input_context, g_user_data);
     }
 }
 
 void CCoreEventCallback::on_ise_hide(sclint ic, const sclchar *ic_uuid)
 {
-    if (g_inputmethod_primitive_callback.hide) {
-        g_inputmethod_primitive_callback.hide(ic);
+    if (g_basic_callback.hide) {
+        g_basic_callback.hide(ic, g_user_data);
     }
 }
 
@@ -145,8 +192,8 @@ void CCoreEventCallback::on_get_geometry(sclu32 *pos_x, sclu32 *pos_y, sclu32 *w
     int geometry_width = 0;
     int geometry_height = 0;
 
-    if (g_inputmethod_extended_callback.get_geometry) {
-        g_inputmethod_extended_callback.get_geometry(&geometry_pos_x, &geometry_pos_y, &geometry_width, &geometry_height);
+    if (g_event_callback.geometry_requested) {
+        g_event_callback.geometry_requested(g_event_callback.geometry_requested_user_data, &geometry_pos_x, &geometry_pos_y, &geometry_width, &geometry_height);
     }
 
     if (pos_x)
@@ -164,156 +211,466 @@ void CCoreEventCallback::on_get_geometry(sclu32 *pos_x, sclu32 *pos_y, sclu32 *w
 
 void CCoreEventCallback::on_set_language(Ecore_IMF_Input_Panel_Lang language)
 {
-    if (g_inputmethod_extended_callback.set_language) {
-        g_inputmethod_extended_callback.set_language(language);
+    if (g_event_callback.language_set) {
+        g_event_callback.language_set(language, g_event_callback.language_set_user_data);
     }
 }
 
 void CCoreEventCallback::on_set_imdata(sclchar *buf, sclu32 len)
 {
-    if (g_inputmethod_extended_callback.set_imdata) {
-        g_inputmethod_extended_callback.set_imdata((void *)buf, len);
+    if (g_event_callback.imdata_set) {
+        g_event_callback.imdata_set((void *)buf, len, g_event_callback.imdata_set_user_data);
     }
 }
 
 void CCoreEventCallback::on_get_language_locale(sclint ic, sclchar **locale)
 {
-    if (g_inputmethod_extended_callback.get_language_locale) {
-        g_inputmethod_extended_callback.get_language_locale(locale);
+    if (g_event_callback.language_requested) {
+        g_event_callback.language_requested(g_event_callback.language_requested_user_data, locale);
     }
 }
 
 void CCoreEventCallback::on_set_return_key_type(Ecore_IMF_Input_Panel_Return_Key_Type type)
 {
-    if (g_inputmethod_extended_callback.set_return_key_type) {
-        g_inputmethod_extended_callback.set_return_key_type(type);
+    if (g_event_callback.return_key_type_set) {
+        g_event_callback.return_key_type_set(type, g_event_callback.return_key_type_set_user_data);
     }
 }
 
 void CCoreEventCallback::on_set_return_key_disable(bool disabled)
 {
-    if (g_inputmethod_extended_callback.set_return_key_disable) {
-        g_inputmethod_extended_callback.set_return_key_disable(disabled);
+    if (g_event_callback.return_key_state_set) {
+        g_event_callback.return_key_state_set(disabled, g_event_callback.return_key_state_set_user_data);
     }
 }
 
 void CCoreEventCallback::on_set_layout(Ecore_IMF_Input_Panel_Layout layout)
 {
-    if (g_inputmethod_extended_callback.set_layout) {
-        g_inputmethod_extended_callback.set_layout(layout);
+    if (g_event_callback.layout_set) {
+        g_event_callback.layout_set(layout, g_event_callback.layout_set_user_data);
     }
 }
 
 void CCoreEventCallback::on_reset_input_context(sclint ic, const sclchar *uuid)
 {
-    if (g_inputmethod_extended_callback.reset_input_context) {
-        g_inputmethod_extended_callback.reset_input_context();
+    if (g_event_callback.input_context_reset) {
+        g_event_callback.input_context_reset(g_event_callback.input_context_reset_user_data);
     }
 }
 
 void CCoreEventCallback::on_set_display_language(const sclchar *language)
 {
-    if (g_inputmethod_extended_callback.set_display_language) {
-        g_inputmethod_extended_callback.set_display_language(language);
+    if (g_event_callback.display_language_changed) {
+        g_event_callback.display_language_changed(language, g_event_callback.display_language_changed_user_data);
     }
 }
 
 void CCoreEventCallback::on_set_rotation_degree(sclint degree)
 {
-    if (g_inputmethod_extended_callback.set_rotation_degree) {
-        g_inputmethod_extended_callback.set_rotation_degree(degree);
+    if (g_event_callback.rotation_degree_changed) {
+        g_event_callback.rotation_degree_changed(degree, g_event_callback.rotation_degree_changed_user_data);
     }
 }
 
 void CCoreEventCallback::on_set_accessibility_state(sclboolean state)
 {
-    if (g_inputmethod_extended_callback.set_accessibility_state) {
-        g_inputmethod_extended_callback.set_accessibility_state(state);
+    if (g_event_callback.accessibility_state_changed) {
+        g_event_callback.accessibility_state_changed(state, g_event_callback.accessibility_state_changed_user_data);
     }
 }
 
 void CCoreEventCallback::on_create_option_window(sclwindow window, SCLOptionWindowType type)
 {
-    if (g_inputmethod_extended_callback.create_option_window) {
-        g_inputmethod_extended_callback.create_option_window(static_cast<Evas_Object*>(window), (inputmethod_option_window_type_e)type);
+    if (g_event_callback.option_window_created) {
+        g_event_callback.option_window_created(static_cast<Evas_Object*>(window), (inputmethod_option_window_type_e)type, g_event_callback.option_window_created_user_data);
     }
 }
 
 void CCoreEventCallback::on_destroy_option_window(sclwindow window)
 {
-    if (g_inputmethod_extended_callback.destroy_option_window) {
-        g_inputmethod_extended_callback.destroy_option_window(static_cast<Evas_Object*>(window));
+    if (g_event_callback.option_window_destroyed) {
+        g_event_callback.option_window_destroyed(static_cast<Evas_Object*>(window), g_event_callback.option_window_destroyed_user_data);
     }
 }
 
-void inputmethod_set_primitive_cb(inputmethod_primitive_callback_s callback)
+int inputmethod_run(inputmethod_callback_s *basic_cb, void *user_data)
 {
-    g_inputmethod_primitive_callback = callback;
-}
+    if (g_running) {
+        LOGE("inputmethod main loop is already running.");
+        return INPUTMETHOD_ERROR_OPERATION_FAILED;
+    }
 
-void inputmethod_unset_primitive_cb(void)
-{
-    memset(&g_inputmethod_primitive_callback, 0x00, sizeof(g_inputmethod_primitive_callback));
-}
+    if (!basic_cb) {
+        LOGE("basic callbacks pointer is null.");
+        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+    }
 
-void inputmethod_set_extended_cb(inputmethod_extended_callback_s callback)
-{
-    g_inputmethod_extended_callback = callback;
-}
+    g_basic_callback = *basic_cb;
 
-void inputmethod_unset_extended_cb(void)
-{
-    memset(&g_inputmethod_extended_callback, 0x00, sizeof(g_inputmethod_extended_callback));
-}
+    if (!g_basic_callback.create || !g_basic_callback.terminate ||
+        !g_basic_callback.show || !g_basic_callback.hide) {
+        LOGE("mandatory callback funtions are not set");
+        memset(&g_basic_callback, 0, sizeof(inputmethod_callback_s));
+        memset(&g_event_callback, 0, sizeof(inputmethod_event_callback_s));
+        return INPUTMETHOD_ERROR_NO_CALLBACK_FUNCTION;
+    }
 
-void inputmethod_run(void)
-{
+    g_user_data = user_data;
+    g_running = true;
+
     g_core.run();
+
+    memset(&g_basic_callback, 0, sizeof(inputmethod_callback_s));
+    memset(&g_event_callback, 0, sizeof(inputmethod_event_callback_s));
+    g_user_data = NULL;
+    g_running = false;
+
+    return INPUTMETHOD_ERROR_NONE;
 }
 
-void inputmethod_send_key_event(inputmethod_key_code_e keycode, inputmethod_key_mask_e keymask)
+int inputmethod_event_set_focus_in_cb(inputmethod_focus_in_cb callback_func, void *user_data)
 {
+    if (!callback_func)
+        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+
+    if (g_running)
+        return INPUTMETHOD_ERROR_OPERATION_FAILED;
+
+    g_event_callback.focus_in = callback_func;
+    g_event_callback.focus_in_user_data = user_data;
+
+    return INPUTMETHOD_ERROR_NONE;
+}
+
+int inputmethod_event_set_focus_out_cb(inputmethod_focus_out_cb callback_func, void *user_data)
+{
+    if (!callback_func)
+        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+
+    if (g_running)
+        return INPUTMETHOD_ERROR_OPERATION_FAILED;
+
+    g_event_callback.focus_out = callback_func;
+    g_event_callback.focus_out_user_data = user_data;
+
+    return INPUTMETHOD_ERROR_NONE;
+}
+
+int inputmethod_event_set_surrounding_text_updated_cb(inputmethod_surrounding_text_updated_cb callback_func, void *user_data)
+{
+    if (!callback_func)
+        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+
+    if (g_running)
+        return INPUTMETHOD_ERROR_OPERATION_FAILED;
+
+    g_event_callback.surrounding_text_updated = callback_func;
+    g_event_callback.surrounding_text_updated_user_data = user_data;
+
+    return INPUTMETHOD_ERROR_NONE;
+}
+
+int inputmethod_event_set_input_context_reset_cb(inputmethod_input_context_reset_cb callback_func, void *user_data)
+{
+    if (!callback_func)
+        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+
+    if (g_running)
+        return INPUTMETHOD_ERROR_OPERATION_FAILED;
+
+    g_event_callback.input_context_reset = callback_func;
+    g_event_callback.input_context_reset_user_data = user_data;
+
+    return INPUTMETHOD_ERROR_NONE;
+}
+
+int inputmethod_event_set_cursor_position_updated_cb(inputmethod_cursor_position_updated_cb callback_func, void *user_data)
+{
+    if (!callback_func)
+        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+
+    if (g_running)
+        return INPUTMETHOD_ERROR_OPERATION_FAILED;
+
+    g_event_callback.cursor_position_updated = callback_func;
+    g_event_callback.cursor_position_updated_user_data = user_data;
+
+    return INPUTMETHOD_ERROR_NONE;
+}
+
+int inputmethod_event_set_language_requested_cb(inputmethod_language_requested_cb callback_func, void *user_data)
+{
+    if (!callback_func)
+        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+
+    if (g_running)
+        return INPUTMETHOD_ERROR_OPERATION_FAILED;
+
+    g_event_callback.language_requested = callback_func;
+    g_event_callback.language_requested_user_data = user_data;
+
+    return INPUTMETHOD_ERROR_NONE;
+}
+
+int inputmethod_event_set_language_set_cb(inputmethod_language_set_cb callback_func, void *user_data)
+{
+    if (!callback_func)
+        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+
+    if (g_running)
+        return INPUTMETHOD_ERROR_OPERATION_FAILED;
+
+    g_event_callback.language_set = callback_func;
+    g_event_callback.language_set_user_data = user_data;
+
+    return INPUTMETHOD_ERROR_NONE;
+}
+
+int inputmethod_event_set_imdata_set_cb(inputmethod_imdata_set_cb callback_func, void *user_data)
+{
+    if (!callback_func)
+        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+
+    if (g_running)
+        return INPUTMETHOD_ERROR_OPERATION_FAILED;
+
+    g_event_callback.imdata_set = callback_func;
+    g_event_callback.imdata_set_user_data = user_data;
+
+    return INPUTMETHOD_ERROR_NONE;
+}
+
+int inputmethod_event_set_layout_set_cb(inputmethod_layout_set_cb callback_func, void *user_data)
+{
+    if (!callback_func)
+        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+
+    if (g_running)
+        return INPUTMETHOD_ERROR_OPERATION_FAILED;
+
+    g_event_callback.layout_set = callback_func;
+    g_event_callback.layout_set_user_data = user_data;
+
+    return INPUTMETHOD_ERROR_NONE;
+}
+
+int inputmethod_event_set_return_key_type_set_cb(inputmethod_return_key_type_set_cb callback_func, void *user_data)
+{
+    if (!callback_func)
+        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+
+    if (g_running)
+        return INPUTMETHOD_ERROR_OPERATION_FAILED;
+
+    g_event_callback.return_key_type_set = callback_func;
+    g_event_callback.return_key_type_set_user_data = user_data;
+
+    return INPUTMETHOD_ERROR_NONE;
+}
+
+int inputmethod_event_set_return_key_state_set_cb(inputmethod_return_key_state_set_cb callback_func, void *user_data)
+{
+    if (!callback_func)
+        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+
+    if (g_running)
+        return INPUTMETHOD_ERROR_OPERATION_FAILED;
+
+    g_event_callback.return_key_state_set = callback_func;
+    g_event_callback.return_key_state_set_user_data = user_data;
+
+    return INPUTMETHOD_ERROR_NONE;
+}
+
+int inputmethod_event_set_geometry_requested_cb(inputmethod_geometry_requested_cb callback_func, void *user_data)
+{
+    if (!callback_func)
+        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+
+    if (g_running)
+        return INPUTMETHOD_ERROR_OPERATION_FAILED;
+
+    g_event_callback.geometry_requested = callback_func;
+    g_event_callback.geometry_requested_user_data = user_data;
+
+    return INPUTMETHOD_ERROR_NONE;
+}
+
+int inputmethod_event_set_display_language_changed_cb(inputmethod_display_language_changed_cb callback_func, void *user_data)
+{
+    if (!callback_func)
+        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+
+    if (g_running)
+        return INPUTMETHOD_ERROR_OPERATION_FAILED;
+
+    g_event_callback.display_language_changed = callback_func;
+    g_event_callback.display_language_changed_user_data = user_data;
+
+    return INPUTMETHOD_ERROR_NONE;
+}
+
+int inputmethod_event_set_rotation_degree_changed_cb(inputmethod_rotation_degree_changed_cb callback_func, void *user_data)
+{
+    if (!callback_func)
+        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+
+    if (g_running)
+        return INPUTMETHOD_ERROR_OPERATION_FAILED;
+
+    g_event_callback.rotation_degree_changed = callback_func;
+    g_event_callback.rotation_degree_changed_user_data = user_data;
+
+    return INPUTMETHOD_ERROR_NONE;
+}
+
+int inputmethod_event_set_accessibility_state_changed_cb(inputmethod_accessibility_state_changed_cb callback_func, void *user_data)
+{
+    if (!callback_func)
+        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+
+    if (g_running)
+        return INPUTMETHOD_ERROR_OPERATION_FAILED;
+
+    g_event_callback.accessibility_state_changed = callback_func;
+    g_event_callback.accessibility_state_changed_user_data = user_data;
+
+    return INPUTMETHOD_ERROR_NONE;
+}
+
+int inputmethod_event_set_option_window_created_cb(inputmethod_option_window_created_cb callback_func, void *user_data)
+{
+    if (!callback_func)
+        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+
+    if (g_running)
+        return INPUTMETHOD_ERROR_OPERATION_FAILED;
+
+    g_event_callback.option_window_created = callback_func;
+    g_event_callback.option_window_created_user_data = user_data;
+
+    return INPUTMETHOD_ERROR_NONE;
+}
+
+int inputmethod_event_set_option_window_destroyed_cb(inputmethod_option_window_destroyed_cb callback_func, void *user_data)
+{
+    if (!callback_func)
+        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+
+    if (g_running)
+        return INPUTMETHOD_ERROR_OPERATION_FAILED;
+
+    g_event_callback.option_window_destroyed = callback_func;
+    g_event_callback.option_window_destroyed_user_data = user_data;
+
+    return INPUTMETHOD_ERROR_NONE;
+}
+
+int inputmethod_send_key_event(inputmethod_key_code_e keycode, inputmethod_key_mask_e keymask)
+{
+    if (!g_running)
+        return INPUTMETHOD_ERROR_NOT_RUNNING;
+
     g_core.forward_key_event(-1, NULL, (sclu32)keycode, (sclu16)keymask);
+
+    return TIZEN_ERROR_NONE;
 }
 
-void inputmethod_commit_string(const char *str)
+int inputmethod_commit_string(const char *str)
 {
+    if (!g_running)
+        return INPUTMETHOD_ERROR_NOT_RUNNING;
+
     g_core.commit_string(-1, NULL, str);
+
+    return TIZEN_ERROR_NONE;
 }
 
-void inputmethod_show_preedit_string(void)
+int inputmethod_show_preedit_string(void)
 {
+    if (!g_running)
+        return INPUTMETHOD_ERROR_NOT_RUNNING;
+
     g_core.show_preedit_string(-1, NULL);
+
+    return TIZEN_ERROR_NONE;
 }
 
-void inputmethod_hide_preedit_string(void)
+int inputmethod_hide_preedit_string(void)
 {
+    if (!g_running)
+        return INPUTMETHOD_ERROR_NOT_RUNNING;
+
     g_core.hide_preedit_string(-1, NULL);
+
+    return TIZEN_ERROR_NONE;
 }
 
-void inputmethod_update_preedit_string(const char *str)
+int inputmethod_update_preedit_string(const char *str)
 {
+    if (!g_running)
+        return INPUTMETHOD_ERROR_NOT_RUNNING;
+
+    if (!str)
+        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+
     g_core.update_preedit_string(-1, NULL, str);
+
+    return TIZEN_ERROR_NONE;
 }
 
-void inputmethod_get_surrounding_text(int maxlen_before, int maxlen_after)
+int inputmethod_request_surrounding_text(int maxlen_before, int maxlen_after)
 {
+    if (!g_running)
+        return INPUTMETHOD_ERROR_NOT_RUNNING;
+
+    if (!g_event_callback.surrounding_text_updated)
+        return INPUTMETHOD_ERROR_NO_CALLBACK_FUNCTION;
+
     g_core.get_surrounding_text(NULL, maxlen_before, maxlen_after);
+
+    return TIZEN_ERROR_NONE;
 }
 
-void inputmethod_delete_surrounding_text(int offset, int len)
+int inputmethod_delete_surrounding_text(int offset, int len)
 {
+    if (!g_running)
+        return INPUTMETHOD_ERROR_NOT_RUNNING;
+
+    if (len <= 0)
+        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+
     g_core.delete_surrounding_text(offset, len);
+
+    return TIZEN_ERROR_NONE;
 }
 
 Evas_Object* inputmethod_get_main_window(void)
 {
-    return static_cast<Evas_Object*>(g_core.get_main_window());
+    Evas_Object *win = NULL;
+
+    if (!g_running) {
+        set_last_result(INPUTMETHOD_ERROR_NOT_RUNNING);
+        return NULL;
+    }
+
+    win = static_cast<Evas_Object*>(g_core.get_main_window());
+    if (win) {
+        set_last_result(INPUTMETHOD_ERROR_NONE);
+    }
+    else {
+        set_last_result(INPUTMETHOD_ERROR_OPERATION_FAILED);
+    }
+
+    return win;
 }
 
-void inputmethod_set_size_hints(int portrait_width, int portrait_height, int landscape_width, int landscape_height)
+int inputmethod_set_size(int portrait_width, int portrait_height, int landscape_width, int landscape_height)
 {
     SclSize portrait_size, landscape_size;
+
+    if (!g_running)
+        return INPUTMETHOD_ERROR_NOT_RUNNING;
 
     portrait_size.width = portrait_width;
     portrait_size.height = portrait_height;
@@ -322,14 +679,186 @@ void inputmethod_set_size_hints(int portrait_width, int portrait_height, int lan
     landscape_size.height = landscape_height;
 
     g_core.set_keyboard_size_hints(portrait_size, landscape_size);
+
+    return TIZEN_ERROR_NONE;
 }
 
-Evas_Object* inputmethod_create_option_window(void)
+int inputmethod_create_option_window(void)
 {
-    return static_cast<Evas_Object*>(g_core.create_option_window());
+    if (!g_running)
+        return INPUTMETHOD_ERROR_NOT_RUNNING;
+
+    if (!g_event_callback.option_window_created || !g_event_callback.option_window_destroyed) {
+        LOGW("inputmethod_create_option_window_cb() and inputmethod_destroy_option_window_cb() callback functions are not set.");
+        return INPUTMETHOD_ERROR_NO_CALLBACK_FUNCTION;
+    }
+
+    if (g_core.create_option_window())
+        return INPUTMETHOD_ERROR_NONE;
+    else
+        return INPUTMETHOD_ERROR_OPERATION_FAILED;
 }
 
-void inputmethod_destroy_option_window(Evas_Object *window)
+int inputmethod_destroy_option_window(Evas_Object *window)
 {
+    if (!window) {
+        LOGW("Window pointer is null.");
+        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+    }
+
+    if (!g_running)
+        return INPUTMETHOD_ERROR_NOT_RUNNING;
+
+    if (!g_event_callback.option_window_created || !g_event_callback.option_window_destroyed) {
+        LOGW("inputmethod_create_option_window_cb() and inputmethod_destroy_option_window_cb() callback functions are not set.");
+        return INPUTMETHOD_ERROR_NO_CALLBACK_FUNCTION;
+    }
+
     g_core.destroy_option_window(window);
+
+    return INPUTMETHOD_ERROR_NONE;
 }
+
+int inputmethod_context_get_layout(inputmethod_context_h context, Ecore_IMF_Input_Panel_Layout *layout)
+{
+    if (!context || !layout)
+        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+
+    if (!g_running)
+        return INPUTMETHOD_ERROR_NOT_RUNNING;
+
+    *layout = context->layout;
+
+    return INPUTMETHOD_ERROR_NONE;
+}
+
+int inputmethod_context_get_layout_variation(inputmethod_context_h context, inputmethod_layout_variation_e *layout_variation)
+{
+    if (!context || !layout_variation)
+        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+
+    if (!g_running)
+        return INPUTMETHOD_ERROR_NOT_RUNNING;
+
+    *layout_variation = static_cast<inputmethod_layout_variation_e>(context->layout_variation);
+
+    return INPUTMETHOD_ERROR_NONE;
+}
+
+int inputmethod_context_get_cursor_position(inputmethod_context_h context, int *cursor_pos)
+{
+    if (!context || !cursor_pos)
+        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+
+    if (!g_running)
+        return INPUTMETHOD_ERROR_NOT_RUNNING;
+
+    *cursor_pos = context->cursor_pos;
+
+    return INPUTMETHOD_ERROR_NONE;
+}
+
+int inputmethod_context_get_autocapital_type(inputmethod_context_h context, Ecore_IMF_Autocapital_Type *autocapital_type)
+{
+    if (!context || !autocapital_type)
+        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+
+    if (!g_running)
+        return INPUTMETHOD_ERROR_NOT_RUNNING;
+
+    *autocapital_type = context->autocapital_type;
+
+    return INPUTMETHOD_ERROR_NONE;
+}
+
+int inputmethod_context_get_return_key_type(inputmethod_context_h context, Ecore_IMF_Input_Panel_Return_Key_Type *return_key_type)
+{
+    if (!context || !return_key_type)
+        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+
+    if (!g_running)
+        return INPUTMETHOD_ERROR_NOT_RUNNING;
+
+    *return_key_type = context->return_key_type;
+
+    return INPUTMETHOD_ERROR_NONE;
+}
+
+int inputmethod_context_get_return_key_state(inputmethod_context_h context, bool *return_key_state)
+{
+    if (!context || !return_key_state)
+        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+
+    if (!g_running)
+        return INPUTMETHOD_ERROR_NOT_RUNNING;
+
+    *return_key_state = static_cast<bool>(context->return_key_disabled);
+
+    return INPUTMETHOD_ERROR_NONE;
+}
+
+int inputmethod_context_get_prediction_mode(inputmethod_context_h context, bool *prediction_mode)
+{
+    if (!context || !prediction_mode)
+        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+
+    if (!g_running)
+        return INPUTMETHOD_ERROR_NOT_RUNNING;
+
+    *prediction_mode = static_cast<bool>(context->prediction_allow);
+
+    return INPUTMETHOD_ERROR_NONE;
+}
+
+int inputmethod_context_get_password_mode(inputmethod_context_h context, bool *password_mode)
+{
+    if (!context || !password_mode)
+        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+
+    if (!g_running)
+        return INPUTMETHOD_ERROR_NOT_RUNNING;
+
+    *password_mode = static_cast<bool>(context->password_mode);
+
+    return INPUTMETHOD_ERROR_NONE;
+}
+
+int inputmethod_context_get_input_hint(inputmethod_context_h context, Ecore_IMF_Input_Hints *input_hint)
+{
+    if (!context || !input_hint)
+        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+
+    if (!g_running)
+        return INPUTMETHOD_ERROR_NOT_RUNNING;
+
+    *input_hint = context->input_hint;
+
+    return INPUTMETHOD_ERROR_NONE;
+}
+
+int inputmethod_context_get_bidi_direction(inputmethod_context_h context, Ecore_IMF_BiDi_Direction *bidi)
+{
+    if (!context || !bidi)
+        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+
+    if (!g_running)
+        return INPUTMETHOD_ERROR_NOT_RUNNING;
+
+    *bidi = context->bidi_direction;
+
+    return INPUTMETHOD_ERROR_NONE;
+}
+
+int inputmethod_context_get_language(inputmethod_context_h context, Ecore_IMF_Input_Panel_Lang *language)
+{
+    if (!context || !language)
+        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+
+    if (!g_running)
+        return INPUTMETHOD_ERROR_NOT_RUNNING;
+
+    *language = context->language;
+
+    return INPUTMETHOD_ERROR_NONE;
+}
+
