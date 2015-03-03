@@ -19,7 +19,7 @@
 
 /**
  * @file inputmethod.h
- * @brief This file contains inputmethod APIs and related enumeration.
+ * @brief This file contains input method APIs and related enumeration.
  */
 
 #include <tizen.h>
@@ -38,103 +38,103 @@ extern "C" {
  */
 
 /**
- * @brief Enumeration for inputmethod function error
+ * @brief Enumeration for input method function error
  *
  * @since_tizen 2.4
  */
 typedef enum
 {
-    INPUTMETHOD_ERROR_NONE = TIZEN_ERROR_NONE, /**< Successful */
-    INPUTMETHOD_ERROR_INVALID_PARAMETER = TIZEN_ERROR_INVALID_PARAMETER, /**< Invalid parameter */
-    INPUTMETHOD_ERROR_NO_CALLBACK_FUNCTION = TIZEN_ERROR_UIX_CLASS | 0x0001, /**< Necessary callback function is not set */
-    INPUTMETHOD_ERROR_NOT_RUNNING = TIZEN_ERROR_UIX_CLASS | 0x0002, /**< IME main loop isn't started yet */
-    INPUTMETHOD_ERROR_OPERATION_FAILED = TIZEN_ERROR_UIX_CLASS | 0x0003, /**< Operation failed */
-} inputmethod_error_e;
+    IME_ERROR_NONE = TIZEN_ERROR_NONE, /**< Successful */
+    IME_ERROR_INVALID_PARAMETER = TIZEN_ERROR_INVALID_PARAMETER, /**< Invalid parameter */
+    IME_ERROR_NO_CALLBACK_FUNCTION = TIZEN_ERROR_UIX_CLASS | 0x0001, /**< Necessary callback function is not set */
+    IME_ERROR_NOT_RUNNING = TIZEN_ERROR_UIX_CLASS | 0x0002, /**< IME main loop isn't started yet */
+    IME_ERROR_OPERATION_FAILED = TIZEN_ERROR_UIX_CLASS | 0x0003, /**< Operation failed */
+} ime_error_e;
 
 /**
  * @brief Enumeration of the option window type
  *
  * @since_tizen 2.4
  *
- * @see inputmethod_option_window_created_cb
+ * @see ime_option_window_created_cb
  */
 typedef enum
 {
-    INPUTMETHOD_OPTION_WINDOW_TYPE_KEYBOARD,  /**< Open from Keyboard */
-    INPUTMETHOD_OPTION_WINDOW_TYPE_SETTING_APPLICATION, /**< Open from Setting application */
-} inputmethod_option_window_type_e;
+    IME_OPTION_WINDOW_TYPE_KEYBOARD,  /**< Open from Keyboard */
+    IME_OPTION_WINDOW_TYPE_SETTING_APPLICATION, /**< Open from Setting application */
+} ime_option_window_type_e;
 
 /**
  * @brief Enumeration of layout variation
  *
  * @since_tizen 2.4
  *
- * @see inputmethod_context_get_layout_variation
+ * @see ime_context_get_layout_variation
  */
 typedef enum
 {
-    INPUTMETHOD_LAYOUT_NORMAL_VARIATION_NORMAL = 0, /**< The plain normal layout */
-    INPUTMETHOD_LAYOUT_NORMAL_VARIATION_FILENAME, /**< Filename layout; symbols such as '/', '*', '\', '|', '<', '>', '?', '"' and ':' should be disabled */
-    INPUTMETHOD_LAYOUT_NORMAL_VARIATION_PERSON_NAME, /**< The name of a person */
-    INPUTMETHOD_LAYOUT_NUMBERONLY_VARIATION_NORMAL = 0, /**< The plain normal number layout */
-    INPUTMETHOD_LAYOUT_NUMBERONLY_VARIATION_SIGNED, /**< The number layout to allow a negative sign */
-    INPUTMETHOD_LAYOUT_NUMBERONLY_VARIATION_DECIMAL, /**< The number layout to allow decimal point to provide fractional value */
-    INPUTMETHOD_LAYOUT_NUMBERONLY_VARIATION_SIGNED_AND_DECIMAL, /**< The number layout to allow decimal point and negative sign */
-    INPUTMETHOD_LAYOUT_PASSWORD_VARIATION_NORMAL = 0, /**< The normal password layout */
-    INPUTMETHOD_LAYOUT_PASSWORD_VARIATION_NUMBERONLY, /**< The password layout to allow only number */
-} inputmethod_layout_variation_e;
+    IME_LAYOUT_NORMAL_VARIATION_NORMAL = 0, /**< The plain normal layout */
+    IME_LAYOUT_NORMAL_VARIATION_FILENAME, /**< Filename layout; symbols such as '/', '*', '\', '|', '<', '>', '?', '"' and ':' should be disabled */
+    IME_LAYOUT_NORMAL_VARIATION_PERSON_NAME, /**< The name of a person */
+    IME_LAYOUT_NUMBERONLY_VARIATION_NORMAL = 0, /**< The plain normal number layout */
+    IME_LAYOUT_NUMBERONLY_VARIATION_SIGNED, /**< The number layout to allow a negative sign */
+    IME_LAYOUT_NUMBERONLY_VARIATION_DECIMAL, /**< The number layout to allow decimal point to provide fractional value */
+    IME_LAYOUT_NUMBERONLY_VARIATION_SIGNED_AND_DECIMAL, /**< The number layout to allow decimal point and negative sign */
+    IME_LAYOUT_PASSWORD_VARIATION_NORMAL = 0, /**< The normal password layout */
+    IME_LAYOUT_PASSWORD_VARIATION_NUMBERONLY, /**< The password layout to allow only number */
+} ime_layout_variation_e;
 
 /**
  * @brief Structure of an associated text input UI control's input context.
  *
- * @details This is one of parameters of inputmethod_show_cb() callback function. IME application
+ * @details This is one of parameters of ime_show_cb() callback function. IME application
  * should configure its input panel with this structure information.
  *
  * @since_tizen 2.4
  *
- * @see inputmethod_context_get_layout, inputmethod_context_get_layout_variation, inputmethod_context_get_cursor_position,
- * inputmethod_context_get_autocapital_type, inputmethod_context_get_return_key_type, inputmethod_context_get_return_key_state,
- * inputmethod_context_get_prediction_mode, inputmethod_context_get_password_mode, inputmethod_context_get_input_hint,
- * inputmethod_context_get_bidi_direction, inputmethod_context_get_language
+ * @see ime_context_get_layout, ime_context_get_layout_variation, ime_context_get_cursor_position,
+ * ime_context_get_autocapital_type, ime_context_get_return_key_type, ime_context_get_return_key_state,
+ * ime_context_get_prediction_mode, ime_context_get_password_mode, ime_context_get_input_hint,
+ * ime_context_get_bidi_direction, ime_context_get_language
  */
-typedef struct _inputmethod_context *inputmethod_context_h;
+typedef struct _ime_context *ime_context_h;
 
 /**
  * @brief Called when the input panel is created.
  *
- * @remarks This callback function is mandatory and must be registered using inputmethod_run(). The
- * inputmethod_get_main_window() can be used to get the created input panel window.
+ * @remarks This callback function is mandatory and must be registered using ime_run(). The
+ * ime_get_main_window() can be used to get the created input panel window.
  *
  * @since_tizen 2.4
  *
  * @param[in] user_data User data to be passed from the callback registration function
  *
- * @pre The inputmethod_run() function calls this callback function.
+ * @pre The ime_run() function calls this callback function.
  *
- * @see inputmethod_run, inputmethod_set_size, inputmethod_get_main_window
+ * @see ime_run, ime_set_size, ime_get_main_window
  */
-typedef void (*inputmethod_create_cb)(void *user_data);
+typedef void (*ime_create_cb)(void *user_data);
 
 /**
  * @brief Called when the input panel is terminated.
  *
- * @remarks This callback function is mandatory and must be registered using inputmethod_run(). The
- * inputmethod_get_main_window() can be used to get the created input panel window.
+ * @remarks This callback function is mandatory and must be registered using ime_run(). The
+ * ime_get_main_window() can be used to get the created input panel window.
  *
  * @since_tizen 2.4
  *
  * @param[in] user_data User data to be passed from the callback registration function
  *
- * @see inputmethod_run, inputmethod_get_main_window
+ * @see ime_run, ime_get_main_window
  */
-typedef void (*inputmethod_terminate_cb)(void *user_data);
+typedef void (*ime_terminate_cb)(void *user_data);
 
 /**
  * @brief Called when an associated text input UI control requests the input panel to show itself.
  *
- * @remarks This callback function is mandatory and must be registered using inputmethod_run().
- * IME application should configure its input panel with #inputmethod_context_h structure information.
- * The inputmethod_get_main_window() can be used to get the created input panel window.
+ * @remarks This callback function is mandatory and must be registered using ime_run().
+ * IME application should configure its input panel with #ime_context_h structure information.
+ * The ime_get_main_window() can be used to get the created input panel window.
  *
  * @since_tizen 2.4
  *
@@ -142,29 +142,29 @@ typedef void (*inputmethod_terminate_cb)(void *user_data);
  * @param[in] context The input context information pointer
  * @param[in] user_data User data to be passed from the callback registration function
  *
- * @see inputmethod_run, inputmethod_get_main_window, inputmethod_context_get_layout,
- * inputmethod_context_get_layout_variation, inputmethod_context_get_cursor_position,
- * inputmethod_context_get_autocapital_type, inputmethod_context_get_return_key_type,
- * inputmethod_context_get_return_key_state, inputmethod_context_get_prediction_mode,
- * inputmethod_context_get_password_mode, inputmethod_context_get_input_hint,
- * inputmethod_context_get_bidi_direction, inputmethod_context_get_language
+ * @see ime_run, ime_get_main_window, ime_context_get_layout,
+ * ime_context_get_layout_variation, ime_context_get_cursor_position,
+ * ime_context_get_autocapital_type, ime_context_get_return_key_type,
+ * ime_context_get_return_key_state, ime_context_get_prediction_mode,
+ * ime_context_get_password_mode, ime_context_get_input_hint,
+ * ime_context_get_bidi_direction, ime_context_get_language
  */
-typedef void (*inputmethod_show_cb)(int context_id, inputmethod_context_h context, void *user_data);
+typedef void (*ime_show_cb)(int context_id, ime_context_h context, void *user_data);
 
 /**
  * @brief Called when an associated text input UI control requests the input panel to hide itself.
  *
- * @remarks This callback function is mandatory and must be registered using inputmethod_run(). The
- * inputmethod_get_main_window() can be used to get the created input panel window.
+ * @remarks This callback function is mandatory and must be registered using ime_run(). The
+ * ime_get_main_window() can be used to get the created input panel window.
  *
  * @since_tizen 2.4
  *
  * @param[in] context_id The input context identification value of an associated text input UI control
  * @param[in] user_data User data to be passed from the callback registration function
  *
- * @see inputmethod_run, inputmethod_get_main_window
+ * @see ime_run, ime_get_main_window
  */
-typedef void (*inputmethod_hide_cb)(int context_id, void *user_data);
+typedef void (*ime_hide_cb)(int context_id, void *user_data);
 
 /**
  * @brief Called when an associated text input UI control has focus.
@@ -174,11 +174,11 @@ typedef void (*inputmethod_hide_cb)(int context_id, void *user_data);
  * @param[in] context_id The input context identification value of an associated text input UI control
  * @param[in] user_data User data to be passed from the callback registration function
  *
- * @pre The callback can be registered using inputmethod_event_set_focus_in_cb().
+ * @pre The callback can be registered using ime_event_set_focus_in_cb().
  *
- * @see inputmethod_event_set_focus_in_cb
+ * @see ime_event_set_focus_in_cb
  */
-typedef void (*inputmethod_focus_in_cb)(int context_id, void *user_data);
+typedef void (*ime_focus_in_cb)(int context_id, void *user_data);
 
 /**
  * @brief Called when an associated text input UI control loses focus.
@@ -188,16 +188,16 @@ typedef void (*inputmethod_focus_in_cb)(int context_id, void *user_data);
  * @param[in] context_id The input context identification value of an associated text input UI control
  * @param[in] user_data User data to be passed from the callback registration function
  *
- * @pre The callback can be registered using inputmethod_event_set_focus_out_cb().
+ * @pre The callback can be registered using ime_event_set_focus_out_cb().
  *
- * @see inputmethod_event_set_focus_out_cb
+ * @see ime_event_set_focus_out_cb
  */
-typedef void (*inputmethod_focus_out_cb)(int context_id, void *user_data);
+typedef void (*ime_focus_out_cb)(int context_id, void *user_data);
 
 /**
  * @brief Called when an associated text input UI control responds to a request with the surrounding text.
  *
- * @remarks The inputmethod_request_surrounding_text() must be called to invoke this callback function, asynchronously.
+ * @remarks The ime_request_surrounding_text() must be called to invoke this callback function, asynchronously.
  *
  * @since_tizen 2.4
  *
@@ -206,11 +206,11 @@ typedef void (*inputmethod_focus_out_cb)(int context_id, void *user_data);
  * @param[in] cursor_pos The cursor position
  * @param[in] user_data User data to be passed from the callback registration function
  *
- * @pre The callback can be registered using inputmethod_event_set_surrounding_text_updated_cb().
+ * @pre The callback can be registered using ime_event_set_surrounding_text_updated_cb().
  *
- * @see inputmethod_event_set_surrounding_text_updated_cb, inputmethod_request_surrounding_text
+ * @see ime_event_set_surrounding_text_updated_cb, ime_request_surrounding_text
  */
-typedef void (*inputmethod_surrounding_text_updated_cb)(int context_id, const char *text, int cursor_pos, void *user_data);
+typedef void (*ime_surrounding_text_updated_cb)(int context_id, const char *text, int cursor_pos, void *user_data);
 
 /**
  * @brief Called to reset the input context of an associated text input UI control.
@@ -219,11 +219,11 @@ typedef void (*inputmethod_surrounding_text_updated_cb)(int context_id, const ch
  *
  * @param[in] user_data User data to be passed from the callback registration function
  *
- * @pre The callback can be registered using inputmethod_event_set_input_context_reset_cb().
+ * @pre The callback can be registered using ime_event_set_input_context_reset_cb().
  *
- * @see inputmethod_event_set_input_context_reset_cb
+ * @see ime_event_set_input_context_reset_cb
  */
-typedef void (*inputmethod_input_context_reset_cb)(void *user_data);
+typedef void (*ime_input_context_reset_cb)(void *user_data);
 
 /**
  * @brief Called when the position of the cursor in an associated text input UI control changes.
@@ -233,11 +233,11 @@ typedef void (*inputmethod_input_context_reset_cb)(void *user_data);
  * @param[in] cursor_pos The cursor position
  * @param[in] user_data User data to be passed from the callback registration function
  *
- * @pre The callback can be registered using inputmethod_event_set_cursor_position_updated_cb().
+ * @pre The callback can be registered using ime_event_set_cursor_position_updated_cb().
  *
- * @see inputmethod_event_set_cursor_position_updated_cb
+ * @see ime_event_set_cursor_position_updated_cb
  */
-typedef void (*inputmethod_cursor_position_updated_cb)(int cursor_pos, void *user_data);
+typedef void (*ime_cursor_position_updated_cb)(int cursor_pos, void *user_data);
 
 /**
  * @brief Called when an associated text input UI control requests for the language of the input panel.
@@ -249,17 +249,17 @@ typedef void (*inputmethod_cursor_position_updated_cb)(int cursor_pos, void *use
  * @param[in] user_data User data to be passed from the callback registration function
  * @param[out] lang_code Input panel's current input language code
  *
- * @pre The callback can be registered using inputmethod_event_set_language_requested_cb().
+ * @pre The callback can be registered using ime_event_set_language_requested_cb().
  *
- * @see inputmethod_event_set_language_requested_cb
+ * @see ime_event_set_language_requested_cb
  */
-typedef void (*inputmethod_language_requested_cb)(void *user_data, char **lang_code);
+typedef void (*ime_language_requested_cb)(void *user_data, char **lang_code);
 
 /**
  * @brief Called to set the preferred language to the input panel.
  *
  * @remarks @a language information is already set to the input panel when it is shown
- * through #inputmethod_context_h. This callback function will be only called when the client
+ * through #ime_context_h. This callback function will be only called when the client
  * application changes the edit field's language attribute after the input panel is shown.
  *
  * @since_tizen 2.4
@@ -267,11 +267,11 @@ typedef void (*inputmethod_language_requested_cb)(void *user_data, char **lang_c
  * @param[in] language The preferred language that the client wants
  * @param[in] user_data User data to be passed from the callback registration function
  *
- * @pre The callback can be registered using inputmethod_event_set_language_set_cb().
+ * @pre The callback can be registered using ime_event_set_language_set_cb().
  *
- * @see inputmethod_event_set_language_set_cb
+ * @see ime_event_set_language_set_cb
  */
-typedef void (*inputmethod_language_set_cb)(Ecore_IMF_Input_Panel_Lang language, void *user_data);
+typedef void (*ime_language_set_cb)(Ecore_IMF_Input_Panel_Lang language, void *user_data);
 
 /**
  * @brief Called to set the application specific data to deliver to the input panel.
@@ -285,17 +285,17 @@ typedef void (*inputmethod_language_set_cb)(Ecore_IMF_Input_Panel_Lang language,
  * @param[in] data_len The length of data, in bytes, to send to the input panel
  * @param[in] user_data User data to be passed from the callback registration function
  *
- * @pre The callback can be registered using inputmethod_event_set_imdata_set_cb().
+ * @pre The callback can be registered using ime_event_set_imdata_set_cb().
  *
- * @see inputmethod_event_set_imdata_set_cb
+ * @see ime_event_set_imdata_set_cb
  */
-typedef void (*inputmethod_imdata_set_cb)(void *data, unsigned int data_len, void *user_data);
+typedef void (*ime_imdata_set_cb)(void *data, unsigned int data_len, void *user_data);
 
 /**
  * @brief Called when an associated text input UI control requests the input panel to set its layout.
  *
  * @remarks @a layout information is already set to the input panel when it is shown
- * through #inputmethod_context_h. This callback function will be only called when the client
+ * through #ime_context_h. This callback function will be only called when the client
  * application changes the edit field's layout attribute after the input panel is shown.
  *
  * @since_tizen 2.4
@@ -303,18 +303,18 @@ typedef void (*inputmethod_imdata_set_cb)(void *data, unsigned int data_len, voi
  * @param[in] layout The input panel layout
  * @param[in] user_data User data to be passed from the callback registration function
  *
- * @pre The callback can be registered using inputmethod_event_set_layout_set_cb().
+ * @pre The callback can be registered using ime_event_set_layout_set_cb().
  *
- * @see inputmethod_event_set_layout_set_cb
+ * @see ime_event_set_layout_set_cb
  */
-typedef void (*inputmethod_layout_set_cb)(Ecore_IMF_Input_Panel_Layout layout, void *user_data);
+typedef void (*ime_layout_set_cb)(Ecore_IMF_Input_Panel_Layout layout, void *user_data);
 
 /**
  * @brief Called when an associated text input UI control requests the input panel to set the @c Return key label.
  * The input panel can show text or image on the @c Return button according to the @c Return key action.
  *
  * @remarks @a type information is already set to the input panel when it is shown
- * through #inputmethod_context_h. This callback function will be only called when the client
+ * through #ime_context_h. This callback function will be only called when the client
  * application changes the edit field's @c Return key type attribute after the input panel
  * is shown.
  *
@@ -323,18 +323,18 @@ typedef void (*inputmethod_layout_set_cb)(Ecore_IMF_Input_Panel_Layout layout, v
  * @param[in] type The type of @c Return key on the input panel
  * @param[in] user_data User data to be passed from the callback registration function
  *
- * @pre The callback can be registered using inputmethod_event_set_return_key_type_set_cb().
+ * @pre The callback can be registered using ime_event_set_return_key_type_set_cb().
  *
- * @see inputmethod_event_set_return_key_type_set_cb
+ * @see ime_event_set_return_key_type_set_cb
  */
-typedef void (*inputmethod_return_key_type_set_cb)(Ecore_IMF_Input_Panel_Return_Key_Type type, void *user_data);
+typedef void (*ime_return_key_type_set_cb)(Ecore_IMF_Input_Panel_Return_Key_Type type, void *user_data);
 
 /**
  * @brief Called when an associated text input UI control requests the input panel to enable
  * or disable the @c Return key state.
  *
  * @remarks @a disabled information is already set to the input panel when it is shown
- * through #inputmethod_context_h. This callback function will be only called when the client
+ * through #ime_context_h. This callback function will be only called when the client
  * application changes the edit field's @c Return key disable attribute after the input panel
  * is shown.
  *
@@ -343,11 +343,11 @@ typedef void (*inputmethod_return_key_type_set_cb)(Ecore_IMF_Input_Panel_Return_
  * @param[in] disabled The Boolean state to disable @c Return key. The @c Return key is enabled by default
  * @param[in] user_data User data to be passed from the callback registration function
  *
- * @pre The callback can be registered using inputmethod_event_set_return_key_state_set_cb().
+ * @pre The callback can be registered using ime_event_set_return_key_state_set_cb().
  *
- * @see inputmethod_event_set_return_key_state_set_cb
+ * @see ime_event_set_return_key_state_set_cb
  */
-typedef void (*inputmethod_return_key_state_set_cb)(bool disabled, void *user_data);
+typedef void (*ime_return_key_state_set_cb)(bool disabled, void *user_data);
 
 /**
  * @brief Called when an associated text input UI control requests for the position
@@ -361,11 +361,11 @@ typedef void (*inputmethod_return_key_state_set_cb)(bool disabled, void *user_da
  * @param[out] w The window width
  * @param[out] h The window height
  *
- * @pre The callback can be registered using inputmethod_event_set_geometry_requested_cb().
+ * @pre The callback can be registered using ime_event_set_geometry_requested_cb().
  *
- * @see inputmethod_event_set_geometry_requested_cb
+ * @see ime_event_set_geometry_requested_cb
  */
-typedef void (*inputmethod_geometry_requested_cb)(void *user_data, int *x, int *y, int *w, int *h);
+typedef void (*ime_geometry_requested_cb)(void *user_data, int *x, int *y, int *w, int *h);
 
 /**
  * @brief Called when the system display language is changed.
@@ -375,11 +375,11 @@ typedef void (*inputmethod_geometry_requested_cb)(void *user_data, int *x, int *
  * @param[in] language The language code
  * @param[in] user_data User data to be passed from the callback registration function
  *
- * @pre The callback can be registered using inputmethod_event_set_display_language_changed_cb().
+ * @pre The callback can be registered using ime_event_set_display_language_changed_cb().
  *
- * @see inputmethod_event_set_display_language_changed_cb
+ * @see ime_event_set_display_language_changed_cb
  */
-typedef void (*inputmethod_display_language_changed_cb)(const char *language, void *user_data);
+typedef void (*ime_display_language_changed_cb)(const char *language, void *user_data);
 
 /**
  * @brief Called when the device is rotated.
@@ -389,11 +389,11 @@ typedef void (*inputmethod_display_language_changed_cb)(const char *language, vo
  * @param[in] degree The rotation degree
  * @param[in] user_data User data to be passed from the callback registration function
  *
- * @pre The callback can be registered using inputmethod_event_set_rotation_degree_changed_cb().
+ * @pre The callback can be registered using ime_event_set_rotation_degree_changed_cb().
  *
- * @see inputmethod_event_set_rotation_degree_changed_cb
+ * @see ime_event_set_rotation_degree_changed_cb
  */
-typedef void (*inputmethod_rotation_degree_changed_cb)(int degree, void *user_data);
+typedef void (*ime_rotation_degree_changed_cb)(int degree, void *user_data);
 
 /**
  * @brief Called when Accessibility in Settings application is on or off.
@@ -403,17 +403,17 @@ typedef void (*inputmethod_rotation_degree_changed_cb)(int degree, void *user_da
  * @param[in] state Accessibility option state
  * @param[in] user_data User data to be passed from the callback registration function
  *
- * @pre The callback can be registered using inputmethod_event_set_accessibility_state_changed_cb().
+ * @pre The callback can be registered using ime_event_set_accessibility_state_changed_cb().
  *
- * @see inputmethod_event_set_accessibility_state_changed_cb
+ * @see ime_event_set_accessibility_state_changed_cb
  */
-typedef void (*inputmethod_accessibility_state_changed_cb)(bool state, void *user_data);
+typedef void (*ime_accessibility_state_changed_cb)(bool state, void *user_data);
 
 /**
  * @brief Called to create the option window.
  *
- * @remarks if Input panel requests to open the option window, @a type will be #INPUTMETHOD_OPTION_WINDOW_TYPE_KEYBOARD.
- * And if Settings application requests to open it, @a type will be #INPUTMETHOD_OPTION_WINDOW_TYPE_SETTING_APPLICATION.
+ * @remarks if Input panel requests to open the option window, @a type will be #IME_OPTION_WINDOW_TYPE_KEYBOARD.
+ * And if Settings application requests to open it, @a type will be #IME_OPTION_WINDOW_TYPE_SETTING_APPLICATION.
  *
  * @since_tizen 2.4
  *
@@ -421,12 +421,12 @@ typedef void (*inputmethod_accessibility_state_changed_cb)(bool state, void *use
  * @param[in] type The type of option window
  * @param[in] user_data User data to be passed from the callback registration function
  *
- * @pre The callback can be registered using inputmethod_event_set_option_window_created_cb(). The
- * inputmethod_create_option_window() calls this callback function or Settings application can call this callback function.
+ * @pre The callback can be registered using ime_event_set_option_window_created_cb(). The
+ * ime_create_option_window() calls this callback function or Settings application can call this callback function.
  *
- * @see inputmethod_event_set_option_window_created_cb, inputmethod_create_option_window
+ * @see ime_event_set_option_window_created_cb, ime_create_option_window
  */
-typedef void (*inputmethod_option_window_created_cb)(Evas_Object *window, inputmethod_option_window_type_e type, void *user_data);
+typedef void (*ime_option_window_created_cb)(Evas_Object *window, ime_option_window_type_e type, void *user_data);
 
 /**
  * @brief Called to destroy the option window.
@@ -436,12 +436,12 @@ typedef void (*inputmethod_option_window_created_cb)(Evas_Object *window, inputm
  * @param[in] window The window object to destroy
  * @param[in] user_data User data to be passed to the callback function
  *
- * @pre The callback can be registered using inputmethod_event_set_option_window_destroyed_cb().
- * inputmethod_destroy_option_window() calls this callback function.
+ * @pre The callback can be registered using ime_event_set_option_window_destroyed_cb().
+ * ime_destroy_option_window() calls this callback function.
  *
- * @see inputmethod_event_set_option_window_destroyed_cb
+ * @see ime_event_set_option_window_destroyed_cb
  */
-typedef void (*inputmethod_option_window_destroyed_cb)(Evas_Object *window, void *user_data);
+typedef void (*ime_option_window_destroyed_cb)(Evas_Object *window, void *user_data);
 
 /**
  * @brief The structure type to contain the set of the essential callback functions for IME application lifecycle and appearance.
@@ -450,27 +450,27 @@ typedef void (*inputmethod_option_window_destroyed_cb)(Evas_Object *window, void
  *
  * @since_tizen 2.4
  *
- * @see inputmethod_run
+ * @see ime_run
  */
 typedef struct
 {
-    inputmethod_create_cb create;       /**< Called when the input panel is created */
-    inputmethod_terminate_cb terminate; /**< Called when the input panel is terminated */
-    inputmethod_show_cb show;           /**< Called when the input panel is requested to show itself */
-    inputmethod_hide_cb hide;           /**< Called when the input panel is requested to hide itself */
-} inputmethod_callback_s;
+    ime_create_cb create;       /**< Called when the input panel is created */
+    ime_terminate_cb terminate; /**< Called when the input panel is terminated */
+    ime_show_cb show;           /**< Called when the input panel is requested to show itself */
+    ime_hide_cb hide;           /**< Called when the input panel is requested to hide itself */
+} ime_callback_s;
 
 /**
  * @brief Runs the main loop of IME application.
  *
- * @details This function starts to run IME application's main loop. The inputmethod_create_cb()
+ * @details This function starts to run IME application's main loop. The ime_create_cb()
  * callback function is called to initialize IME application before the main loop starts up. And
- * the inputmethod_terminate_cb() callback function is called when IME application is terminated.
+ * the ime_terminate_cb() callback function is called when IME application is terminated.
  *
- * @remarks IME application needs to implement inputmethod_app_main() function which is the main
- * entry point of IME application. In inputmethod_app_main() function, the inputmethod_run()
- * function MUST be called with the necessary callback functions; inputmethod_create_cb(),
- * inputmethod_terminate_cb(), inputmethod_show_cb(), and inputmethod_hide_cb() callback functions
+ * @remarks IME application MUST implement ime_app_main() function which is the main
+ * entry point of IME application. In ime_app_main() function, the ime_run()
+ * function MUST be called with the necessary callback functions; ime_create_cb(),
+ * ime_terminate_cb(), ime_show_cb(), and ime_hide_cb() callback functions
  * are mandatory for IME application.
  *
  * @since_tizen 2.4
@@ -479,52 +479,52 @@ typedef struct
  * @param[in] user_data User data to be passed to the callback functions
  *
  * @return 0 if IME application ends successfully, otherwise a negative error value
- * @retval #INPUTMETHOD_ERROR_NONE No error
- * @retval #INPUTMETHOD_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #INPUTMETHOD_ERROR_NO_CALLBACK_FUNCTION Necessary callback function is not set
- * @retval #INPUTMETHOD_ERROR_OPERATION_FAILED Operation failed
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_NO_CALLBACK_FUNCTION Necessary callback function is not set
+ * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
- * @pre The inputmethod_event_set_***() functions can be called to set the event handling callback functions.
+ * @pre The ime_event_set_***() functions can be called to set the event handling callback functions.
  *
- * @see inputmethod_callback_s, inputmethod_event_set_focus_in_cb, inputmethod_event_set_focus_out_cb,
- * inputmethod_event_set_surrounding_text_updated_cb, inputmethod_event_set_input_context_reset_cb,
- * inputmethod_event_set_cursor_position_updated_cb, inputmethod_event_set_language_requested_cb,
- * inputmethod_event_set_language_set_cb, inputmethod_event_set_imdata_set_cb, inputmethod_event_set_layout_set_cb,
- * inputmethod_event_set_return_key_type_set_cb, inputmethod_event_set_return_key_state_set_cb,
- * inputmethod_event_set_geometry_requested_cb, inputmethod_event_set_display_language_changed_cb,
- * inputmethod_event_set_rotation_degree_changed_cb, inputmethod_event_set_accessibility_state_changed_cb,
- * inputmethod_event_set_option_window_created_cb, inputmethod_event_set_option_window_destroyed_cb
+ * @see ime_callback_s, ime_event_set_focus_in_cb, ime_event_set_focus_out_cb,
+ * ime_event_set_surrounding_text_updated_cb, ime_event_set_input_context_reset_cb,
+ * ime_event_set_cursor_position_updated_cb, ime_event_set_language_requested_cb,
+ * ime_event_set_language_set_cb, ime_event_set_imdata_set_cb, ime_event_set_layout_set_cb,
+ * ime_event_set_return_key_type_set_cb, ime_event_set_return_key_state_set_cb,
+ * ime_event_set_geometry_requested_cb, ime_event_set_display_language_changed_cb,
+ * ime_event_set_rotation_degree_changed_cb, ime_event_set_accessibility_state_changed_cb,
+ * ime_event_set_option_window_created_cb, ime_event_set_option_window_destroyed_cb
  *
  * @code
- static void ime_create_cb(void *user_data);
- static void ime_terminate_cb(void *user_data);
- static void ime_show_cb(int context_id, inputmethod_context_h context, void *user_data);
- static void ime_hide_cb(int context_id, void *user_data);
- static void ime_focus_in_cb(int context_id, void *user_data);
- static void ime_focus_out_cb(int context_id, void *user_data);
- static void ime_cursor_position_updated_cb(int cursor_pos, void *user_data);
+ static void inputmethod_create_cb(void *user_data);
+ static void inputmethod_terminate_cb(void *user_data);
+ static void inputmethod_show_cb(int context_id, ime_context_h context, void *user_data);
+ static void inputmethod_hide_cb(int context_id, void *user_data);
+ static void inputmethod_focus_in_cb(int context_id, void *user_data);
+ static void inputmethod_focus_out_cb(int context_id, void *user_data);
+ static void inputmethod_cursor_position_updated_cb(int cursor_pos, void *user_data);
 
- static void ime_create_cb(void *user_data)
+ static void inputmethod_create_cb(void *user_data)
  {
      Evas_Object *ime_win = NULL;
 
-     inputmethod_set_size(480, 400, 800, 400);
-     ime_win = inputmethod_get_main_window();
+     ime_set_size(480, 400, 800, 400);
+     ime_win = ime_get_main_window();
      if (ime_win) {
          // Prepare before showing IME window.
      }
  }
 
- static void ime_show_cb(int context_id, inputmethod_context_h context, void *user_data)
+ static void inputmethod_show_cb(int context_id, ime_context_h context, void *user_data)
  {
      Ecore_IMF_Input_Panel_Layout layout;
-     inputmethod_layout_variation_e layout_variation;
+     ime_layout_variation_e layout_variation;
      Evas_Object *ime_win;
 
-     inputmethod_context_get_layout(context, &layout);
-     inputmethod_context_get_layout_variation(context, &layout_variation);
+     ime_context_get_layout(context, &layout);
+     ime_context_get_layout_variation(context, &layout_variation);
 
-     ime_win = inputmethod_get_main_window();
+     ime_win = ime_get_main_window();
      if (ime_win) {
          // Compose IME UI properly with the context information and show.
 
@@ -532,37 +532,37 @@ typedef struct
      }
  }
 
- static void ime_hide_cb(int context_id, void *user_data)
+ static void inputmethod_hide_cb(int context_id, void *user_data)
  {
-     Evas_Object *ime_win = inputmethod_get_main_window();
+     Evas_Object *ime_win = ime_get_main_window();
      if (ime_win) {
          evas_object_hide(ime_win);
      }
  }
 
- void inputmethod_app_main(int argc, char **argv)
+ void ime_app_main(int argc, char **argv)
  {
-     inputmethod_callback_s basic_callback = {
-         ime_create_cb,
-         ime_terminate_cb,
-         ime_show_cb,
-         ime_hide_cb,
+     ime_callback_s basic_callback = {
+         inputmethod_create_cb,
+         inputmethod_terminate_cb,
+         inputmethod_show_cb,
+         inputmethod_hide_cb,
      };
 
-     inputmethod_event_set_focus_in_cb(ime_focus_in_cb, NULL);
-     inputmethod_event_set_focus_out_cb(ime_focus_out_cb, NULL);
-     inputmethod_event_set_cursor_position_updated_cb(ime_cursor_position_updated_cb, NULL);
+     ime_event_set_focus_in_cb(inputmethod_focus_in_cb, NULL);
+     ime_event_set_focus_out_cb(inputmethod_focus_out_cb, NULL);
+     ime_event_set_cursor_position_updated_cb(inputmethod_cursor_position_updated_cb, NULL);
 
-     inputmethod_run(&basic_callback, NULL);
+     ime_run(&basic_callback, NULL);
  }
  * @endcode
  */
-EXPORT_API int inputmethod_run(inputmethod_callback_s *basic_cb, void *user_data);
+EXPORT_API int ime_run(ime_callback_s *basic_cb, void *user_data);
 
 /**
  * @brief Sets @c focus_in event callback function.
  *
- * @remarks The inputmethod_focus_in_cb() callback function is called when an associated text input
+ * @remarks The ime_focus_in_cb() callback function is called when an associated text input
  * UI control has focus.
  *
  * @since_tizen 2.4
@@ -571,20 +571,20 @@ EXPORT_API int inputmethod_run(inputmethod_callback_s *basic_cb, void *user_data
  * @param[in] user_data User data to be passed to the callback function
  *
  * @return 0 on success, otherwise a negative error value
- * @retval #INPUTMETHOD_ERROR_NONE No error
- * @retval #INPUTMETHOD_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #INPUTMETHOD_ERROR_OPERATION_FAILED Operation failed
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
- * @post The inputmethod_run() function should be called to start to run IME application's main loop.
+ * @post The ime_run() function should be called to start to run IME application's main loop.
  *
- * @see inputmethod_focus_in_cb, inputmethod_run
+ * @see ime_focus_in_cb, ime_run
  */
-EXPORT_API int inputmethod_event_set_focus_in_cb(inputmethod_focus_in_cb callback_func, void *user_data);
+EXPORT_API int ime_event_set_focus_in_cb(ime_focus_in_cb callback_func, void *user_data);
 
 /**
  * @brief Sets @c focus_out event callback function.
  *
- * @remarks The inputmethod_focus_out_cb() callback function is called when an associated text input
+ * @remarks The ime_focus_out_cb() callback function is called when an associated text input
  * UI control loses focus.
  *
  * @since_tizen 2.4
@@ -593,20 +593,20 @@ EXPORT_API int inputmethod_event_set_focus_in_cb(inputmethod_focus_in_cb callbac
  * @param[in] user_data User data to be passed to the callback function
  *
  * @return 0 on success, otherwise a negative error value
- * @retval #INPUTMETHOD_ERROR_NONE No error
- * @retval #INPUTMETHOD_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #INPUTMETHOD_ERROR_OPERATION_FAILED Operation failed
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
- * @post The inputmethod_run() function should be called to start to run IME application's main loop.
+ * @post The ime_run() function should be called to start to run IME application's main loop.
  *
- * @see inputmethod_focus_out_cb, inputmethod_run
+ * @see ime_focus_out_cb, ime_run
  */
-EXPORT_API int inputmethod_event_set_focus_out_cb(inputmethod_focus_out_cb callback_func, void *user_data);
+EXPORT_API int ime_event_set_focus_out_cb(ime_focus_out_cb callback_func, void *user_data);
 
 /**
  * @brief Sets @c surrounding_text_updated event callback function.
  *
- * @remarks The inputmethod_surrounding_text_updated_cb() callback function is called when an
+ * @remarks The ime_surrounding_text_updated_cb() callback function is called when an
  * associated text input UI control responds to a request with the surrounding text.
  *
  * @since_tizen 2.4
@@ -615,20 +615,20 @@ EXPORT_API int inputmethod_event_set_focus_out_cb(inputmethod_focus_out_cb callb
  * @param[in] user_data User data to be passed to the callback function
  *
  * @return 0 on success, otherwise a negative error value
- * @retval #INPUTMETHOD_ERROR_NONE No error
- * @retval #INPUTMETHOD_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #INPUTMETHOD_ERROR_OPERATION_FAILED Operation failed
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
- * @post The inputmethod_run() function should be called to start to run IME application's main loop.
+ * @post The ime_run() function should be called to start to run IME application's main loop.
  *
- * @see inputmethod_surrounding_text_updated_cb, inputmethod_run
+ * @see ime_surrounding_text_updated_cb, ime_run
  */
-EXPORT_API int inputmethod_event_set_surrounding_text_updated_cb(inputmethod_surrounding_text_updated_cb callback_func, void *user_data);
+EXPORT_API int ime_event_set_surrounding_text_updated_cb(ime_surrounding_text_updated_cb callback_func, void *user_data);
 
 /**
  * @brief Sets #c input_context_reset event callback function.
  *
- * @remarks The inputmethod_input_context_reset_cb() callback function is called to reset the input
+ * @remarks The ime_input_context_reset_cb() callback function is called to reset the input
  * context of an associated text input UI control.
  *
  * @since_tizen 2.4
@@ -637,20 +637,20 @@ EXPORT_API int inputmethod_event_set_surrounding_text_updated_cb(inputmethod_sur
  * @param[in] user_data User data to be passed to the callback function
  *
  * @return 0 on success, otherwise a negative error value
- * @retval #INPUTMETHOD_ERROR_NONE No error
- * @retval #INPUTMETHOD_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #INPUTMETHOD_ERROR_OPERATION_FAILED Operation failed
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
- * @post The inputmethod_run() function should be called to start to run IME application's main loop.
+ * @post The ime_run() function should be called to start to run IME application's main loop.
  *
- * @see inputmethod_input_context_reset_cb, inputmethod_run
+ * @see ime_input_context_reset_cb, ime_run
  */
-EXPORT_API int inputmethod_event_set_input_context_reset_cb(inputmethod_input_context_reset_cb callback_func, void *user_data);
+EXPORT_API int ime_event_set_input_context_reset_cb(ime_input_context_reset_cb callback_func, void *user_data);
 
 /**
  * @brief Sets @c cursor_position_updated event callback function.
  *
- * @remarks The inputmethod_cursor_position_updated_cb() callback function is called when the position
+ * @remarks The ime_cursor_position_updated_cb() callback function is called when the position
  * of the cursor in an associated text input UI control changes.
  *
  * @since_tizen 2.4
@@ -659,20 +659,20 @@ EXPORT_API int inputmethod_event_set_input_context_reset_cb(inputmethod_input_co
  * @param[in] user_data User data to be passed to the callback function
  *
  * @return 0 on success, otherwise a negative error value
- * @retval #INPUTMETHOD_ERROR_NONE No error
- * @retval #INPUTMETHOD_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #INPUTMETHOD_ERROR_OPERATION_FAILED Operation failed
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
- * @post The inputmethod_run() function should be called to start to run IME application's main loop.
+ * @post The ime_run() function should be called to start to run IME application's main loop.
  *
- * @see inputmethod_cursor_position_updated_cb, inputmethod_run
+ * @see ime_cursor_position_updated_cb, ime_run
  */
-EXPORT_API int inputmethod_event_set_cursor_position_updated_cb(inputmethod_cursor_position_updated_cb callback_func, void *user_data);
+EXPORT_API int ime_event_set_cursor_position_updated_cb(ime_cursor_position_updated_cb callback_func, void *user_data);
 
 /**
  * @brief Sets @c language_requested event callback function.
  *
- * @remarks The inputmethod_language_requested_cb() callback function is called when an associated
+ * @remarks The ime_language_requested_cb() callback function is called when an associated
  * text input UI control requests for the language of the input panel.
  *
  * @since_tizen 2.4
@@ -681,20 +681,20 @@ EXPORT_API int inputmethod_event_set_cursor_position_updated_cb(inputmethod_curs
  * @param[in] user_data User data to be passed to the callback function
  *
  * @return 0 on success, otherwise a negative error value
- * @retval #INPUTMETHOD_ERROR_NONE No error
- * @retval #INPUTMETHOD_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #INPUTMETHOD_ERROR_OPERATION_FAILED Operation failed
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
- * @post The inputmethod_run() function should be called to start to run IME application's main loop.
+ * @post The ime_run() function should be called to start to run IME application's main loop.
  *
- * @see inputmethod_language_requested_cb, inputmethod_run
+ * @see ime_language_requested_cb, ime_run
  */
-EXPORT_API int inputmethod_event_set_language_requested_cb(inputmethod_language_requested_cb callback_func, void *user_data);
+EXPORT_API int ime_event_set_language_requested_cb(ime_language_requested_cb callback_func, void *user_data);
 
 /**
  * @brief Sets @c language_set event callback function.
  *
- * @remarks The inputmethod_language_set_cb() callback function is called to set the preferred
+ * @remarks The ime_language_set_cb() callback function is called to set the preferred
  * language to the input panel.
  *
  * @since_tizen 2.4
@@ -703,20 +703,20 @@ EXPORT_API int inputmethod_event_set_language_requested_cb(inputmethod_language_
  * @param[in] user_data User data to be passed to the callback function
  *
  * @return 0 on success, otherwise a negative error value
- * @retval #INPUTMETHOD_ERROR_NONE No error
- * @retval #INPUTMETHOD_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #INPUTMETHOD_ERROR_OPERATION_FAILED Operation failed
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
- * @post The inputmethod_run() function should be called to start to run IME application's main loop.
+ * @post The ime_run() function should be called to start to run IME application's main loop.
  *
- * @see inputmethod_language_set_cb, inputmethod_run
+ * @see ime_language_set_cb, ime_run
  */
-EXPORT_API int inputmethod_event_set_language_set_cb(inputmethod_language_set_cb callback_func, void *user_data);
+EXPORT_API int ime_event_set_language_set_cb(ime_language_set_cb callback_func, void *user_data);
 
 /**
  * @brief Sets @c imdata_set event callback function.
  *
- * @remarks The inputmethod_imdata_set_cb() callback function is called to set the application
+ * @remarks The ime_imdata_set_cb() callback function is called to set the application
  * specific data to deliver to the input panel.
  *
  * @since_tizen 2.4
@@ -725,20 +725,20 @@ EXPORT_API int inputmethod_event_set_language_set_cb(inputmethod_language_set_cb
  * @param[in] user_data User data to be passed to the callback function
  *
  * @return 0 on success, otherwise a negative error value
- * @retval #INPUTMETHOD_ERROR_NONE No error
- * @retval #INPUTMETHOD_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #INPUTMETHOD_ERROR_OPERATION_FAILED Operation failed
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
- * @post The inputmethod_run() function should be called to start to run IME application's main loop.
+ * @post The ime_run() function should be called to start to run IME application's main loop.
  *
- * @see inputmethod_imdata_set_cb, inputmethod_run
+ * @see ime_imdata_set_cb, ime_run
  */
-EXPORT_API int inputmethod_event_set_imdata_set_cb(inputmethod_imdata_set_cb callback_func, void *user_data);
+EXPORT_API int ime_event_set_imdata_set_cb(ime_imdata_set_cb callback_func, void *user_data);
 
 /**
  * @brief Sets @c layout_set event callback function.
  *
- * @remarks The inputmethod_layout_set_cb() callback function is called when an associated text input
+ * @remarks The ime_layout_set_cb() callback function is called when an associated text input
  * UI control requests the input panel to set its layout.
  *
  * @since_tizen 2.4
@@ -747,20 +747,20 @@ EXPORT_API int inputmethod_event_set_imdata_set_cb(inputmethod_imdata_set_cb cal
  * @param[in] user_data User data to be passed to the callback function
  *
  * @return 0 on success, otherwise a negative error value
- * @retval #INPUTMETHOD_ERROR_NONE No error
- * @retval #INPUTMETHOD_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #INPUTMETHOD_ERROR_OPERATION_FAILED Operation failed
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
- * @post The inputmethod_run() function should be called to start to run IME application's main loop.
+ * @post The ime_run() function should be called to start to run IME application's main loop.
  *
- * @see inputmethod_layout_set_cb, inputmethod_run
+ * @see ime_layout_set_cb, ime_run
  */
-EXPORT_API int inputmethod_event_set_layout_set_cb(inputmethod_layout_set_cb callback_func, void *user_data);
+EXPORT_API int ime_event_set_layout_set_cb(ime_layout_set_cb callback_func, void *user_data);
 
 /**
  * @brief Sets @c return_key_type_set event callback function.
  *
- * @remarks The inputmethod_return_key_type_set_cb() callback function is called when an associated
+ * @remarks The ime_return_key_type_set_cb() callback function is called when an associated
  * text input UI control requests the input panel to set the @c Return key label.
  *
  * @since_tizen 2.4
@@ -769,20 +769,20 @@ EXPORT_API int inputmethod_event_set_layout_set_cb(inputmethod_layout_set_cb cal
  * @param[in] user_data User data to be passed to the callback function
  *
  * @return 0 on success, otherwise a negative error value
- * @retval #INPUTMETHOD_ERROR_NONE No error
- * @retval #INPUTMETHOD_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #INPUTMETHOD_ERROR_OPERATION_FAILED Operation failed
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
- * @post The inputmethod_run() function should be called to start to run IME application's main loop.
+ * @post The ime_run() function should be called to start to run IME application's main loop.
  *
- * @see inputmethod_return_key_type_set_cb, inputmethod_run
+ * @see ime_return_key_type_set_cb, ime_run
  */
-EXPORT_API int inputmethod_event_set_return_key_type_set_cb(inputmethod_return_key_type_set_cb callback_func, void *user_data);
+EXPORT_API int ime_event_set_return_key_type_set_cb(ime_return_key_type_set_cb callback_func, void *user_data);
 
 /**
  * @brief Sets @c return_key_state_set event callback function.
  *
- * @remarks The inputmethod_return_key_state_set_cb() callback function is called when an associated
+ * @remarks The ime_return_key_state_set_cb() callback function is called when an associated
  * text input UI control requests the input panel to enable or disable the @c Return key state.
  *
  * @since_tizen 2.4
@@ -791,20 +791,20 @@ EXPORT_API int inputmethod_event_set_return_key_type_set_cb(inputmethod_return_k
  * @param[in] user_data User data to be passed to the callback function
  *
  * @return 0 on success, otherwise a negative error value
- * @retval #INPUTMETHOD_ERROR_NONE No error
- * @retval #INPUTMETHOD_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #INPUTMETHOD_ERROR_OPERATION_FAILED Operation failed
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
- * @post The inputmethod_run() function should be called to start to run IME application's main loop.
+ * @post The ime_run() function should be called to start to run IME application's main loop.
  *
- * @see inputmethod_return_key_state_set_cb, inputmethod_run
+ * @see ime_return_key_state_set_cb, ime_run
  */
-EXPORT_API int inputmethod_event_set_return_key_state_set_cb(inputmethod_return_key_state_set_cb callback_func, void *user_data);
+EXPORT_API int ime_event_set_return_key_state_set_cb(ime_return_key_state_set_cb callback_func, void *user_data);
 
 /**
  * @brief Sets @c geometry_requested event callback function.
  *
- * @remarks The inputmethod_geometry_requested_cb() callback function is called when an associated
+ * @remarks The ime_geometry_requested_cb() callback function is called when an associated
  * text input UI control requests for the position and size of the input panel.
  *
  * @since_tizen 2.4
@@ -813,20 +813,20 @@ EXPORT_API int inputmethod_event_set_return_key_state_set_cb(inputmethod_return_
  * @param[in] user_data User data to be passed to the callback function
  *
  * @return 0 on success, otherwise a negative error value
- * @retval #INPUTMETHOD_ERROR_NONE No error
- * @retval #INPUTMETHOD_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #INPUTMETHOD_ERROR_OPERATION_FAILED Operation failed
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
- * @post The inputmethod_run() function should be called to start to run IME application's main loop.
+ * @post The ime_run() function should be called to start to run IME application's main loop.
  *
- * @see inputmethod_geometry_requested_cb, inputmethod_run
+ * @see ime_geometry_requested_cb, ime_run
  */
-EXPORT_API int inputmethod_event_set_geometry_requested_cb(inputmethod_geometry_requested_cb callback_func, void *user_data);
+EXPORT_API int ime_event_set_geometry_requested_cb(ime_geometry_requested_cb callback_func, void *user_data);
 
 /**
  * @brief Sets @c display_language_changed event callback function.
  *
- * @remarks The inputmethod_display_language_changed_cb() callback function is called when the system
+ * @remarks The ime_display_language_changed_cb() callback function is called when the system
  * display language is changed.
  *
  * @since_tizen 2.4
@@ -835,20 +835,20 @@ EXPORT_API int inputmethod_event_set_geometry_requested_cb(inputmethod_geometry_
  * @param[in] user_data User data to be passed to the callback function
  *
  * @return 0 on success, otherwise a negative error value
- * @retval #INPUTMETHOD_ERROR_NONE No error
- * @retval #INPUTMETHOD_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #INPUTMETHOD_ERROR_OPERATION_FAILED Operation failed
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
- * @post The inputmethod_run() function should be called to start to run IME application's main loop.
+ * @post The ime_run() function should be called to start to run IME application's main loop.
  *
- * @see inputmethod_display_language_changed_cb, inputmethod_run
+ * @see ime_display_language_changed_cb, ime_run
  */
-EXPORT_API int inputmethod_event_set_display_language_changed_cb(inputmethod_display_language_changed_cb callback_func, void *user_data);
+EXPORT_API int ime_event_set_display_language_changed_cb(ime_display_language_changed_cb callback_func, void *user_data);
 
 /**
  * @brief Sets #c rotation_degree_changed event callback function.
  *
- * @remarks The inputmethod_rotation_degree_changed_cb() callback function is called when the device
+ * @remarks The ime_rotation_degree_changed_cb() callback function is called when the device
  * is rotated.
  *
  * @since_tizen 2.4
@@ -857,20 +857,20 @@ EXPORT_API int inputmethod_event_set_display_language_changed_cb(inputmethod_dis
  * @param[in] user_data User data to be passed to the callback function
  *
  * @return 0 on success, otherwise a negative error value
- * @retval #INPUTMETHOD_ERROR_NONE No error
- * @retval #INPUTMETHOD_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #INPUTMETHOD_ERROR_OPERATION_FAILED Operation failed
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
- * @post The inputmethod_run() function should be called to start to run IME application's main loop.
+ * @post The ime_run() function should be called to start to run IME application's main loop.
  *
- * @see inputmethod_rotation_degree_changed_cb, inputmethod_run
+ * @see ime_rotation_degree_changed_cb, ime_run
  */
-EXPORT_API int inputmethod_event_set_rotation_degree_changed_cb(inputmethod_rotation_degree_changed_cb callback_func, void *user_data);
+EXPORT_API int ime_event_set_rotation_degree_changed_cb(ime_rotation_degree_changed_cb callback_func, void *user_data);
 
 /**
  * @brief Sets @c accessibility_state_changed event callback function.
  *
- * @remarks The inputmethod_accessibility_state_changed_cb() callback function is called when
+ * @remarks The ime_accessibility_state_changed_cb() callback function is called when
  * Accessibility in Settings application is on or off.
  *
  * @since_tizen 2.4
@@ -879,20 +879,20 @@ EXPORT_API int inputmethod_event_set_rotation_degree_changed_cb(inputmethod_rota
  * @param[in] user_data User data to be passed to the callback function
  *
  * @return 0 on success, otherwise a negative error value
- * @retval #INPUTMETHOD_ERROR_NONE No error
- * @retval #INPUTMETHOD_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #INPUTMETHOD_ERROR_OPERATION_FAILED Operation failed
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
- * @post The inputmethod_run() function should be called to start to run IME application's main loop.
+ * @post The ime_run() function should be called to start to run IME application's main loop.
  *
- * @see inputmethod_accessibility_state_changed_cb, inputmethod_run
+ * @see ime_accessibility_state_changed_cb, ime_run
  */
-EXPORT_API int inputmethod_event_set_accessibility_state_changed_cb(inputmethod_accessibility_state_changed_cb callback_func, void *user_data);
+EXPORT_API int ime_event_set_accessibility_state_changed_cb(ime_accessibility_state_changed_cb callback_func, void *user_data);
 
 /**
  * @brief Sets @c option_window_created event callback function.
  *
- * @remarks The inputmethod_option_window_created_cb() callback function is called to create the option window.
+ * @remarks The ime_option_window_created_cb() callback function is called to create the option window.
  *
  * @since_tizen 2.4
  *
@@ -900,20 +900,20 @@ EXPORT_API int inputmethod_event_set_accessibility_state_changed_cb(inputmethod_
  * @param[in] user_data User data to be passed to the callback function
  *
  * @return 0 on success, otherwise a negative error value
- * @retval #INPUTMETHOD_ERROR_NONE No error
- * @retval #INPUTMETHOD_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #INPUTMETHOD_ERROR_OPERATION_FAILED Operation failed
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
- * @post The inputmethod_run() function should be called to start to run IME application's main loop.
+ * @post The ime_run() function should be called to start to run IME application's main loop.
  *
- * @see inputmethod_option_window_created_cb, inputmethod_run
+ * @see ime_option_window_created_cb, ime_run
  */
-EXPORT_API int inputmethod_event_set_option_window_created_cb(inputmethod_option_window_created_cb callback_func, void *user_data);
+EXPORT_API int ime_event_set_option_window_created_cb(ime_option_window_created_cb callback_func, void *user_data);
 
 /**
  * @brief Sets @c option_window_destroyed event callback function.
  *
- * @remarks The inputmethod_option_window_destroyed_cb() callback function is called to destroy the option window.
+ * @remarks The ime_option_window_destroyed_cb() callback function is called to destroy the option window.
  *
  * @since_tizen 2.4
  *
@@ -921,15 +921,15 @@ EXPORT_API int inputmethod_event_set_option_window_created_cb(inputmethod_option
  * @param[in] user_data User data to be passed to the callback function
  *
  * @return 0 on success, otherwise a negative error value
- * @retval #INPUTMETHOD_ERROR_NONE No error
- * @retval #INPUTMETHOD_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #INPUTMETHOD_ERROR_OPERATION_FAILED Operation failed
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
- * @post The inputmethod_run() function should be called to start to run IME application's main loop.
+ * @post The ime_run() function should be called to start to run IME application's main loop.
  *
- * @see inputmethod_option_window_destroyed_cb, inputmethod_run
+ * @see ime_option_window_destroyed_cb, ime_run
  */
-EXPORT_API int inputmethod_event_set_option_window_destroyed_cb(inputmethod_option_window_destroyed_cb callback_func, void *user_data);
+EXPORT_API int ime_event_set_option_window_destroyed_cb(ime_option_window_destroyed_cb callback_func, void *user_data);
 
 /**
  * @brief Sends a key event directly to the associated text input UI control.
@@ -940,12 +940,12 @@ EXPORT_API int inputmethod_event_set_option_window_destroyed_cb(inputmethod_opti
  * @param[in] keymask The modifier key mask
  *
  * @return 0 on success, otherwise a negative error value
- * @retval #INPUTMETHOD_ERROR_NONE No error
- * @retval #INPUTMETHOD_ERROR_NOT_RUNNING IME main loop isn't started yet
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
- * @see inputmethod_key_code_e, inputmethod_key_mask_e
+ * @see ime_key_code_e, ime_key_mask_e
  */
-EXPORT_API int inputmethod_send_key_event(inputmethod_key_code_e keycode, inputmethod_key_mask_e keymask);
+EXPORT_API int ime_send_key_event(ime_key_code_e keycode, ime_key_mask_e keymask);
 
 /**
  * @brief Sends the text to the associated text input UI control.
@@ -955,12 +955,12 @@ EXPORT_API int inputmethod_send_key_event(inputmethod_key_code_e keycode, inputm
  * @param[in] str The UTF-8 string to be committed
  *
  * @return 0 on success, otherwise a negative error value
- * @retval #INPUTMETHOD_ERROR_NONE No error
- * @retval #INPUTMETHOD_ERROR_NOT_RUNNING IME main loop isn't started yet
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
- * @see inputmethod_show_preedit_string, inputmethod_hide_preedit_string, inputmethod_update_preedit_string
+ * @see ime_show_preedit_string, ime_hide_preedit_string, ime_update_preedit_string
  */
-EXPORT_API int inputmethod_commit_string(const char *str);
+EXPORT_API int ime_commit_string(const char *str);
 
 /**
  * @brief Requests to show preedit string.
@@ -968,12 +968,12 @@ EXPORT_API int inputmethod_commit_string(const char *str);
  * @since_tizen 2.4
  *
  * @return 0 on success, otherwise a negative error value
- * @retval #INPUTMETHOD_ERROR_NONE No error
- * @retval #INPUTMETHOD_ERROR_NOT_RUNNING IME main loop isn't started yet
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
- * @see inputmethod_commit_string, inputmethod_hide_preedit_string, inputmethod_update_preedit_string
+ * @see ime_commit_string, ime_hide_preedit_string, ime_update_preedit_string
  */
-EXPORT_API int inputmethod_show_preedit_string(void);
+EXPORT_API int ime_show_preedit_string(void);
 
 /**
  * @brief Requests to hide preedit string.
@@ -981,12 +981,12 @@ EXPORT_API int inputmethod_show_preedit_string(void);
  * @since_tizen 2.4
  *
  * @return 0 on success, otherwise a negative error value
- * @retval #INPUTMETHOD_ERROR_NONE No error
- * @retval #INPUTMETHOD_ERROR_NOT_RUNNING IME main loop isn't started yet
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
- * @see inputmethod_commit_string, inputmethod_show_preedit_string, inputmethod_update_preedit_string
+ * @see ime_commit_string, ime_show_preedit_string, ime_update_preedit_string
  */
-EXPORT_API int inputmethod_hide_preedit_string(void);
+EXPORT_API int ime_hide_preedit_string(void);
 
 /**
  * @brief Updates a new preedit string.
@@ -996,13 +996,13 @@ EXPORT_API int inputmethod_hide_preedit_string(void);
  * @param[in] str The UTF-8 string to be updated in preedit
  *
  * @return 0 on success, otherwise a negative error value
- * @retval #INPUTMETHOD_ERROR_NONE No error
- * @retval #INPUTMETHOD_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #INPUTMETHOD_ERROR_NOT_RUNNING IME main loop isn't started yet
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
- * @see inputmethod_commit_string, inputmethod_show_preedit_string, inputmethod_hide_preedit_string
+ * @see ime_commit_string, ime_show_preedit_string, ime_hide_preedit_string
  */
-EXPORT_API int inputmethod_update_preedit_string(const char *str);
+EXPORT_API int ime_update_preedit_string(const char *str);
 
 /**
  * @brief Requests the surrounding text from the position of the cursor, asynchronously.
@@ -1013,17 +1013,17 @@ EXPORT_API int inputmethod_update_preedit_string(const char *str);
  * @param[in] maxlen_after The maximum length of string to be retrieved after the cursor; -1 means unlimited
  *
  * @return 0 on success, otherwise a negative error value
- * @retval #INPUTMETHOD_ERROR_NONE No error
- * @retval #INPUTMETHOD_ERROR_NO_CALLBACK_FUNCTION Necessary callback function is not set
- * @retval #INPUTMETHOD_ERROR_NOT_RUNNING IME main loop isn't started yet
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_NO_CALLBACK_FUNCTION Necessary callback function is not set
+ * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
- * @pre The inputmethod_surrounding_text_updated_cb() callback function MUST be set by inputmethod_event_set_surrounding_text_updated_cb().
+ * @pre The ime_surrounding_text_updated_cb() callback function MUST be set by ime_event_set_surrounding_text_updated_cb().
  *
- * @post The requested surrounding text can be received using the inputmethod_surrounding_text_updated_cb() callback function.
+ * @post The requested surrounding text can be received using the ime_surrounding_text_updated_cb() callback function.
  *
- * @see inputmethod_delete_surrounding_text, inputmethod_event_set_surrounding_text_updated_cb, inputmethod_surrounding_text_updated_cb
+ * @see ime_delete_surrounding_text, ime_event_set_surrounding_text_updated_cb, ime_surrounding_text_updated_cb
  */
-EXPORT_API int inputmethod_request_surrounding_text(int maxlen_before, int maxlen_after);
+EXPORT_API int ime_request_surrounding_text(int maxlen_before, int maxlen_after);
 
 /**
  * @brief Requests to delete surrounding text.
@@ -1034,13 +1034,13 @@ EXPORT_API int inputmethod_request_surrounding_text(int maxlen_before, int maxle
  * @param[in] len The length of the text to delete
  *
  * @return 0 on success, otherwise a negative error value
- * @retval #INPUTMETHOD_ERROR_NONE No error
- * @retval #INPUTMETHOD_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #INPUTMETHOD_ERROR_NOT_RUNNING IME main loop isn't started yet
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
- * @see inputmethod_request_surrounding_text
+ * @see ime_request_surrounding_text
  */
-EXPORT_API int inputmethod_delete_surrounding_text(int offset, int len);
+EXPORT_API int ime_delete_surrounding_text(int offset, int len);
 
 /**
  * @brief This API returns the pointer of input panel main window.
@@ -1051,13 +1051,13 @@ EXPORT_API int inputmethod_delete_surrounding_text(int offset, int len);
  *
  * @return The input panel main window object on success, otherwise NULL
  *
- * @exception #INPUTMETHOD_ERROR_NONE Successful
- * #INPUTMETHOD_ERROR_NOT_RUNNING IME main loop isn't started yet
- * #INPUTMETHOD_ERROR_OPERATION_FAILED Operation failed
+ * @exception #IME_ERROR_NONE Successful
+ * #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
+ * #IME_ERROR_OPERATION_FAILED Operation failed
  *
- * @see inputmethod_create_cb, inputmethod_terminate_cb, inputmethod_show_cb, inputmethod_hide_cb
+ * @see ime_create_cb, ime_terminate_cb, ime_show_cb, ime_hide_cb
  */
-EXPORT_API Evas_Object* inputmethod_get_main_window(void);
+EXPORT_API Evas_Object* ime_get_main_window(void);
 
 /**
  * @brief This API updates the input panel window's size information.
@@ -1070,39 +1070,39 @@ EXPORT_API Evas_Object* inputmethod_get_main_window(void);
  * @param[in] landscape_height The height in landscape mode
  *
  * @return 0 on success, otherwise a negative error value
- * @retval #INPUTMETHOD_ERROR_NONE No error
- * @retval #INPUTMETHOD_ERROR_NOT_RUNNING IME main loop isn't started yet
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
- * @see inputmethod_create_cb
+ * @see ime_create_cb
  */
-EXPORT_API int inputmethod_set_size(int portrait_width, int portrait_height, int landscape_width, int landscape_height);
+EXPORT_API int ime_set_size(int portrait_width, int portrait_height, int landscape_width, int landscape_height);
 
 /**
  * @brief Requests to create an option window from the input panel.
  *
  * @details The input panel can call this function to open the option window. This
- * function calls inputmethod_option_window_created_cb() callback function with
- * #INPUTMETHOD_OPTION_WINDOW_TYPE_KEYBOARD parameter.
+ * function calls ime_option_window_created_cb() callback function with
+ * #IME_OPTION_WINDOW_TYPE_KEYBOARD parameter.
  *
  * @since_tizen 2.4
  *
  * @return 0 on success, otherwise a negative error value
- * @retval #INPUTMETHOD_ERROR_NONE No error
- * @retval #INPUTMETHOD_ERROR_NO_CALLBACK_FUNCTION Necessary callback function is not set
- * @retval #INPUTMETHOD_ERROR_NOT_RUNNING IME main loop isn't started yet
- * @retval #INPUTMETHOD_ERROR_OPERATION_FAILED Operation failed
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_NO_CALLBACK_FUNCTION Necessary callback function is not set
+ * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
+ * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
- * @pre The inputmethod_option_window_created_cb() and inputmethod_option_window_destroyed_cb()
- * callback functions MUST be set by inputmethod_event_set_option_window_created_cb() and
- * inputmethod_event_set_option_window_destroyed_cb() respectively.
+ * @pre The ime_option_window_created_cb() and ime_option_window_destroyed_cb()
+ * callback functions MUST be set by ime_event_set_option_window_created_cb() and
+ * ime_event_set_option_window_destroyed_cb() respectively.
  *
- * @post This function calls inputmethod_option_window_created_cb() callback function to
- * create the option window. And inputmethod_destroy_option_window() function can be called
+ * @post This function calls ime_option_window_created_cb() callback function to
+ * create the option window. And ime_destroy_option_window() function can be called
  * to close the option window.
  *
- * @see inputmethod_event_set_option_window_created_cb, inputmethod_option_window_created_cb, inputmethod_destroy_option_window
+ * @see ime_event_set_option_window_created_cb, ime_option_window_created_cb, ime_destroy_option_window
  */
-EXPORT_API int inputmethod_create_option_window(void);
+EXPORT_API int ime_create_option_window(void);
 
 /**
  * @brief Requests to destroy an option window.
@@ -1115,27 +1115,27 @@ EXPORT_API int inputmethod_create_option_window(void);
  * @param[in] window The option window to destroy
  *
  * @return 0 on success, otherwise a negative error value
- * @retval #INPUTMETHOD_ERROR_NONE No error
- * @retval #INPUTMETHOD_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #INPUTMETHOD_ERROR_NO_CALLBACK_FUNCTION Necessary callback function is not set
- * @retval #INPUTMETHOD_ERROR_NOT_RUNNING IME main loop isn't started yet
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_NO_CALLBACK_FUNCTION Necessary callback function is not set
+ * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
- * @pre The inputmethod_option_window_created_cb() and inputmethod_option_window_destroyed_cb()
- * callback functions MUST be set by inputmethod_event_set_option_window_created_cb() and
- * inputmethod_event_set_option_window_destroyed_cb() respectively.
+ * @pre The ime_option_window_created_cb() and ime_option_window_destroyed_cb()
+ * callback functions MUST be set by ime_event_set_option_window_created_cb() and
+ * ime_event_set_option_window_destroyed_cb() respectively.
  *
- * @post This function calls inputmethod_option_window_destroyed_cb() callback function
+ * @post This function calls ime_option_window_destroyed_cb() callback function
  * to destroy the option window.
  *
- * @see inputmethod_event_set_option_window_destroyed_cb, inputmethod_option_window_destroyed_cb, inputmethod_create_option_window
+ * @see ime_event_set_option_window_destroyed_cb, ime_option_window_destroyed_cb, ime_create_option_window
  */
-EXPORT_API int inputmethod_destroy_option_window(Evas_Object *window);
+EXPORT_API int ime_destroy_option_window(Evas_Object *window);
 
 /**
  * @brief Gets the layout information from the given input context.
  *
  * @details Each edit field has various attributes for input panel. This function can be
- * called to get the layout information in inputmethod_show_cb() callback function.
+ * called to get the layout information in ime_show_cb() callback function.
  *
  * @since_tizen 2.4
  *
@@ -1143,21 +1143,21 @@ EXPORT_API int inputmethod_destroy_option_window(Evas_Object *window);
  * @param[out] layout Layout information
  *
  * @return 0 on success, otherwise a negative error value
- * @retval #INPUTMETHOD_ERROR_NONE No error
- * @retval #INPUTMETHOD_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #INPUTMETHOD_ERROR_NOT_RUNNING IME main loop isn't started yet
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @post Input panel UI should be drawn or operated by this information accordingly.
  *
- * @see inputmethod_show_cb, inputmethod_layout_set_cb
+ * @see ime_show_cb, ime_layout_set_cb
  */
-EXPORT_API int inputmethod_context_get_layout(inputmethod_context_h context, Ecore_IMF_Input_Panel_Layout *layout);
+EXPORT_API int ime_context_get_layout(ime_context_h context, Ecore_IMF_Input_Panel_Layout *layout);
 
 /**
  * @brief Gets the layout variation information from the given input context.
  *
  * @details Each edit field has various attributes for input panel. This function can be
- * called to get the layout variation information in inputmethod_show_cb() callback function.
+ * called to get the layout variation information in ime_show_cb() callback function.
  *
  * @since_tizen 2.4
  *
@@ -1165,21 +1165,21 @@ EXPORT_API int inputmethod_context_get_layout(inputmethod_context_h context, Eco
  * @param[out] layout_variation Layout variation information
  *
  * @return 0 on success, otherwise a negative error value
- * @retval #INPUTMETHOD_ERROR_NONE No error
- * @retval #INPUTMETHOD_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #INPUTMETHOD_ERROR_NOT_RUNNING IME main loop isn't started yet
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @post Input panel UI should be drawn or operated by this information accordingly.
  *
- * @see inputmethod_show_cb, inputmethod_layout_variation_e
+ * @see ime_show_cb, ime_layout_variation_e
  */
-EXPORT_API int inputmethod_context_get_layout_variation(inputmethod_context_h context, inputmethod_layout_variation_e *layout_variation);
+EXPORT_API int ime_context_get_layout_variation(ime_context_h context, ime_layout_variation_e *layout_variation);
 
 /**
  * @brief Gets the cursor position information from the given input context.
  *
  * @details Each edit field has various attributes for input panel. This function can be
- * called to get the cursor position information in inputmethod_show_cb() callback function.
+ * called to get the cursor position information in ime_show_cb() callback function.
  *
  * @since_tizen 2.4
  *
@@ -1187,21 +1187,21 @@ EXPORT_API int inputmethod_context_get_layout_variation(inputmethod_context_h co
  * @param[out] cursor_pos Cursor position information
  *
  * @return 0 on success, otherwise a negative error value
- * @retval #INPUTMETHOD_ERROR_NONE No error
- * @retval #INPUTMETHOD_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #INPUTMETHOD_ERROR_NOT_RUNNING IME main loop isn't started yet
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @post Input panel UI should be drawn or operated by this information accordingly.
  *
- * @see inputmethod_show_cb, inputmethod_cursor_position_updated_cb
+ * @see ime_show_cb, ime_cursor_position_updated_cb
  */
-EXPORT_API int inputmethod_context_get_cursor_position(inputmethod_context_h context, int *cursor_pos);
+EXPORT_API int ime_context_get_cursor_position(ime_context_h context, int *cursor_pos);
 
 /**
  * @brief Gets the autocapital type information from the given input context.
  *
  * @details Each edit field has various attributes for input panel. This function can be
- * called to get the autocapital type information in inputmethod_show_cb() callback function.
+ * called to get the autocapital type information in ime_show_cb() callback function.
  *
  * @since_tizen 2.4
  *
@@ -1209,21 +1209,21 @@ EXPORT_API int inputmethod_context_get_cursor_position(inputmethod_context_h con
  * @param[out] autocapital_type Autocapital type information
  *
  * @return 0 on success, otherwise a negative error value
- * @retval #INPUTMETHOD_ERROR_NONE No error
- * @retval #INPUTMETHOD_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #INPUTMETHOD_ERROR_NOT_RUNNING IME main loop isn't started yet
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @post Input panel UI should be drawn or operated by this information accordingly.
  *
- * @see inputmethod_show_cb
+ * @see ime_show_cb
  */
-EXPORT_API int inputmethod_context_get_autocapital_type(inputmethod_context_h context, Ecore_IMF_Autocapital_Type *autocapital_type);
+EXPORT_API int ime_context_get_autocapital_type(ime_context_h context, Ecore_IMF_Autocapital_Type *autocapital_type);
 
 /**
  * @brief Gets the @c Return key label type information from the given input context.
  *
  * @details Each edit field has various attributes for input panel. This function can be
- * called to get the @c Return key label type information in inputmethod_show_cb() callback function.
+ * called to get the @c Return key label type information in ime_show_cb() callback function.
  *
  * @since_tizen 2.4
  *
@@ -1231,21 +1231,21 @@ EXPORT_API int inputmethod_context_get_autocapital_type(inputmethod_context_h co
  * @param[out] return_key_type The @c Return key label type information
  *
  * @return 0 on success, otherwise a negative error value
- * @retval #INPUTMETHOD_ERROR_NONE No error
- * @retval #INPUTMETHOD_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #INPUTMETHOD_ERROR_NOT_RUNNING IME main loop isn't started yet
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @post Input panel UI should be drawn or operated by this information accordingly.
  *
- * @see inputmethod_show_cb, inputmethod_return_key_type_set_cb
+ * @see ime_show_cb, ime_return_key_type_set_cb
  */
-EXPORT_API int inputmethod_context_get_return_key_type(inputmethod_context_h context, Ecore_IMF_Input_Panel_Return_Key_Type *return_key_type);
+EXPORT_API int ime_context_get_return_key_type(ime_context_h context, Ecore_IMF_Input_Panel_Return_Key_Type *return_key_type);
 
 /**
  * @brief Gets the @c Return key state information from the given input context.
  *
  * @details Each edit field has various attributes for input panel. This function can be
- * called to get the @c Return key state information in inputmethod_show_cb() callback function.
+ * called to get the @c Return key state information in ime_show_cb() callback function.
  *
  * @since_tizen 2.4
  *
@@ -1254,21 +1254,21 @@ EXPORT_API int inputmethod_context_get_return_key_type(inputmethod_context_h con
  * button, @c false to disable @c Return key button
  *
  * @return 0 on success, otherwise a negative error value
- * @retval #INPUTMETHOD_ERROR_NONE No error
- * @retval #INPUTMETHOD_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #INPUTMETHOD_ERROR_NOT_RUNNING IME main loop isn't started yet
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @post Input panel UI should be drawn or operated by this information accordingly.
  *
- * @see inputmethod_show_cb, inputmethod_return_key_state_set_cb
+ * @see ime_show_cb, ime_return_key_state_set_cb
  */
-EXPORT_API int inputmethod_context_get_return_key_state(inputmethod_context_h context, bool *return_key_state);
+EXPORT_API int ime_context_get_return_key_state(ime_context_h context, bool *return_key_state);
 
 /**
  * @brief Gets the prediction mode information from the given input context.
  *
  * @details Each edit field has various attributes for input panel. This function can be
- * called to get the prediction mode information in inputmethod_show_cb() callback function.
+ * called to get the prediction mode information in ime_show_cb() callback function.
  *
  * @since_tizen 2.4
  *
@@ -1277,21 +1277,21 @@ EXPORT_API int inputmethod_context_get_return_key_state(inputmethod_context_h co
  * text feature if available, @c false to disable the predictive text feature
  *
  * @return 0 on success, otherwise a negative error value
- * @retval #INPUTMETHOD_ERROR_NONE No error
- * @retval #INPUTMETHOD_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #INPUTMETHOD_ERROR_NOT_RUNNING IME main loop isn't started yet
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @post Input panel UI should be drawn or operated by this information accordingly.
  *
- * @see inputmethod_show_cb
+ * @see ime_show_cb
  */
-EXPORT_API int inputmethod_context_get_prediction_mode(inputmethod_context_h context, bool *prediction_mode);
+EXPORT_API int ime_context_get_prediction_mode(ime_context_h context, bool *prediction_mode);
 
 /**
  * @brief Gets the password mode information from the given input context.
  *
  * @details Each edit field has various attributes for input panel. This function can be
- * called to get the password mode information in inputmethod_show_cb() callback function.
+ * called to get the password mode information in ime_show_cb() callback function.
  *
  * @remarks If @a password_mode is @c true, the input panel is advised not to support the predictive text.
  *
@@ -1302,21 +1302,21 @@ EXPORT_API int inputmethod_context_get_prediction_mode(inputmethod_context_h con
  * @c false to indicate non-password edit field.
  *
  * @return 0 on success, otherwise a negative error value
- * @retval #INPUTMETHOD_ERROR_NONE No error
- * @retval #INPUTMETHOD_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #INPUTMETHOD_ERROR_NOT_RUNNING IME main loop isn't started yet
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @post Input panel UI should be drawn or operated by this information accordingly.
  *
- * @see inputmethod_show_cb
+ * @see ime_show_cb
  */
-EXPORT_API int inputmethod_context_get_password_mode(inputmethod_context_h context, bool *password_mode);
+EXPORT_API int ime_context_get_password_mode(ime_context_h context, bool *password_mode);
 
 /**
  * @brief Gets the input hint information from the given input context.
  *
  * @details Each edit field has various attributes for input panel. This function can be
- * called to get the input hint information in inputmethod_show_cb() callback function.
+ * called to get the input hint information in ime_show_cb() callback function.
  *
  * @remarks @a input_hint is a bit-wise value which recommends the input panel provide
  * an auto completion and so on if it is capable of supporting such features.
@@ -1327,21 +1327,21 @@ EXPORT_API int inputmethod_context_get_password_mode(inputmethod_context_h conte
  * @param[out] input_hint Input hint information
  *
  * @return 0 on success, otherwise a negative error value
- * @retval #INPUTMETHOD_ERROR_NONE No error
- * @retval #INPUTMETHOD_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #INPUTMETHOD_ERROR_NOT_RUNNING IME main loop isn't started yet
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @post Input panel UI should be drawn or operated by this information accordingly.
  *
- * @see inputmethod_show_cb
+ * @see ime_show_cb
  */
-EXPORT_API int inputmethod_context_get_input_hint(inputmethod_context_h context, Ecore_IMF_Input_Hints *input_hint);
+EXPORT_API int ime_context_get_input_hint(ime_context_h context, Ecore_IMF_Input_Hints *input_hint);
 
 /**
  * @brief Gets the text bidirectional information from the given input context.
  *
  * @details Each edit field has various attributes for input panel. This function can be
- * called to get the bidirectional information in inputmethod_show_cb() callback function.
+ * called to get the bidirectional information in ime_show_cb() callback function.
  *
  * @since_tizen 2.4
  *
@@ -1349,21 +1349,21 @@ EXPORT_API int inputmethod_context_get_input_hint(inputmethod_context_h context,
  * @param[out] bidi Text bidirectional information
  *
  * @return 0 on success, otherwise a negative error value
- * @retval #INPUTMETHOD_ERROR_NONE No error
- * @retval #INPUTMETHOD_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #INPUTMETHOD_ERROR_NOT_RUNNING IME main loop isn't started yet
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @post Input panel UI should be drawn or operated by this information accordingly.
  *
- * @see inputmethod_show_cb
+ * @see ime_show_cb
  */
-EXPORT_API int inputmethod_context_get_bidi_direction(inputmethod_context_h context, Ecore_IMF_BiDi_Direction *bidi);
+EXPORT_API int ime_context_get_bidi_direction(ime_context_h context, Ecore_IMF_BiDi_Direction *bidi);
 
 /**
  * @brief Gets the preferred language information from the given input context.
  *
  * @details Each edit field has various attributes for input panel. This function can be
- * called to get the preferred language information in inputmethod_show_cb() callback function.
+ * called to get the preferred language information in ime_show_cb() callback function.
  *
  * @since_tizen 2.4
  *
@@ -1371,15 +1371,15 @@ EXPORT_API int inputmethod_context_get_bidi_direction(inputmethod_context_h cont
  * @param[out] language Preferred language information
  *
  * @return 0 on success, otherwise a negative error value
- * @retval #INPUTMETHOD_ERROR_NONE No error
- * @retval #INPUTMETHOD_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #INPUTMETHOD_ERROR_NOT_RUNNING IME main loop isn't started yet
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @post Input panel UI should be drawn or operated by this information accordingly.
  *
- * @see inputmethod_show_cb
+ * @see ime_show_cb
  */
-EXPORT_API int inputmethod_context_get_language(inputmethod_context_h context, Ecore_IMF_Input_Panel_Lang *language);
+EXPORT_API int ime_context_get_language(ime_context_h context, Ecore_IMF_Input_Panel_Lang *language);
 
 /**
  * @}

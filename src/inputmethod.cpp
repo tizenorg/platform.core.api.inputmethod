@@ -57,23 +57,23 @@ class CCoreEventCallback : public ISCLCoreEventCallback
 
 typedef struct
 {
-    inputmethod_focus_in_cb focus_in;   /**< Called when an edit field has focus */
-    inputmethod_focus_out_cb focus_out; /**< Called when an edit field loses focus */
-    inputmethod_surrounding_text_updated_cb surrounding_text_updated;   /**< Called when an edit field responds to a request with the surrounding text */
-    inputmethod_input_context_reset_cb input_context_reset;             /**< Called to reset the input context of an edit field */
-    inputmethod_cursor_position_updated_cb cursor_position_updated;     /**< Called when the position of the cursor in an edit field changes */
-    inputmethod_language_requested_cb language_requested;   /**< Called when an edit field requests for the language of the input panel */
-    inputmethod_language_set_cb language_set;   /**< Called to set the preferred language to the input panel */
-    inputmethod_imdata_set_cb imdata_set;       /**< Called to set the application specific data to deliver to the input panel */
-    inputmethod_layout_set_cb layout_set;       /**< Called when an edit field requests the input panel to set its layout */
-    inputmethod_return_key_type_set_cb return_key_type_set;     /**< Called when an edit field requests the input panel to set the "return" key label */
-    inputmethod_return_key_state_set_cb return_key_state_set;   /**< Called when an edit field requests the input panel to enable or disable the "return" key state. */
-    inputmethod_geometry_requested_cb geometry_requested;       /**< Called when an edit field requests for the position and size of the input panel */
-    inputmethod_display_language_changed_cb display_language_changed;   /**< Called when the system display language is changed */
-    inputmethod_rotation_degree_changed_cb rotation_degree_changed;     /**< Called when the device is rotated */
-    inputmethod_accessibility_state_changed_cb accessibility_state_changed; /**< Called when Accessibility in Settings application is on or off */
-    inputmethod_option_window_created_cb option_window_created;     /**< Called to create the option window */
-    inputmethod_option_window_destroyed_cb option_window_destroyed; /**< Called to destroy the option window */
+    ime_focus_in_cb focus_in;   /**< Called when an edit field has focus */
+    ime_focus_out_cb focus_out; /**< Called when an edit field loses focus */
+    ime_surrounding_text_updated_cb surrounding_text_updated;   /**< Called when an edit field responds to a request with the surrounding text */
+    ime_input_context_reset_cb input_context_reset;             /**< Called to reset the input context of an edit field */
+    ime_cursor_position_updated_cb cursor_position_updated;     /**< Called when the position of the cursor in an edit field changes */
+    ime_language_requested_cb language_requested;   /**< Called when an edit field requests for the language of the input panel */
+    ime_language_set_cb language_set;   /**< Called to set the preferred language to the input panel */
+    ime_imdata_set_cb imdata_set;       /**< Called to set the application specific data to deliver to the input panel */
+    ime_layout_set_cb layout_set;       /**< Called when an edit field requests the input panel to set its layout */
+    ime_return_key_type_set_cb return_key_type_set;     /**< Called when an edit field requests the input panel to set the "return" key label */
+    ime_return_key_state_set_cb return_key_state_set;   /**< Called when an edit field requests the input panel to enable or disable the "return" key state. */
+    ime_geometry_requested_cb geometry_requested;       /**< Called when an edit field requests for the position and size of the input panel */
+    ime_display_language_changed_cb display_language_changed;   /**< Called when the system display language is changed */
+    ime_rotation_degree_changed_cb rotation_degree_changed;     /**< Called when the device is rotated */
+    ime_accessibility_state_changed_cb accessibility_state_changed; /**< Called when Accessibility in Settings application is on or off */
+    ime_option_window_created_cb option_window_created;     /**< Called to create the option window */
+    ime_option_window_destroyed_cb option_window_destroyed; /**< Called to destroy the option window */
     void *focus_in_user_data;
     void *focus_out_user_data;
     void *surrounding_text_updated_user_data;
@@ -91,10 +91,10 @@ typedef struct
     void *accessibility_state_changed_user_data;
     void *option_window_created_user_data;
     void *option_window_destroyed_user_data;
-} inputmethod_event_callback_s;
+} ime_event_callback_s;
 
-static inputmethod_callback_s g_basic_callback = {NULL};
-static inputmethod_event_callback_s g_event_callback = {NULL};
+static ime_callback_s g_basic_callback = {NULL};
+static ime_event_callback_s g_event_callback = {NULL};
 static void *g_user_data = NULL;
 static bool g_running = false;
 
@@ -102,7 +102,7 @@ static CCoreEventCallback g_core_event_callback;
 CSCLCore g_core(&g_core_event_callback);
 
 extern "C" {
-    extern void inputmethod_app_main(int argc, char **argv);
+    extern void ime_app_main(int argc, char **argv);
 }
 
 void CCoreEventCallback::on_init()
@@ -115,7 +115,7 @@ void CCoreEventCallback::on_init()
 void CCoreEventCallback::on_run(int argc, char **argv)
 {
     LOGD ("on_run");
-    inputmethod_app_main(argc, argv);
+    ime_app_main(argc, argv);
 }
 
 void CCoreEventCallback::on_exit()
@@ -157,9 +157,9 @@ void CCoreEventCallback::on_focus_in(sclint ic, const sclchar *ic_uuid)
 void CCoreEventCallback::on_ise_show(sclint ic, const int degree, Ise_Context context)
 {
     if (g_basic_callback.show) {
-        struct _inputmethod_context input_context;
+        struct _ime_context input_context;
 
-        memset(&input_context, 0, sizeof(struct _inputmethod_context));
+        memset(&input_context, 0, sizeof(struct _ime_context));
         input_context.layout = context.layout;
         input_context.layout_variation = context.layout_variation;
         input_context.cursor_pos = context.cursor_pos;
@@ -174,7 +174,7 @@ void CCoreEventCallback::on_ise_show(sclint ic, const int degree, Ise_Context co
         input_context.language = context.language;
         input_context.client_window = context.client_window;
 
-        g_basic_callback.show(ic, (inputmethod_context_h)&input_context, g_user_data);
+        g_basic_callback.show(ic, (ime_context_h)&input_context, g_user_data);
     }
 }
 
@@ -282,7 +282,7 @@ void CCoreEventCallback::on_set_accessibility_state(sclboolean state)
 void CCoreEventCallback::on_create_option_window(sclwindow window, SCLOptionWindowType type)
 {
     if (g_event_callback.option_window_created) {
-        g_event_callback.option_window_created(static_cast<Evas_Object*>(window), (inputmethod_option_window_type_e)type, g_event_callback.option_window_created_user_data);
+        g_event_callback.option_window_created(static_cast<Evas_Object*>(window), static_cast<ime_option_window_type_e>(type), g_event_callback.option_window_created_user_data);
     }
 }
 
@@ -293,16 +293,16 @@ void CCoreEventCallback::on_destroy_option_window(sclwindow window)
     }
 }
 
-int inputmethod_run(inputmethod_callback_s *basic_cb, void *user_data)
+int ime_run(ime_callback_s *basic_cb, void *user_data)
 {
     if (g_running) {
         LOGE("inputmethod main loop is already running.");
-        return INPUTMETHOD_ERROR_OPERATION_FAILED;
+        return IME_ERROR_OPERATION_FAILED;
     }
 
     if (!basic_cb) {
         LOGE("basic callbacks pointer is null.");
-        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+        return IME_ERROR_INVALID_PARAMETER;
     }
 
     g_basic_callback = *basic_cb;
@@ -310,9 +310,9 @@ int inputmethod_run(inputmethod_callback_s *basic_cb, void *user_data)
     if (!g_basic_callback.create || !g_basic_callback.terminate ||
         !g_basic_callback.show || !g_basic_callback.hide) {
         LOGE("mandatory callback funtions are not set");
-        memset(&g_basic_callback, 0, sizeof(inputmethod_callback_s));
-        memset(&g_event_callback, 0, sizeof(inputmethod_event_callback_s));
-        return INPUTMETHOD_ERROR_NO_CALLBACK_FUNCTION;
+        memset(&g_basic_callback, 0, sizeof(ime_callback_s));
+        memset(&g_event_callback, 0, sizeof(ime_event_callback_s));
+        return IME_ERROR_NO_CALLBACK_FUNCTION;
     }
 
     g_user_data = user_data;
@@ -320,357 +320,357 @@ int inputmethod_run(inputmethod_callback_s *basic_cb, void *user_data)
 
     g_core.run();
 
-    memset(&g_basic_callback, 0, sizeof(inputmethod_callback_s));
-    memset(&g_event_callback, 0, sizeof(inputmethod_event_callback_s));
+    memset(&g_basic_callback, 0, sizeof(ime_callback_s));
+    memset(&g_event_callback, 0, sizeof(ime_event_callback_s));
     g_user_data = NULL;
     g_running = false;
 
-    return INPUTMETHOD_ERROR_NONE;
+    return IME_ERROR_NONE;
 }
 
-int inputmethod_event_set_focus_in_cb(inputmethod_focus_in_cb callback_func, void *user_data)
+int ime_event_set_focus_in_cb(ime_focus_in_cb callback_func, void *user_data)
 {
     if (!callback_func)
-        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+        return IME_ERROR_INVALID_PARAMETER;
 
     if (g_running)
-        return INPUTMETHOD_ERROR_OPERATION_FAILED;
+        return IME_ERROR_OPERATION_FAILED;
 
     g_event_callback.focus_in = callback_func;
     g_event_callback.focus_in_user_data = user_data;
 
-    return INPUTMETHOD_ERROR_NONE;
+    return IME_ERROR_NONE;
 }
 
-int inputmethod_event_set_focus_out_cb(inputmethod_focus_out_cb callback_func, void *user_data)
+int ime_event_set_focus_out_cb(ime_focus_out_cb callback_func, void *user_data)
 {
     if (!callback_func)
-        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+        return IME_ERROR_INVALID_PARAMETER;
 
     if (g_running)
-        return INPUTMETHOD_ERROR_OPERATION_FAILED;
+        return IME_ERROR_OPERATION_FAILED;
 
     g_event_callback.focus_out = callback_func;
     g_event_callback.focus_out_user_data = user_data;
 
-    return INPUTMETHOD_ERROR_NONE;
+    return IME_ERROR_NONE;
 }
 
-int inputmethod_event_set_surrounding_text_updated_cb(inputmethod_surrounding_text_updated_cb callback_func, void *user_data)
+int ime_event_set_surrounding_text_updated_cb(ime_surrounding_text_updated_cb callback_func, void *user_data)
 {
     if (!callback_func)
-        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+        return IME_ERROR_INVALID_PARAMETER;
 
     if (g_running)
-        return INPUTMETHOD_ERROR_OPERATION_FAILED;
+        return IME_ERROR_OPERATION_FAILED;
 
     g_event_callback.surrounding_text_updated = callback_func;
     g_event_callback.surrounding_text_updated_user_data = user_data;
 
-    return INPUTMETHOD_ERROR_NONE;
+    return IME_ERROR_NONE;
 }
 
-int inputmethod_event_set_input_context_reset_cb(inputmethod_input_context_reset_cb callback_func, void *user_data)
+int ime_event_set_input_context_reset_cb(ime_input_context_reset_cb callback_func, void *user_data)
 {
     if (!callback_func)
-        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+        return IME_ERROR_INVALID_PARAMETER;
 
     if (g_running)
-        return INPUTMETHOD_ERROR_OPERATION_FAILED;
+        return IME_ERROR_OPERATION_FAILED;
 
     g_event_callback.input_context_reset = callback_func;
     g_event_callback.input_context_reset_user_data = user_data;
 
-    return INPUTMETHOD_ERROR_NONE;
+    return IME_ERROR_NONE;
 }
 
-int inputmethod_event_set_cursor_position_updated_cb(inputmethod_cursor_position_updated_cb callback_func, void *user_data)
+int ime_event_set_cursor_position_updated_cb(ime_cursor_position_updated_cb callback_func, void *user_data)
 {
     if (!callback_func)
-        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+        return IME_ERROR_INVALID_PARAMETER;
 
     if (g_running)
-        return INPUTMETHOD_ERROR_OPERATION_FAILED;
+        return IME_ERROR_OPERATION_FAILED;
 
     g_event_callback.cursor_position_updated = callback_func;
     g_event_callback.cursor_position_updated_user_data = user_data;
 
-    return INPUTMETHOD_ERROR_NONE;
+    return IME_ERROR_NONE;
 }
 
-int inputmethod_event_set_language_requested_cb(inputmethod_language_requested_cb callback_func, void *user_data)
+int ime_event_set_language_requested_cb(ime_language_requested_cb callback_func, void *user_data)
 {
     if (!callback_func)
-        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+        return IME_ERROR_INVALID_PARAMETER;
 
     if (g_running)
-        return INPUTMETHOD_ERROR_OPERATION_FAILED;
+        return IME_ERROR_OPERATION_FAILED;
 
     g_event_callback.language_requested = callback_func;
     g_event_callback.language_requested_user_data = user_data;
 
-    return INPUTMETHOD_ERROR_NONE;
+    return IME_ERROR_NONE;
 }
 
-int inputmethod_event_set_language_set_cb(inputmethod_language_set_cb callback_func, void *user_data)
+int ime_event_set_language_set_cb(ime_language_set_cb callback_func, void *user_data)
 {
     if (!callback_func)
-        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+        return IME_ERROR_INVALID_PARAMETER;
 
     if (g_running)
-        return INPUTMETHOD_ERROR_OPERATION_FAILED;
+        return IME_ERROR_OPERATION_FAILED;
 
     g_event_callback.language_set = callback_func;
     g_event_callback.language_set_user_data = user_data;
 
-    return INPUTMETHOD_ERROR_NONE;
+    return IME_ERROR_NONE;
 }
 
-int inputmethod_event_set_imdata_set_cb(inputmethod_imdata_set_cb callback_func, void *user_data)
+int ime_event_set_imdata_set_cb(ime_imdata_set_cb callback_func, void *user_data)
 {
     if (!callback_func)
-        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+        return IME_ERROR_INVALID_PARAMETER;
 
     if (g_running)
-        return INPUTMETHOD_ERROR_OPERATION_FAILED;
+        return IME_ERROR_OPERATION_FAILED;
 
     g_event_callback.imdata_set = callback_func;
     g_event_callback.imdata_set_user_data = user_data;
 
-    return INPUTMETHOD_ERROR_NONE;
+    return IME_ERROR_NONE;
 }
 
-int inputmethod_event_set_layout_set_cb(inputmethod_layout_set_cb callback_func, void *user_data)
+int ime_event_set_layout_set_cb(ime_layout_set_cb callback_func, void *user_data)
 {
     if (!callback_func)
-        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+        return IME_ERROR_INVALID_PARAMETER;
 
     if (g_running)
-        return INPUTMETHOD_ERROR_OPERATION_FAILED;
+        return IME_ERROR_OPERATION_FAILED;
 
     g_event_callback.layout_set = callback_func;
     g_event_callback.layout_set_user_data = user_data;
 
-    return INPUTMETHOD_ERROR_NONE;
+    return IME_ERROR_NONE;
 }
 
-int inputmethod_event_set_return_key_type_set_cb(inputmethod_return_key_type_set_cb callback_func, void *user_data)
+int ime_event_set_return_key_type_set_cb(ime_return_key_type_set_cb callback_func, void *user_data)
 {
     if (!callback_func)
-        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+        return IME_ERROR_INVALID_PARAMETER;
 
     if (g_running)
-        return INPUTMETHOD_ERROR_OPERATION_FAILED;
+        return IME_ERROR_OPERATION_FAILED;
 
     g_event_callback.return_key_type_set = callback_func;
     g_event_callback.return_key_type_set_user_data = user_data;
 
-    return INPUTMETHOD_ERROR_NONE;
+    return IME_ERROR_NONE;
 }
 
-int inputmethod_event_set_return_key_state_set_cb(inputmethod_return_key_state_set_cb callback_func, void *user_data)
+int ime_event_set_return_key_state_set_cb(ime_return_key_state_set_cb callback_func, void *user_data)
 {
     if (!callback_func)
-        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+        return IME_ERROR_INVALID_PARAMETER;
 
     if (g_running)
-        return INPUTMETHOD_ERROR_OPERATION_FAILED;
+        return IME_ERROR_OPERATION_FAILED;
 
     g_event_callback.return_key_state_set = callback_func;
     g_event_callback.return_key_state_set_user_data = user_data;
 
-    return INPUTMETHOD_ERROR_NONE;
+    return IME_ERROR_NONE;
 }
 
-int inputmethod_event_set_geometry_requested_cb(inputmethod_geometry_requested_cb callback_func, void *user_data)
+int ime_event_set_geometry_requested_cb(ime_geometry_requested_cb callback_func, void *user_data)
 {
     if (!callback_func)
-        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+        return IME_ERROR_INVALID_PARAMETER;
 
     if (g_running)
-        return INPUTMETHOD_ERROR_OPERATION_FAILED;
+        return IME_ERROR_OPERATION_FAILED;
 
     g_event_callback.geometry_requested = callback_func;
     g_event_callback.geometry_requested_user_data = user_data;
 
-    return INPUTMETHOD_ERROR_NONE;
+    return IME_ERROR_NONE;
 }
 
-int inputmethod_event_set_display_language_changed_cb(inputmethod_display_language_changed_cb callback_func, void *user_data)
+int ime_event_set_display_language_changed_cb(ime_display_language_changed_cb callback_func, void *user_data)
 {
     if (!callback_func)
-        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+        return IME_ERROR_INVALID_PARAMETER;
 
     if (g_running)
-        return INPUTMETHOD_ERROR_OPERATION_FAILED;
+        return IME_ERROR_OPERATION_FAILED;
 
     g_event_callback.display_language_changed = callback_func;
     g_event_callback.display_language_changed_user_data = user_data;
 
-    return INPUTMETHOD_ERROR_NONE;
+    return IME_ERROR_NONE;
 }
 
-int inputmethod_event_set_rotation_degree_changed_cb(inputmethod_rotation_degree_changed_cb callback_func, void *user_data)
+int ime_event_set_rotation_degree_changed_cb(ime_rotation_degree_changed_cb callback_func, void *user_data)
 {
     if (!callback_func)
-        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+        return IME_ERROR_INVALID_PARAMETER;
 
     if (g_running)
-        return INPUTMETHOD_ERROR_OPERATION_FAILED;
+        return IME_ERROR_OPERATION_FAILED;
 
     g_event_callback.rotation_degree_changed = callback_func;
     g_event_callback.rotation_degree_changed_user_data = user_data;
 
-    return INPUTMETHOD_ERROR_NONE;
+    return IME_ERROR_NONE;
 }
 
-int inputmethod_event_set_accessibility_state_changed_cb(inputmethod_accessibility_state_changed_cb callback_func, void *user_data)
+int ime_event_set_accessibility_state_changed_cb(ime_accessibility_state_changed_cb callback_func, void *user_data)
 {
     if (!callback_func)
-        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+        return IME_ERROR_INVALID_PARAMETER;
 
     if (g_running)
-        return INPUTMETHOD_ERROR_OPERATION_FAILED;
+        return IME_ERROR_OPERATION_FAILED;
 
     g_event_callback.accessibility_state_changed = callback_func;
     g_event_callback.accessibility_state_changed_user_data = user_data;
 
-    return INPUTMETHOD_ERROR_NONE;
+    return IME_ERROR_NONE;
 }
 
-int inputmethod_event_set_option_window_created_cb(inputmethod_option_window_created_cb callback_func, void *user_data)
+int ime_event_set_option_window_created_cb(ime_option_window_created_cb callback_func, void *user_data)
 {
     if (!callback_func)
-        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+        return IME_ERROR_INVALID_PARAMETER;
 
     if (g_running)
-        return INPUTMETHOD_ERROR_OPERATION_FAILED;
+        return IME_ERROR_OPERATION_FAILED;
 
     g_event_callback.option_window_created = callback_func;
     g_event_callback.option_window_created_user_data = user_data;
 
-    return INPUTMETHOD_ERROR_NONE;
+    return IME_ERROR_NONE;
 }
 
-int inputmethod_event_set_option_window_destroyed_cb(inputmethod_option_window_destroyed_cb callback_func, void *user_data)
+int ime_event_set_option_window_destroyed_cb(ime_option_window_destroyed_cb callback_func, void *user_data)
 {
     if (!callback_func)
-        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+        return IME_ERROR_INVALID_PARAMETER;
 
     if (g_running)
-        return INPUTMETHOD_ERROR_OPERATION_FAILED;
+        return IME_ERROR_OPERATION_FAILED;
 
     g_event_callback.option_window_destroyed = callback_func;
     g_event_callback.option_window_destroyed_user_data = user_data;
 
-    return INPUTMETHOD_ERROR_NONE;
+    return IME_ERROR_NONE;
 }
 
-int inputmethod_send_key_event(inputmethod_key_code_e keycode, inputmethod_key_mask_e keymask)
+int ime_send_key_event(ime_key_code_e keycode, ime_key_mask_e keymask)
 {
     if (!g_running)
-        return INPUTMETHOD_ERROR_NOT_RUNNING;
+        return IME_ERROR_NOT_RUNNING;
 
     g_core.forward_key_event(-1, NULL, (sclu32)keycode, (sclu16)keymask);
 
-    return TIZEN_ERROR_NONE;
+    return IME_ERROR_NONE;
 }
 
-int inputmethod_commit_string(const char *str)
+int ime_commit_string(const char *str)
 {
     if (!g_running)
-        return INPUTMETHOD_ERROR_NOT_RUNNING;
+        return IME_ERROR_NOT_RUNNING;
 
     g_core.commit_string(-1, NULL, str);
 
-    return TIZEN_ERROR_NONE;
+    return IME_ERROR_NONE;
 }
 
-int inputmethod_show_preedit_string(void)
+int ime_show_preedit_string(void)
 {
     if (!g_running)
-        return INPUTMETHOD_ERROR_NOT_RUNNING;
+        return IME_ERROR_NOT_RUNNING;
 
     g_core.show_preedit_string(-1, NULL);
 
-    return TIZEN_ERROR_NONE;
+    return IME_ERROR_NONE;
 }
 
-int inputmethod_hide_preedit_string(void)
+int ime_hide_preedit_string(void)
 {
     if (!g_running)
-        return INPUTMETHOD_ERROR_NOT_RUNNING;
+        return IME_ERROR_NOT_RUNNING;
 
     g_core.hide_preedit_string(-1, NULL);
 
-    return TIZEN_ERROR_NONE;
+    return IME_ERROR_NONE;
 }
 
-int inputmethod_update_preedit_string(const char *str)
+int ime_update_preedit_string(const char *str)
 {
     if (!g_running)
-        return INPUTMETHOD_ERROR_NOT_RUNNING;
+        return IME_ERROR_NOT_RUNNING;
 
     if (!str)
-        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+        return IME_ERROR_INVALID_PARAMETER;
 
     g_core.update_preedit_string(-1, NULL, str);
 
-    return TIZEN_ERROR_NONE;
+    return IME_ERROR_NONE;
 }
 
-int inputmethod_request_surrounding_text(int maxlen_before, int maxlen_after)
+int ime_request_surrounding_text(int maxlen_before, int maxlen_after)
 {
     if (!g_running)
-        return INPUTMETHOD_ERROR_NOT_RUNNING;
+        return IME_ERROR_NOT_RUNNING;
 
     if (!g_event_callback.surrounding_text_updated)
-        return INPUTMETHOD_ERROR_NO_CALLBACK_FUNCTION;
+        return IME_ERROR_NO_CALLBACK_FUNCTION;
 
     g_core.get_surrounding_text(NULL, maxlen_before, maxlen_after);
 
-    return TIZEN_ERROR_NONE;
+    return IME_ERROR_NONE;
 }
 
-int inputmethod_delete_surrounding_text(int offset, int len)
+int ime_delete_surrounding_text(int offset, int len)
 {
     if (!g_running)
-        return INPUTMETHOD_ERROR_NOT_RUNNING;
+        return IME_ERROR_NOT_RUNNING;
 
     if (len <= 0)
-        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+        return IME_ERROR_INVALID_PARAMETER;
 
     g_core.delete_surrounding_text(offset, len);
 
-    return TIZEN_ERROR_NONE;
+    return IME_ERROR_NONE;
 }
 
-Evas_Object* inputmethod_get_main_window(void)
+Evas_Object* ime_get_main_window(void)
 {
     Evas_Object *win = NULL;
 
     if (!g_running) {
-        set_last_result(INPUTMETHOD_ERROR_NOT_RUNNING);
+        set_last_result(IME_ERROR_NOT_RUNNING);
         return NULL;
     }
 
     win = static_cast<Evas_Object*>(g_core.get_main_window());
     if (win) {
-        set_last_result(INPUTMETHOD_ERROR_NONE);
+        set_last_result(IME_ERROR_NONE);
     }
     else {
-        set_last_result(INPUTMETHOD_ERROR_OPERATION_FAILED);
+        set_last_result(IME_ERROR_OPERATION_FAILED);
     }
 
     return win;
 }
 
-int inputmethod_set_size(int portrait_width, int portrait_height, int landscape_width, int landscape_height)
+int ime_set_size(int portrait_width, int portrait_height, int landscape_width, int landscape_height)
 {
     SclSize portrait_size, landscape_size;
 
     if (!g_running)
-        return INPUTMETHOD_ERROR_NOT_RUNNING;
+        return IME_ERROR_NOT_RUNNING;
 
     portrait_size.width = portrait_width;
     portrait_size.height = portrait_height;
@@ -680,185 +680,185 @@ int inputmethod_set_size(int portrait_width, int portrait_height, int landscape_
 
     g_core.set_keyboard_size_hints(portrait_size, landscape_size);
 
-    return TIZEN_ERROR_NONE;
+    return IME_ERROR_NONE;
 }
 
-int inputmethod_create_option_window(void)
+int ime_create_option_window(void)
 {
     if (!g_running)
-        return INPUTMETHOD_ERROR_NOT_RUNNING;
+        return IME_ERROR_NOT_RUNNING;
 
     if (!g_event_callback.option_window_created || !g_event_callback.option_window_destroyed) {
-        LOGW("inputmethod_create_option_window_cb() and inputmethod_destroy_option_window_cb() callback functions are not set.");
-        return INPUTMETHOD_ERROR_NO_CALLBACK_FUNCTION;
+        LOGW("ime_create_option_window_cb() and ime_destroy_option_window_cb() callback functions are not set.");
+        return IME_ERROR_NO_CALLBACK_FUNCTION;
     }
 
     if (g_core.create_option_window())
-        return INPUTMETHOD_ERROR_NONE;
+        return IME_ERROR_NONE;
     else
-        return INPUTMETHOD_ERROR_OPERATION_FAILED;
+        return IME_ERROR_OPERATION_FAILED;
 }
 
-int inputmethod_destroy_option_window(Evas_Object *window)
+int ime_destroy_option_window(Evas_Object *window)
 {
     if (!window) {
         LOGW("Window pointer is null.");
-        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+        return IME_ERROR_INVALID_PARAMETER;
     }
 
     if (!g_running)
-        return INPUTMETHOD_ERROR_NOT_RUNNING;
+        return IME_ERROR_NOT_RUNNING;
 
     if (!g_event_callback.option_window_created || !g_event_callback.option_window_destroyed) {
-        LOGW("inputmethod_create_option_window_cb() and inputmethod_destroy_option_window_cb() callback functions are not set.");
-        return INPUTMETHOD_ERROR_NO_CALLBACK_FUNCTION;
+        LOGW("ime_create_option_window_cb() and ime_destroy_option_window_cb() callback functions are not set.");
+        return IME_ERROR_NO_CALLBACK_FUNCTION;
     }
 
     g_core.destroy_option_window(window);
 
-    return INPUTMETHOD_ERROR_NONE;
+    return IME_ERROR_NONE;
 }
 
-int inputmethod_context_get_layout(inputmethod_context_h context, Ecore_IMF_Input_Panel_Layout *layout)
+int ime_context_get_layout(ime_context_h context, Ecore_IMF_Input_Panel_Layout *layout)
 {
     if (!context || !layout)
-        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+        return IME_ERROR_INVALID_PARAMETER;
 
     if (!g_running)
-        return INPUTMETHOD_ERROR_NOT_RUNNING;
+        return IME_ERROR_NOT_RUNNING;
 
     *layout = context->layout;
 
-    return INPUTMETHOD_ERROR_NONE;
+    return IME_ERROR_NONE;
 }
 
-int inputmethod_context_get_layout_variation(inputmethod_context_h context, inputmethod_layout_variation_e *layout_variation)
+int ime_context_get_layout_variation(ime_context_h context, ime_layout_variation_e *layout_variation)
 {
     if (!context || !layout_variation)
-        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+        return IME_ERROR_INVALID_PARAMETER;
 
     if (!g_running)
-        return INPUTMETHOD_ERROR_NOT_RUNNING;
+        return IME_ERROR_NOT_RUNNING;
 
-    *layout_variation = static_cast<inputmethod_layout_variation_e>(context->layout_variation);
+    *layout_variation = static_cast<ime_layout_variation_e>(context->layout_variation);
 
-    return INPUTMETHOD_ERROR_NONE;
+    return IME_ERROR_NONE;
 }
 
-int inputmethod_context_get_cursor_position(inputmethod_context_h context, int *cursor_pos)
+int ime_context_get_cursor_position(ime_context_h context, int *cursor_pos)
 {
     if (!context || !cursor_pos)
-        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+        return IME_ERROR_INVALID_PARAMETER;
 
     if (!g_running)
-        return INPUTMETHOD_ERROR_NOT_RUNNING;
+        return IME_ERROR_NOT_RUNNING;
 
     *cursor_pos = context->cursor_pos;
 
-    return INPUTMETHOD_ERROR_NONE;
+    return IME_ERROR_NONE;
 }
 
-int inputmethod_context_get_autocapital_type(inputmethod_context_h context, Ecore_IMF_Autocapital_Type *autocapital_type)
+int ime_context_get_autocapital_type(ime_context_h context, Ecore_IMF_Autocapital_Type *autocapital_type)
 {
     if (!context || !autocapital_type)
-        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+        return IME_ERROR_INVALID_PARAMETER;
 
     if (!g_running)
-        return INPUTMETHOD_ERROR_NOT_RUNNING;
+        return IME_ERROR_NOT_RUNNING;
 
     *autocapital_type = context->autocapital_type;
 
-    return INPUTMETHOD_ERROR_NONE;
+    return IME_ERROR_NONE;
 }
 
-int inputmethod_context_get_return_key_type(inputmethod_context_h context, Ecore_IMF_Input_Panel_Return_Key_Type *return_key_type)
+int ime_context_get_return_key_type(ime_context_h context, Ecore_IMF_Input_Panel_Return_Key_Type *return_key_type)
 {
     if (!context || !return_key_type)
-        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+        return IME_ERROR_INVALID_PARAMETER;
 
     if (!g_running)
-        return INPUTMETHOD_ERROR_NOT_RUNNING;
+        return IME_ERROR_NOT_RUNNING;
 
     *return_key_type = context->return_key_type;
 
-    return INPUTMETHOD_ERROR_NONE;
+    return IME_ERROR_NONE;
 }
 
-int inputmethod_context_get_return_key_state(inputmethod_context_h context, bool *return_key_state)
+int ime_context_get_return_key_state(ime_context_h context, bool *return_key_state)
 {
     if (!context || !return_key_state)
-        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+        return IME_ERROR_INVALID_PARAMETER;
 
     if (!g_running)
-        return INPUTMETHOD_ERROR_NOT_RUNNING;
+        return IME_ERROR_NOT_RUNNING;
 
     *return_key_state = static_cast<bool>(context->return_key_disabled);
 
-    return INPUTMETHOD_ERROR_NONE;
+    return IME_ERROR_NONE;
 }
 
-int inputmethod_context_get_prediction_mode(inputmethod_context_h context, bool *prediction_mode)
+int ime_context_get_prediction_mode(ime_context_h context, bool *prediction_mode)
 {
     if (!context || !prediction_mode)
-        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+        return IME_ERROR_INVALID_PARAMETER;
 
     if (!g_running)
-        return INPUTMETHOD_ERROR_NOT_RUNNING;
+        return IME_ERROR_NOT_RUNNING;
 
     *prediction_mode = static_cast<bool>(context->prediction_allow);
 
-    return INPUTMETHOD_ERROR_NONE;
+    return IME_ERROR_NONE;
 }
 
-int inputmethod_context_get_password_mode(inputmethod_context_h context, bool *password_mode)
+int ime_context_get_password_mode(ime_context_h context, bool *password_mode)
 {
     if (!context || !password_mode)
-        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+        return IME_ERROR_INVALID_PARAMETER;
 
     if (!g_running)
-        return INPUTMETHOD_ERROR_NOT_RUNNING;
+        return IME_ERROR_NOT_RUNNING;
 
     *password_mode = static_cast<bool>(context->password_mode);
 
-    return INPUTMETHOD_ERROR_NONE;
+    return IME_ERROR_NONE;
 }
 
-int inputmethod_context_get_input_hint(inputmethod_context_h context, Ecore_IMF_Input_Hints *input_hint)
+int ime_context_get_input_hint(ime_context_h context, Ecore_IMF_Input_Hints *input_hint)
 {
     if (!context || !input_hint)
-        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+        return IME_ERROR_INVALID_PARAMETER;
 
     if (!g_running)
-        return INPUTMETHOD_ERROR_NOT_RUNNING;
+        return IME_ERROR_NOT_RUNNING;
 
     *input_hint = context->input_hint;
 
-    return INPUTMETHOD_ERROR_NONE;
+    return IME_ERROR_NONE;
 }
 
-int inputmethod_context_get_bidi_direction(inputmethod_context_h context, Ecore_IMF_BiDi_Direction *bidi)
+int ime_context_get_bidi_direction(ime_context_h context, Ecore_IMF_BiDi_Direction *bidi)
 {
     if (!context || !bidi)
-        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+        return IME_ERROR_INVALID_PARAMETER;
 
     if (!g_running)
-        return INPUTMETHOD_ERROR_NOT_RUNNING;
+        return IME_ERROR_NOT_RUNNING;
 
     *bidi = context->bidi_direction;
 
-    return INPUTMETHOD_ERROR_NONE;
+    return IME_ERROR_NONE;
 }
 
-int inputmethod_context_get_language(inputmethod_context_h context, Ecore_IMF_Input_Panel_Lang *language)
+int ime_context_get_language(ime_context_h context, Ecore_IMF_Input_Panel_Lang *language)
 {
     if (!context || !language)
-        return INPUTMETHOD_ERROR_INVALID_PARAMETER;
+        return IME_ERROR_INVALID_PARAMETER;
 
     if (!g_running)
-        return INPUTMETHOD_ERROR_NOT_RUNNING;
+        return IME_ERROR_NOT_RUNNING;
 
     *language = context->language;
 
-    return INPUTMETHOD_ERROR_NONE;
+    return IME_ERROR_NONE;
 }
 

@@ -17,7 +17,7 @@
 #ifndef __TIZEN_UIX_INPUTMETHOD_PRIVATE_H__
 #define __TIZEN_UIX_INPUTMETHOD_PRIVATE_H__
 
-struct _inputmethod_context
+struct _ime_context
 {
     Ecore_IMF_Input_Panel_Layout layout;    /**< Input panel (keyboard) layout types */
     int layout_variation;                   /**< Layout variation */
