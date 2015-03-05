@@ -264,7 +264,7 @@ typedef void (*ime_language_requested_cb)(void *user_data, char **lang_code);
  *
  * @since_tizen 2.4
  *
- * @param[in] language The preferred language that the client wants
+ * @param[in] language The preferred language that the client application wants
  * @param[in] user_data User data to be passed from the callback registration function
  *
  * @pre The callback can be registered using ime_event_set_language_set_cb().
@@ -366,6 +366,21 @@ typedef void (*ime_return_key_state_set_cb)(bool disabled, void *user_data);
  * @see ime_event_set_geometry_requested_cb
  */
 typedef void (*ime_geometry_requested_cb)(void *user_data, int *x, int *y, int *w, int *h);
+
+/**
+ * @brief Called when the key event is received from the external keyboard devices or ime_send_key_event() function.
+ *
+ * @details This function processes the key event before an associated text input UI control deos.
+ *
+ * @param[in] keycode The key code to be sent
+ * @param[in] keymask The modifier key mask
+ * @param[in] user_data User data to be passed from the callback registration function
+ *
+ * @return @c true if the event is processed, otherwise the event is not processed and is forwarded to the client application.
+ *
+ * @see ime_event_set_process_key_event_cb, ime_send_key_event, ime_commit_string, ime_show_preedit_string, ime_hide_preedit_string, ime_update_preedit_string
+ */
+typedef bool (*ime_process_key_event_cb)(ime_key_code_e keycode, ime_key_mask_e keymask, void *user_data);
 
 /**
  * @brief Called when the system display language is changed.
@@ -824,6 +839,72 @@ EXPORT_API int ime_event_set_return_key_state_set_cb(ime_return_key_state_set_cb
 EXPORT_API int ime_event_set_geometry_requested_cb(ime_geometry_requested_cb callback_func, void *user_data);
 
 /**
+ * @brief Sets @c process_key_event event callback function.
+ *
+ * @remarks The ime_process_key_event_cb() callback function is called when the key event
+ * is received from the external keyboard devices or ime_send_key_event() function.
+ *
+ * @since_tizen 2.4
+ *
+ * @param[in] callback_func @c process_key_event event callback function
+ * @param[in] user_data User data to be passed to the callback function
+ *
+ * @return 0 on success, otherwise a negative error value
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_OPERATION_FAILED Operation failed
+ *
+ * @post The ime_run() function should be called to start to run IME application's main loop.
+ *
+ * @see ime_process_key_event_cb, ime_run
+ *
+ * @code
+ static void inputmethod_create_cb(void *user_data);
+ static void inputmethod_terminate_cb(void *user_data);
+ static void inputmethod_show_cb(int context_id, ime_context_h context, void *user_data);
+ static void inputmethod_hide_cb(int context_id, void *user_data);
+
+ static bool inputmethod_process_key_event_cb(ime_key_code_e keycode, ime_key_mask_e keymask, void *user_data);
+ {
+     if (keymask & IME_KEY_MASK_CONTROL) {
+         return false; // e.g., Cotrol+C key event would be forwarded to UI control of the client application
+     }
+     if (keymask & IME_KEY_MASK_ALT) {
+         return false;
+     }
+
+     if (!(keymask & IME_KEY_MASK_RELEASED)) { // The key is pressed
+         if (keycode == IME_KEY_1) {
+             ime_update_preedit_string("1"); // Show "1" preedit string
+             return true;
+         }
+         else if (keycode == IME_KEY_2) {
+             ime_commit_string("12"); // Input "12" string
+             return true;
+         }
+     }
+
+     return false;
+ }
+
+ void ime_app_main(int argc, char **argv)
+ {
+     ime_callback_s basic_callback = {
+         inputmethod_create_cb,
+         inputmethod_terminate_cb,
+         inputmethod_show_cb,
+         inputmethod_hide_cb,
+     };
+
+     ime_event_set_process_key_event_cb(inputmethod_process_key_event_cb, NULL);
+
+     ime_run(&basic_callback, NULL);
+ }
+ * @endcode
+ */
+EXPORT_API int ime_event_set_process_key_event_cb(ime_process_key_event_cb callback_func, void *user_data);
+
+/**
  * @brief Sets @c display_language_changed event callback function.
  *
  * @remarks The ime_display_language_changed_cb() callback function is called when the system
@@ -932,20 +1013,27 @@ EXPORT_API int ime_event_set_option_window_created_cb(ime_option_window_created_
 EXPORT_API int ime_event_set_option_window_destroyed_cb(ime_option_window_destroyed_cb callback_func, void *user_data);
 
 /**
- * @brief Sends a key event directly to the associated text input UI control.
+ * @brief Sends a key event to the associated text input UI control.
+ *
+ * @details This function sends key down or up event with key mask to the client application.
+ * If @a forward_key is @c true, this key event goes to the edit filed directly. And if @a forward_key
+ * is @c false, the ime_process_key_event_cb() callback function receives the key event before the edit field.
  *
  * @since_tizen 2.4
  *
  * @param[in] keycode The key code to be sent
  * @param[in] keymask The modifier key mask
+ * @param[in] forward_key The flag to send the key event directly to the edit field
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
- * @see ime_key_code_e, ime_key_mask_e
+ * @post If @a forward_key is @c false, the ime_process_key_event_cb() callback function can compose the text with the key events.
+ *
+ * @see ime_key_code_e, ime_key_mask_e, ime_process_key_event_cb
  */
-EXPORT_API int ime_send_key_event(ime_key_code_e keycode, ime_key_mask_e keymask);
+EXPORT_API int ime_send_key_event(ime_key_code_e keycode, ime_key_mask_e keymask, bool forward_key);
 
 /**
  * @brief Sends the text to the associated text input UI control.
@@ -1391,4 +1479,3 @@ EXPORT_API int ime_context_get_language(ime_context_h context, Ecore_IMF_Input_P
 
 #endif // __TIZEN_UIX_INPUTMETHOD_H__
 
- 

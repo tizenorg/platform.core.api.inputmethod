@@ -48,6 +48,7 @@ class CCoreEventCallback : public ISCLCoreEventCallback
     void on_set_return_key_disable(bool disabled);
     void on_set_layout(Ecore_IMF_Input_Panel_Layout layout);
     void on_reset_input_context(sclint ic, const sclchar *uuid);
+    void on_process_key_event(scim::KeyEvent &key, sclu32 *ret);
     void on_set_display_language(const sclchar *language);
     void on_set_rotation_degree(sclint degree);
     void on_set_accessibility_state(sclboolean state);
@@ -67,8 +68,9 @@ typedef struct
     ime_imdata_set_cb imdata_set;       /**< Called to set the application specific data to deliver to the input panel */
     ime_layout_set_cb layout_set;       /**< Called when an edit field requests the input panel to set its layout */
     ime_return_key_type_set_cb return_key_type_set;     /**< Called when an edit field requests the input panel to set the "return" key label */
-    ime_return_key_state_set_cb return_key_state_set;   /**< Called when an edit field requests the input panel to enable or disable the "return" key state. */
+    ime_return_key_state_set_cb return_key_state_set;   /**< Called when an edit field requests the input panel to enable or disable the "return" key state */
     ime_geometry_requested_cb geometry_requested;       /**< Called when an edit field requests for the position and size of the input panel */
+    ime_process_key_event_cb process_key_event;         /**< Called when the key event is received from the external keyboard devices */
     ime_display_language_changed_cb display_language_changed;   /**< Called when the system display language is changed */
     ime_rotation_degree_changed_cb rotation_degree_changed;     /**< Called when the device is rotated */
     ime_accessibility_state_changed_cb accessibility_state_changed; /**< Called when Accessibility in Settings application is on or off */
@@ -86,6 +88,7 @@ typedef struct
     void *return_key_type_set_user_data;
     void *return_key_state_set_user_data;
     void *geometry_requested_user_data;
+    void *process_key_event_user_data;
     void *display_language_changed_user_data;
     void *rotation_degree_changed_user_data;
     void *accessibility_state_changed_user_data;
@@ -255,6 +258,26 @@ void CCoreEventCallback::on_reset_input_context(sclint ic, const sclchar *uuid)
 {
     if (g_event_callback.input_context_reset) {
         g_event_callback.input_context_reset(g_event_callback.input_context_reset_user_data);
+    }
+}
+
+void CCoreEventCallback::on_process_key_event(scim::KeyEvent &key, sclu32 *ret)
+{
+    if (g_event_callback.process_key_event) {
+        bool processed = g_event_callback.process_key_event(static_cast<ime_key_code_e>(key.code), static_cast<ime_key_mask_e>(key.mask),
+            g_event_callback.process_key_event_user_data);
+
+        if (ret) {
+            if (processed)
+                *ret = 1;
+            else
+                *ret = 0;
+        }
+    }
+    else {
+        if (ret) {
+            *ret = 0;
+        }
     }
 }
 
@@ -496,6 +519,20 @@ int ime_event_set_geometry_requested_cb(ime_geometry_requested_cb callback_func,
     return IME_ERROR_NONE;
 }
 
+int ime_event_set_process_key_event_cb(ime_process_key_event_cb callback_func, void *user_data)
+{
+    if (!callback_func)
+        return IME_ERROR_INVALID_PARAMETER;
+
+    if (g_running)
+        return IME_ERROR_OPERATION_FAILED;
+
+    g_event_callback.process_key_event = callback_func;
+    g_event_callback.process_key_event_user_data = user_data;
+
+    return IME_ERROR_NONE;
+}
+
 int ime_event_set_display_language_changed_cb(ime_display_language_changed_cb callback_func, void *user_data)
 {
     if (!callback_func)
@@ -566,12 +603,15 @@ int ime_event_set_option_window_destroyed_cb(ime_option_window_destroyed_cb call
     return IME_ERROR_NONE;
 }
 
-int ime_send_key_event(ime_key_code_e keycode, ime_key_mask_e keymask)
+int ime_send_key_event(ime_key_code_e keycode, ime_key_mask_e keymask, bool forward_key)
 {
     if (!g_running)
         return IME_ERROR_NOT_RUNNING;
 
-    g_core.forward_key_event(-1, NULL, (sclu32)keycode, (sclu16)keymask);
+    if (forward_key)
+        g_core.forward_key_event(-1, NULL, (sclu32)keycode, (sclu16)keymask);
+    else
+        g_core.send_key_event(-1, NULL, (sclu32)keycode, (sclu16)keymask);
 
     return IME_ERROR_NONE;
 }

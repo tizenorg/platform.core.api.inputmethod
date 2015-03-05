@@ -30,6 +30,9 @@
 /**
  * @brief Enumeration of the key codes.
  *
+ * If keycode & 0xff000000 == 0x01000000 then this key code is directly encoded 24-bit UCS character.
+ * The UCS value is keycode & 0x00ffffff.
+ *
  * @details Defines the list of keys supported by the system.
  * Note that certain keys may not be available on all devices.
  *
@@ -203,7 +206,7 @@ typedef enum
     IME_KEY_equal                              = 0x03d,    /**< The equal key */
     IME_KEY_greater                            = 0x03e,    /**< The greater key */
     IME_KEY_question                           = 0x03f,    /**< The question key */
-    IME_KEY_at                                 = 0x040,    /**< The  key */
+    IME_KEY_at                                 = 0x040,    /**< The at key */
     IME_KEY_A                                  = 0x041,    /**< The A key */
     IME_KEY_B                                  = 0x042,    /**< The B key */
     IME_KEY_C                                  = 0x043,    /**< The C key */
@@ -271,16 +274,23 @@ typedef enum
 /**
  * @brief Enumeration of the key masks.
  *
+ * The key masks indicate which modifier keys is pressed down during the keyboard hit.
+ * The special IME_KEY_MASK_RELEASED indicates the key release event.
+ *
  * @since_tizen 2.4
  */
 typedef enum
 {
-    IME_KEY_MASK_PRESSED = 0,       /**< The key is pressed */
-    IME_KEY_MASK_SHIFT = (1<<0),    /**< The Shift key is pressed */
-    IME_KEY_MASK_CONTROL = (1<<2),  /**< The Control key is pressed */
-    IME_KEY_MASK_ALT = (1<<3),      /**< The Alt key is pressed */
-    IME_KEY_MASK_WIN = (1<<5),      /**< The Win (between Control and Alt) is pressed */
-    IME_KEY_MASK_RELEASED = (1<<15) /**< The key is released */
+    IME_KEY_MASK_PRESSED = 0,       /**< Key press event without modifier key */
+    IME_KEY_MASK_SHIFT = (1<<0),    /**< The Shift key is pressed down */
+    IME_KEY_MASK_CAPSLOCK = (1<<1), /**< The CapsLock key is pressed down */
+    IME_KEY_MASK_CONTROL = (1<<2),  /**< The Control key is pressed down */
+    IME_KEY_MASK_ALT = (1<<3),      /**< The Alt key is pressed down */
+    IME_KEY_MASK_META = (1<<4),     /**< The Meta key is pressed down */
+    IME_KEY_MASK_WIN = (1<<5),      /**< The Win (between Control and Alt) is pressed down */
+    IME_KEY_MASK_HYPER = (1<<6),    /**< The Hyper key is pressed down */
+    IME_KEY_MASK_NUMLOCK = (1<<7),  /**< The NumLock key is pressed down */
+    IME_KEY_MASK_RELEASED = (1<<15) /**< Key release event */
 } ime_key_mask_e;
 
 /**
