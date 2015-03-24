@@ -20,15 +20,15 @@
 /**
  * @ingroup CAPI_UIX_FRAMEWORK
  * @defgroup CAPI_UIX_INPUTMETHOD_MODULE Input Method
- * @brief The @ref CAPI_UIX_INPUTMETHOD_MODULE API provides functions for starting IME application lifecycle,
+ * @brief The @ref CAPI_UIX_INPUTMETHOD_MODULE API provides the functions for starting IME application lifecycle,
  * methods to interact with current UI state of IME, and getting attributes/events.
  *
  * @section CAPI_UIX_INPUTMETHOD_MODULE_HEADER Required Header
  *   \#include <inputmethod.h>
  *
  * @section CAPI_UIX_INPUTMETHOD_MODULE_OVERVIEW Overview
- * Input method editor (IME) is an input panel that lets users to provide input and the platform to receive the text data entered.
- * Custom keyboards can be built according to the application's necessity by this API sets.
+ * Input method editor (IME) is an input panel that lets users provide input and the platform receive the text data entered.
+ * Custom keyboards can be built according to the application's necessity by these API sets.
  * Tizen provides a framework to create such input method editors. Such extra input methods can be selected from Settings.
  */
 

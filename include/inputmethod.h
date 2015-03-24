@@ -85,7 +85,7 @@ typedef enum
 } ime_layout_variation_e;
 
 /**
- * @brief Structure of an associated text input UI control's input context.
+ * @brief Handle of an associated text input UI control's input context.
  *
  * @details This is one of parameters of ime_show_cb() callback function. IME application
  * should configure its input panel with this structure information.
@@ -98,6 +98,18 @@ typedef enum
  * ime_context_get_bidi_direction, ime_context_get_language
  */
 typedef struct _ime_context *ime_context_h;
+
+/**
+ * @brief Handle of the device information of the key event.
+ *
+ * @details This is one of parameters of ime_process_key_event_cb() callback function. IME application
+ * may distinguish the key event by using this if necessary.
+ *
+ * @since_tizen 2.4
+ *
+ * @see ime_process_key_event_cb, ime_device_info_get_name, ime_device_info_get_class, ime_device_info_get_subclass
+ */
+typedef struct _ime_device_info *ime_device_info_h;
 
 /**
  * @brief Called when the input panel is created.
@@ -139,7 +151,7 @@ typedef void (*ime_terminate_cb)(void *user_data);
  * @since_tizen 2.4
  *
  * @param[in] context_id The input context identification value of an associated text input UI control
- * @param[in] context The input context information pointer
+ * @param[in] context The input context information handle
  * @param[in] user_data User data to be passed from the callback registration function
  *
  * @see ime_run, ime_get_main_window, ime_context_get_layout,
@@ -174,7 +186,7 @@ typedef void (*ime_hide_cb)(int context_id, void *user_data);
  * @param[in] context_id The input context identification value of an associated text input UI control
  * @param[in] user_data User data to be passed from the callback registration function
  *
- * @pre The callback can be registered using ime_event_set_focus_in_cb().
+ * @pre The callback can be registered using ime_event_set_focus_in_cb() function.
  *
  * @see ime_event_set_focus_in_cb
  */
@@ -188,7 +200,7 @@ typedef void (*ime_focus_in_cb)(int context_id, void *user_data);
  * @param[in] context_id The input context identification value of an associated text input UI control
  * @param[in] user_data User data to be passed from the callback registration function
  *
- * @pre The callback can be registered using ime_event_set_focus_out_cb().
+ * @pre The callback can be registered using ime_event_set_focus_out_cb() function.
  *
  * @see ime_event_set_focus_out_cb
  */
@@ -206,7 +218,7 @@ typedef void (*ime_focus_out_cb)(int context_id, void *user_data);
  * @param[in] cursor_pos The cursor position
  * @param[in] user_data User data to be passed from the callback registration function
  *
- * @pre The callback can be registered using ime_event_set_surrounding_text_updated_cb().
+ * @pre The callback can be registered using ime_event_set_surrounding_text_updated_cb() function.
  *
  * @see ime_event_set_surrounding_text_updated_cb, ime_request_surrounding_text
  */
@@ -219,7 +231,7 @@ typedef void (*ime_surrounding_text_updated_cb)(int context_id, const char *text
  *
  * @param[in] user_data User data to be passed from the callback registration function
  *
- * @pre The callback can be registered using ime_event_set_input_context_reset_cb().
+ * @pre The callback can be registered using ime_event_set_input_context_reset_cb() function.
  *
  * @see ime_event_set_input_context_reset_cb
  */
@@ -233,23 +245,23 @@ typedef void (*ime_input_context_reset_cb)(void *user_data);
  * @param[in] cursor_pos The cursor position
  * @param[in] user_data User data to be passed from the callback registration function
  *
- * @pre The callback can be registered using ime_event_set_cursor_position_updated_cb().
+ * @pre The callback can be registered using ime_event_set_cursor_position_updated_cb() function.
  *
  * @see ime_event_set_cursor_position_updated_cb
  */
 typedef void (*ime_cursor_position_updated_cb)(int cursor_pos, void *user_data);
 
 /**
- * @brief Called when an associated text input UI control requests for the language of the input panel.
+ * @brief Called when an associated text input UI control requests the language from the input panel.
  *
- * @remarks The allocated @a lang_code will be freed internally.
+ * @remarks The allocated @a lang_code will be released internally.
  *
  * @since_tizen 2.4
  *
  * @param[in] user_data User data to be passed from the callback registration function
- * @param[out] lang_code Input panel's current input language code
+ * @param[out] lang_code Input panel's current input language code (e.g., "en_US")
  *
- * @pre The callback can be registered using ime_event_set_language_requested_cb().
+ * @pre The callback can be registered using ime_event_set_language_requested_cb() function.
  *
  * @see ime_event_set_language_requested_cb
  */
@@ -267,7 +279,7 @@ typedef void (*ime_language_requested_cb)(void *user_data, char **lang_code);
  * @param[in] language The preferred language that the client application wants
  * @param[in] user_data User data to be passed from the callback registration function
  *
- * @pre The callback can be registered using ime_event_set_language_set_cb().
+ * @pre The callback can be registered using ime_event_set_language_set_cb() function.
  *
  * @see ime_event_set_language_set_cb
  */
@@ -276,20 +288,40 @@ typedef void (*ime_language_set_cb)(Ecore_IMF_Input_Panel_Lang language, void *u
 /**
  * @brief Called to set the application specific data to deliver to the input panel.
  *
- * @details This API is used by applications to deliver specific data to the input panel.
- * The data format MUST be negotiated by both application and the input panel.
+ * @details This API is used by the applications to deliver the specific data to the input panel.
+ * The data format MUST be negotiated by both application and input panel.
  *
  * @since_tizen 2.4
  *
  * @param[in] data The specific data to be set to the input panel
- * @param[in] data_len The length of data, in bytes, to send to the input panel
+ * @param[in] data_length The length of data, in bytes, to send to the input panel
  * @param[in] user_data User data to be passed from the callback registration function
  *
- * @pre The callback can be registered using ime_event_set_imdata_set_cb().
+ * @pre The callback can be registered using ime_event_set_imdata_set_cb() function.
  *
  * @see ime_event_set_imdata_set_cb
  */
-typedef void (*ime_imdata_set_cb)(void *data, unsigned int data_len, void *user_data);
+typedef void (*ime_imdata_set_cb)(void *data, unsigned int data_length, void *user_data);
+
+/**
+ * @brief Called when an associated text input UI control requests the application specific data from the input panel.
+ *
+ * @details This API is used by the applications to request the specific data from the input panel.
+ * The data format MUST be negotiated by both application and input panel.
+ *
+ * @remarks The allocated @a data will be released internally.
+ *
+ * @since_tizen 2.4
+ *
+ * @param[in] user_data User data to be passed from the callback registration function
+ * @param[out] data Input panel's data to be set to the application
+ * @paran[out] data_length The length of data, in bytes, to send to the application
+ *
+ * @pre The callback can be registered using ime_event_set_imdata_requested_cb() function.
+ *
+ * @see ime_event_set_imdata_requested_cb
+ */
+typedef void (*ime_imdata_requested_cb)(void *user_data, void **data, unsigned int *data_length);
 
 /**
  * @brief Called when an associated text input UI control requests the input panel to set its layout.
@@ -303,7 +335,7 @@ typedef void (*ime_imdata_set_cb)(void *data, unsigned int data_len, void *user_
  * @param[in] layout The input panel layout
  * @param[in] user_data User data to be passed from the callback registration function
  *
- * @pre The callback can be registered using ime_event_set_layout_set_cb().
+ * @pre The callback can be registered using ime_event_set_layout_set_cb() function.
  *
  * @see ime_event_set_layout_set_cb
  */
@@ -323,7 +355,7 @@ typedef void (*ime_layout_set_cb)(Ecore_IMF_Input_Panel_Layout layout, void *use
  * @param[in] type The type of @c Return key on the input panel
  * @param[in] user_data User data to be passed from the callback registration function
  *
- * @pre The callback can be registered using ime_event_set_return_key_type_set_cb().
+ * @pre The callback can be registered using ime_event_set_return_key_type_set_cb() function.
  *
  * @see ime_event_set_return_key_type_set_cb
  */
@@ -343,15 +375,14 @@ typedef void (*ime_return_key_type_set_cb)(Ecore_IMF_Input_Panel_Return_Key_Type
  * @param[in] disabled The Boolean state to disable @c Return key. The @c Return key is enabled by default
  * @param[in] user_data User data to be passed from the callback registration function
  *
- * @pre The callback can be registered using ime_event_set_return_key_state_set_cb().
+ * @pre The callback can be registered using ime_event_set_return_key_state_set_cb() function.
  *
  * @see ime_event_set_return_key_state_set_cb
  */
 typedef void (*ime_return_key_state_set_cb)(bool disabled, void *user_data);
 
 /**
- * @brief Called when an associated text input UI control requests for the position
- * and size of the input panel.
+ * @brief Called when an associated text input UI control requests the position and size from the input panel.
  *
  * @since_tizen 2.4
  *
@@ -361,26 +392,32 @@ typedef void (*ime_return_key_state_set_cb)(bool disabled, void *user_data);
  * @param[out] w The window width
  * @param[out] h The window height
  *
- * @pre The callback can be registered using ime_event_set_geometry_requested_cb().
+ * @pre The callback can be registered using ime_event_set_geometry_requested_cb() function.
  *
  * @see ime_event_set_geometry_requested_cb
  */
 typedef void (*ime_geometry_requested_cb)(void *user_data, int *x, int *y, int *w, int *h);
 
 /**
- * @brief Called when the key event is received from the external keyboard devices or ime_send_key_event() function.
+ * @brief Called when the key event is received from the external devices or ime_send_key_event() function.
  *
- * @details This function processes the key event before an associated text input UI control deos.
+ * @details This function processes the key event before an associated text input UI control does.
+ *
+ * @remarks If the key event is from the external device, @a dev_info will have its name, class and subclass information.
  *
  * @param[in] keycode The key code to be sent
  * @param[in] keymask The modifier key mask
+ * @param[in] dev_info The device information handle
  * @param[in] user_data User data to be passed from the callback registration function
  *
  * @return @c true if the event is processed, otherwise the event is not processed and is forwarded to the client application.
  *
- * @see ime_event_set_process_key_event_cb, ime_send_key_event, ime_commit_string, ime_show_preedit_string, ime_hide_preedit_string, ime_update_preedit_string
+ * @pre The callback can be registered using ime_event_set_process_key_event_cb() function.
+ *
+ * @see ime_event_set_process_key_event_cb, ime_device_info_get_name, ime_device_info_get_class, ime_device_info_get_subclass,
+ * ime_send_key_event, ime_commit_string, ime_show_preedit_string, ime_hide_preedit_string, ime_update_preedit_string
  */
-typedef bool (*ime_process_key_event_cb)(ime_key_code_e keycode, ime_key_mask_e keymask, void *user_data);
+typedef bool (*ime_process_key_event_cb)(ime_key_code_e keycode, ime_key_mask_e keymask, ime_device_info_h dev_info, void *user_data);
 
 /**
  * @brief Called when the system display language is changed.
@@ -390,7 +427,7 @@ typedef bool (*ime_process_key_event_cb)(ime_key_code_e keycode, ime_key_mask_e 
  * @param[in] language The language code
  * @param[in] user_data User data to be passed from the callback registration function
  *
- * @pre The callback can be registered using ime_event_set_display_language_changed_cb().
+ * @pre The callback can be registered using ime_event_set_display_language_changed_cb() function.
  *
  * @see ime_event_set_display_language_changed_cb
  */
@@ -404,7 +441,7 @@ typedef void (*ime_display_language_changed_cb)(const char *language, void *user
  * @param[in] degree The rotation degree
  * @param[in] user_data User data to be passed from the callback registration function
  *
- * @pre The callback can be registered using ime_event_set_rotation_degree_changed_cb().
+ * @pre The callback can be registered using ime_event_set_rotation_degree_changed_cb() function.
  *
  * @see ime_event_set_rotation_degree_changed_cb
  */
@@ -418,7 +455,7 @@ typedef void (*ime_rotation_degree_changed_cb)(int degree, void *user_data);
  * @param[in] state Accessibility option state
  * @param[in] user_data User data to be passed from the callback registration function
  *
- * @pre The callback can be registered using ime_event_set_accessibility_state_changed_cb().
+ * @pre The callback can be registered using ime_event_set_accessibility_state_changed_cb() function.
  *
  * @see ime_event_set_accessibility_state_changed_cb
  */
@@ -436,7 +473,7 @@ typedef void (*ime_accessibility_state_changed_cb)(bool state, void *user_data);
  * @param[in] type The type of option window
  * @param[in] user_data User data to be passed from the callback registration function
  *
- * @pre The callback can be registered using ime_event_set_option_window_created_cb(). The
+ * @pre The callback can be registered using ime_event_set_option_window_created_cb() function. The
  * ime_create_option_window() calls this callback function or Settings application can call this callback function.
  *
  * @see ime_event_set_option_window_created_cb, ime_create_option_window
@@ -451,7 +488,7 @@ typedef void (*ime_option_window_created_cb)(Evas_Object *window, ime_option_win
  * @param[in] window The window object to destroy
  * @param[in] user_data User data to be passed to the callback function
  *
- * @pre The callback can be registered using ime_event_set_option_window_destroyed_cb().
+ * @pre The callback can be registered using ime_event_set_option_window_destroyed_cb() function.
  * ime_destroy_option_window() calls this callback function.
  *
  * @see ime_event_set_option_window_destroyed_cb
@@ -688,7 +725,7 @@ EXPORT_API int ime_event_set_cursor_position_updated_cb(ime_cursor_position_upda
  * @brief Sets @c language_requested event callback function.
  *
  * @remarks The ime_language_requested_cb() callback function is called when an associated
- * text input UI control requests for the language of the input panel.
+ * text input UI control requests the language from the input panel.
  *
  * @since_tizen 2.4
  *
@@ -746,9 +783,31 @@ EXPORT_API int ime_event_set_language_set_cb(ime_language_set_cb callback_func, 
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
  *
- * @see ime_imdata_set_cb, ime_run
+ * @see ime_imdata_set_cb, ime_event_set_imdata_requested_cb, ime_run
  */
 EXPORT_API int ime_event_set_imdata_set_cb(ime_imdata_set_cb callback_func, void *user_data);
+
+/**
+ * @brief Sets @c imdata_requested event callback function.
+ *
+ * @remarks The ime_imdata_requested_cb() callback function is called when an associated
+ * text input UI control requests the application specific data from the input panel.
+ *
+ * @since_tizen 2.4
+ *
+ * @param[in] callback_func @c imdata_requested event callback function
+ * @param[in] user_data User data to be passed to the callback function
+ *
+ * @return 0 on success, otherwise a negative error value
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_OPERATION_FAILED Operation failed
+ *
+ * @post The ime_run() function should be called to start to run IME application's main loop.
+ *
+ * @see ime_imdata_requested_cb, ime_event_set_imdata_set_cb, ime_run
+ */
+EXPORT_API int ime_event_set_imdata_requested_cb(ime_imdata_requested_cb callback_func, void *user_data);
 
 /**
  * @brief Sets @c layout_set event callback function.
@@ -820,7 +879,7 @@ EXPORT_API int ime_event_set_return_key_state_set_cb(ime_return_key_state_set_cb
  * @brief Sets @c geometry_requested event callback function.
  *
  * @remarks The ime_geometry_requested_cb() callback function is called when an associated
- * text input UI control requests for the position and size of the input panel.
+ * text input UI control requests the position and size from the input panel.
  *
  * @since_tizen 2.4
  *
@@ -1468,6 +1527,58 @@ EXPORT_API int ime_context_get_bidi_direction(ime_context_h context, Ecore_IMF_B
  * @see ime_show_cb
  */
 EXPORT_API int ime_context_get_language(ime_context_h context, Ecore_IMF_Input_Panel_Lang *language);
+
+/**
+ * @brief Gets the device name of the key event.
+ *
+ * @remarks @a dev_name must be released using free().
+ *
+ * @since_tizen 2.4
+ *
+ * @param[in] dev_info The device information from the key event
+ * @param[out] dev_name The name of key input device. This can be an empty string if the device name is not available
+ *
+ * @return 0 on success, otherwise a negative error value
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
+ *
+ * @see ime_process_key_event_cb, ime_device_info_get_class, ime_device_info_get_subclass
+ */
+EXPORT_API int ime_device_info_get_name(ime_device_info_h dev_info, char **dev_name);
+
+/**
+ * @brief Gets the device class of the key event.
+ *
+ * @since_tizen 2.4
+ *
+ * @param[in] dev_info The device information from the key event
+ * @param[out] dev_class The class of key input device. This can be #ECORE_IMF_DEVICE_CLASS_NONE if the device class is not available
+ *
+ * @return 0 on success, otherwise a negative error value
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
+ *
+ * @see ime_process_key_event_cb, ime_device_info_get_name, ime_device_info_get_subclass
+ */
+EXPORT_API int ime_device_info_get_class(ime_device_info_h dev_info, Ecore_IMF_Device_Class *dev_class);
+/**
+ * @brief Gets the device subclass of the key event.
+ *
+ * @since_tizen 2.4
+ *
+ * @param[in] dev_info The device information from the key event
+ * @param[out] dev_subclass The subclass of key input device. This can be #ECORE_IMF_DEVICE_SUBCLASS_NONE if the device subclass is not available
+ *
+ * @return 0 on success, otherwise a negative error value
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
+ *
+ * @see ime_process_key_event_cb, ime_device_info_get_name, ime_device_info_get_class
+ */
+EXPORT_API int ime_device_info_get_subclass(ime_device_info_h dev_info, Ecore_IMF_Device_Subclass *dev_subclass);
 
 /**
  * @}

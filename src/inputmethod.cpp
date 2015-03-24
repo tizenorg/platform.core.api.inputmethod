@@ -43,6 +43,7 @@ class CCoreEventCallback : public ISCLCoreEventCallback
     void on_get_geometry(sclu32 *pos_x, sclu32 *pos_y, sclu32 *width, sclu32 *height);
     void on_set_language(Ecore_IMF_Input_Panel_Lang language);
     void on_set_imdata(sclchar *buf, sclu32 len);
+    void on_get_imdata(sclchar **buf, sclu32 *len);
     void on_get_language_locale(sclint ic, sclchar **locale);
     void on_set_return_key_type(Ecore_IMF_Input_Panel_Return_Key_Type type);
     void on_set_return_key_disable(bool disabled);
@@ -64,13 +65,14 @@ typedef struct
     ime_surrounding_text_updated_cb surrounding_text_updated;   /**< Called when an edit field responds to a request with the surrounding text */
     ime_input_context_reset_cb input_context_reset;             /**< Called to reset the input context of an edit field */
     ime_cursor_position_updated_cb cursor_position_updated;     /**< Called when the position of the cursor in an edit field changes */
-    ime_language_requested_cb language_requested;   /**< Called when an edit field requests for the language of the input panel */
+    ime_language_requested_cb language_requested;   /**< Called when an edit field requests the language from the input panel */
     ime_language_set_cb language_set;   /**< Called to set the preferred language to the input panel */
     ime_imdata_set_cb imdata_set;       /**< Called to set the application specific data to deliver to the input panel */
+    ime_imdata_requested_cb imdata_requested;       /**< Called when an associated text input UI control requests the application specific data from the input panel */
     ime_layout_set_cb layout_set;       /**< Called when an edit field requests the input panel to set its layout */
     ime_return_key_type_set_cb return_key_type_set;     /**< Called when an edit field requests the input panel to set the "return" key label */
     ime_return_key_state_set_cb return_key_state_set;   /**< Called when an edit field requests the input panel to enable or disable the "return" key state */
-    ime_geometry_requested_cb geometry_requested;       /**< Called when an edit field requests for the position and size of the input panel */
+    ime_geometry_requested_cb geometry_requested;       /**< Called when an edit field requests the position and size from the input panel */
     ime_process_key_event_cb process_key_event;         /**< Called when the key event is received from the external keyboard devices */
     ime_display_language_changed_cb display_language_changed;   /**< Called when the system display language is changed */
     ime_rotation_degree_changed_cb rotation_degree_changed;     /**< Called when the device is rotated */
@@ -85,6 +87,7 @@ typedef struct
     void *language_requested_user_data;
     void *language_set_user_data;
     void *imdata_set_user_data;
+    void *imdata_requested_user_data;
     void *layout_set_user_data;
     void *return_key_type_set_user_data;
     void *return_key_state_set_user_data;
@@ -178,7 +181,7 @@ void CCoreEventCallback::on_ise_show(sclint ic, const int degree, Ise_Context co
         input_context.language = context.language;
         input_context.client_window = context.client_window;
 
-        g_basic_callback.show(ic, (ime_context_h)&input_context, g_user_data);
+        g_basic_callback.show(ic, static_cast<ime_context_h>(&input_context), g_user_data);
     }
 }
 
@@ -227,6 +230,13 @@ void CCoreEventCallback::on_set_imdata(sclchar *buf, sclu32 len)
     }
 }
 
+void CCoreEventCallback::on_get_imdata(sclchar **buf, sclu32 *len)
+{
+    if (g_event_callback.imdata_requested) {
+        g_event_callback.imdata_requested(g_event_callback.imdata_set_user_data, (void **)buf, len);
+    }
+}
+
 void CCoreEventCallback::on_get_language_locale(sclint ic, sclchar **locale)
 {
     if (g_event_callback.language_requested) {
@@ -265,8 +275,10 @@ void CCoreEventCallback::on_reset_input_context(sclint ic, const sclchar *uuid)
 void CCoreEventCallback::on_process_key_event(scim::KeyEvent &key, sclu32 *ret)
 {
     if (g_event_callback.process_key_event) {
+        struct _ime_device_info dev_info = {key.dev_name.c_str(),
+            static_cast<Ecore_IMF_Device_Class>(key.dev_class), static_cast<Ecore_IMF_Device_Subclass>(key.dev_subclass)};
         bool processed = g_event_callback.process_key_event(static_cast<ime_key_code_e>(key.code), static_cast<ime_key_mask_e>(key.mask),
-            g_event_callback.process_key_event_user_data);
+            static_cast<ime_device_info_h>(&dev_info), g_event_callback.process_key_event_user_data);
 
         if (ret) {
             if (processed)
@@ -470,6 +482,20 @@ int ime_event_set_imdata_set_cb(ime_imdata_set_cb callback_func, void *user_data
 
     g_event_callback.imdata_set = callback_func;
     g_event_callback.imdata_set_user_data = user_data;
+
+    return IME_ERROR_NONE;
+}
+
+int ime_event_set_imdata_requested_cb(ime_imdata_requested_cb callback_func, void *user_data)
+{
+    if (!callback_func)
+        return IME_ERROR_INVALID_PARAMETER;
+
+    if (g_running)
+        return IME_ERROR_OPERATION_FAILED;
+
+    g_event_callback.imdata_requested = callback_func;
+    g_event_callback.imdata_requested_user_data = user_data;
 
     return IME_ERROR_NONE;
 }
@@ -912,4 +938,47 @@ int ime_context_get_language(ime_context_h context, Ecore_IMF_Input_Panel_Lang *
 
     return IME_ERROR_NONE;
 }
+
+int ime_device_info_get_name(ime_device_info_h dev_info, char **dev_name)
+{
+    if (!dev_info || !dev_name)
+        return IME_ERROR_INVALID_PARAMETER;
+
+    if (!g_running)
+        return IME_ERROR_NOT_RUNNING;
+
+    if (!dev_info->dev_name)
+        *dev_name = strdup("");
+    else
+        *dev_name = strdup(dev_info->dev_name);
+
+    return IME_ERROR_NONE;
+}
+
+int ime_device_info_get_class(ime_device_info_h dev_info, Ecore_IMF_Device_Class *dev_class)
+{
+    if (!dev_info || !dev_class)
+        return IME_ERROR_INVALID_PARAMETER;
+
+    if (!g_running)
+        return IME_ERROR_NOT_RUNNING;
+
+    *dev_class = dev_info->dev_class;
+
+    return IME_ERROR_NONE;
+}
+
+int ime_device_info_get_subclass(ime_device_info_h dev_info, Ecore_IMF_Device_Subclass *dev_subclass)
+{
+    if (!dev_info || !dev_subclass)
+        return IME_ERROR_INVALID_PARAMETER;
+
+    if (!g_running)
+        return IME_ERROR_NOT_RUNNING;
+
+    *dev_subclass = dev_info->dev_subclass;
+
+    return IME_ERROR_NONE;
+}
+
 

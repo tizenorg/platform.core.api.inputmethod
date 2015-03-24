@@ -34,5 +34,12 @@ struct _ime_context
     unsigned int client_window;             /**< Client application window object */
 };
 
+struct _ime_device_info
+{
+    const char *dev_name;                   /**< The device name */
+    Ecore_IMF_Device_Class dev_class;       /**< The device class */
+    Ecore_IMF_Device_Subclass dev_subclass; /**< The device subclass */
+};
+
 #endif // __TIZEN_UIX_INPUTMETHOD_PRIVATE_H__
 
