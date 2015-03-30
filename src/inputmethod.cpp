@@ -54,6 +54,7 @@ class CCoreEventCallback : public ISCLCoreEventCallback
     void on_set_accessibility_state(sclboolean state);
     void on_create_option_window(sclwindow window, SCLOptionWindowType type);
     void on_destroy_option_window(sclwindow window);
+    void on_check_option_window_availability(sclboolean *ret);
 };
 
 typedef struct
@@ -313,6 +314,16 @@ void CCoreEventCallback::on_destroy_option_window(sclwindow window)
 {
     if (g_event_callback.option_window_destroyed) {
         g_event_callback.option_window_destroyed(static_cast<Evas_Object*>(window), g_event_callback.option_window_destroyed_user_data);
+    }
+}
+
+void CCoreEventCallback::on_check_option_window_availability(sclboolean *ret)
+{
+    if (ret) {
+        if (g_event_callback.option_window_created) // Instead of each 3rd party keyboard, inputmethod will reply the availability of the option (setting).
+            *ret = true;
+        else
+            *ret = false;
     }
 }
 
