@@ -46,6 +46,7 @@ typedef enum
 {
     IME_ERROR_NONE = TIZEN_ERROR_NONE, /**< Successful */
     IME_ERROR_INVALID_PARAMETER = TIZEN_ERROR_INVALID_PARAMETER, /**< Invalid parameter */
+    IME_ERROR_PERMISSION_DENIED = TIZEN_ERROR_PERMISSION_DENIED, /**< Permission denied */
     IME_ERROR_NO_CALLBACK_FUNCTION = TIZEN_ERROR_UIX_CLASS | 0x0001, /**< Necessary callback function is not set */
     IME_ERROR_NOT_RUNNING = TIZEN_ERROR_UIX_CLASS | 0x0002, /**< IME main loop isn't started yet */
     IME_ERROR_OPERATION_FAILED = TIZEN_ERROR_UIX_CLASS | 0x0003, /**< Operation failed */
@@ -119,6 +120,10 @@ typedef struct _ime_device_info *ime_device_info_h;
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] user_data User data to be passed from the callback registration function
  *
  * @pre The ime_run() function calls this callback function.
@@ -135,6 +140,10 @@ typedef void (*ime_create_cb)(void *user_data);
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] user_data User data to be passed from the callback registration function
  *
  * @see ime_run, ime_get_main_window
@@ -149,6 +158,10 @@ typedef void (*ime_terminate_cb)(void *user_data);
  * The ime_get_main_window() can be used to get the created input panel window.
  *
  * @since_tizen 2.4
+ *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
  *
  * @param[in] context_id The input context identification value of an associated text input UI control
  * @param[in] context The input context information handle
@@ -171,6 +184,10 @@ typedef void (*ime_show_cb)(int context_id, ime_context_h context, void *user_da
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] context_id The input context identification value of an associated text input UI control
  * @param[in] user_data User data to be passed from the callback registration function
  *
@@ -182,6 +199,10 @@ typedef void (*ime_hide_cb)(int context_id, void *user_data);
  * @brief Called when an associated text input UI control has focus.
  *
  * @since_tizen 2.4
+ *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
  *
  * @param[in] context_id The input context identification value of an associated text input UI control
  * @param[in] user_data User data to be passed from the callback registration function
@@ -196,6 +217,10 @@ typedef void (*ime_focus_in_cb)(int context_id, void *user_data);
  * @brief Called when an associated text input UI control loses focus.
  *
  * @since_tizen 2.4
+ *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
  *
  * @param[in] context_id The input context identification value of an associated text input UI control
  * @param[in] user_data User data to be passed from the callback registration function
@@ -213,6 +238,10 @@ typedef void (*ime_focus_out_cb)(int context_id, void *user_data);
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] context_id The input context identification value of an associated text input UI control
  * @param[in] text The UTF-8 string requested
  * @param[in] cursor_pos The cursor position
@@ -229,6 +258,10 @@ typedef void (*ime_surrounding_text_updated_cb)(int context_id, const char *text
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] user_data User data to be passed from the callback registration function
  *
  * @pre The callback can be registered using ime_event_set_input_context_reset_cb() function.
@@ -241,6 +274,10 @@ typedef void (*ime_input_context_reset_cb)(void *user_data);
  * @brief Called when the position of the cursor in an associated text input UI control changes.
  *
  * @since_tizen 2.4
+ *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
  *
  * @param[in] cursor_pos The cursor position
  * @param[in] user_data User data to be passed from the callback registration function
@@ -257,6 +294,10 @@ typedef void (*ime_cursor_position_updated_cb)(int cursor_pos, void *user_data);
  * @remarks The allocated @a lang_code will be released internally.
  *
  * @since_tizen 2.4
+ *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
  *
  * @param[in] user_data User data to be passed from the callback registration function
  * @param[out] lang_code Input panel's current input language code (e.g., "en_US")
@@ -276,6 +317,10 @@ typedef void (*ime_language_requested_cb)(void *user_data, char **lang_code);
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] language The preferred language that the client application wants
  * @param[in] user_data User data to be passed from the callback registration function
  *
@@ -292,6 +337,10 @@ typedef void (*ime_language_set_cb)(Ecore_IMF_Input_Panel_Lang language, void *u
  * The data format MUST be negotiated by both application and input panel.
  *
  * @since_tizen 2.4
+ *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
  *
  * @param[in] data The specific data to be set to the input panel
  * @param[in] data_length The length of data, in bytes, to send to the input panel
@@ -313,6 +362,10 @@ typedef void (*ime_imdata_set_cb)(void *data, unsigned int data_length, void *us
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] user_data User data to be passed from the callback registration function
  * @param[out] data Input panel's data to be set to the application
  * @paran[out] data_length The length of data, in bytes, to send to the application
@@ -331,6 +384,10 @@ typedef void (*ime_imdata_requested_cb)(void *user_data, void **data, unsigned i
  * application changes the edit field's layout attribute after the input panel is shown.
  *
  * @since_tizen 2.4
+ *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
  *
  * @param[in] layout The input panel layout
  * @param[in] user_data User data to be passed from the callback registration function
@@ -352,6 +409,10 @@ typedef void (*ime_layout_set_cb)(Ecore_IMF_Input_Panel_Layout layout, void *use
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] type The type of @c Return key on the input panel
  * @param[in] user_data User data to be passed from the callback registration function
  *
@@ -372,6 +433,10 @@ typedef void (*ime_return_key_type_set_cb)(Ecore_IMF_Input_Panel_Return_Key_Type
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] disabled The Boolean state to disable @c Return key. The @c Return key is enabled by default
  * @param[in] user_data User data to be passed from the callback registration function
  *
@@ -385,6 +450,10 @@ typedef void (*ime_return_key_state_set_cb)(bool disabled, void *user_data);
  * @brief Called when an associated text input UI control requests the position and size from the input panel.
  *
  * @since_tizen 2.4
+ *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
  *
  * @param[in] user_data User data to be passed from the callback registration function
  * @param[out] x The x position in screen
@@ -424,6 +493,10 @@ typedef bool (*ime_process_key_event_cb)(ime_key_code_e keycode, ime_key_mask_e 
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] language The language code
  * @param[in] user_data User data to be passed from the callback registration function
  *
@@ -438,6 +511,10 @@ typedef void (*ime_display_language_changed_cb)(const char *language, void *user
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] degree The rotation degree
  * @param[in] user_data User data to be passed from the callback registration function
  *
@@ -451,6 +528,10 @@ typedef void (*ime_rotation_degree_changed_cb)(int degree, void *user_data);
  * @brief Called when Accessibility in Settings application is on or off.
  *
  * @since_tizen 2.4
+ *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
  *
  * @param[in] state Accessibility option state
  * @param[in] user_data User data to be passed from the callback registration function
@@ -469,6 +550,10 @@ typedef void (*ime_accessibility_state_changed_cb)(bool state, void *user_data);
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] window The created window object
  * @param[in] type The type of option window
  * @param[in] user_data User data to be passed from the callback registration function
@@ -484,6 +569,10 @@ typedef void (*ime_option_window_created_cb)(Evas_Object *window, ime_option_win
  * @brief Called to destroy the option window.
  *
  * @since_tizen 2.4
+ *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
  *
  * @param[in] window The window object to destroy
  * @param[in] user_data User data to be passed to the callback function
@@ -526,13 +615,18 @@ typedef struct
  * are mandatory for IME application.
  *
  * @since_tizen 2.4
-
+ *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] basic_cb The structure pointer of the essential callback functions
  * @param[in] user_data User data to be passed to the callback functions
  *
  * @return 0 if IME application ends successfully, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
  * @retval #IME_ERROR_NO_CALLBACK_FUNCTION Necessary callback function is not set
  * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
@@ -619,12 +713,17 @@ EXPORT_API int ime_run(ime_callback_s *basic_cb, void *user_data);
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] callback_func @c focus_in event callback function
  * @param[in] user_data User data to be passed to the callback function
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
  * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
@@ -641,12 +740,17 @@ EXPORT_API int ime_event_set_focus_in_cb(ime_focus_in_cb callback_func, void *us
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] callback_func @c focus_out event callback function
  * @param[in] user_data User data to be passed to the callback function
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
  * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
@@ -663,12 +767,17 @@ EXPORT_API int ime_event_set_focus_out_cb(ime_focus_out_cb callback_func, void *
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] callback_func @c surrounding_text_updated event callback function
  * @param[in] user_data User data to be passed to the callback function
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
  * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
@@ -685,12 +794,17 @@ EXPORT_API int ime_event_set_surrounding_text_updated_cb(ime_surrounding_text_up
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] callback_func @c input_context_reset event callback function
  * @param[in] user_data User data to be passed to the callback function
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
  * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
@@ -707,12 +821,17 @@ EXPORT_API int ime_event_set_input_context_reset_cb(ime_input_context_reset_cb c
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] callback_func @c cursor_position_updated event callback function
  * @param[in] user_data User data to be passed to the callback function
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
  * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
@@ -729,12 +848,17 @@ EXPORT_API int ime_event_set_cursor_position_updated_cb(ime_cursor_position_upda
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] callback_func @c language_requested event callback function
  * @param[in] user_data User data to be passed to the callback function
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
  * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
@@ -751,12 +875,17 @@ EXPORT_API int ime_event_set_language_requested_cb(ime_language_requested_cb cal
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] callback_func @c language_set event callback function
  * @param[in] user_data User data to be passed to the callback function
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
  * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
@@ -773,12 +902,17 @@ EXPORT_API int ime_event_set_language_set_cb(ime_language_set_cb callback_func, 
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] callback_func @c imdata_set event callback function
  * @param[in] user_data User data to be passed to the callback function
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
  * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
@@ -795,12 +929,17 @@ EXPORT_API int ime_event_set_imdata_set_cb(ime_imdata_set_cb callback_func, void
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] callback_func @c imdata_requested event callback function
  * @param[in] user_data User data to be passed to the callback function
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
  * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
@@ -817,12 +956,17 @@ EXPORT_API int ime_event_set_imdata_requested_cb(ime_imdata_requested_cb callbac
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] callback_func @c layout_set event callback function
  * @param[in] user_data User data to be passed to the callback function
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
  * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
@@ -839,12 +983,17 @@ EXPORT_API int ime_event_set_layout_set_cb(ime_layout_set_cb callback_func, void
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] callback_func @c return_key_type_set event callback function
  * @param[in] user_data User data to be passed to the callback function
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
  * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
@@ -861,12 +1010,17 @@ EXPORT_API int ime_event_set_return_key_type_set_cb(ime_return_key_type_set_cb c
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] callback_func @c return_key_state_set event callback function
  * @param[in] user_data User data to be passed to the callback function
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
  * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
@@ -883,12 +1037,17 @@ EXPORT_API int ime_event_set_return_key_state_set_cb(ime_return_key_state_set_cb
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] callback_func @c geometry_requested event callback function
  * @param[in] user_data User data to be passed to the callback function
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
  * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
@@ -905,12 +1064,17 @@ EXPORT_API int ime_event_set_geometry_requested_cb(ime_geometry_requested_cb cal
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] callback_func @c process_key_event event callback function
  * @param[in] user_data User data to be passed to the callback function
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
  * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
@@ -971,12 +1135,17 @@ EXPORT_API int ime_event_set_process_key_event_cb(ime_process_key_event_cb callb
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] callback_func @c display_language_changed event callback function
  * @param[in] user_data User data to be passed to the callback function
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
  * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
@@ -993,12 +1162,17 @@ EXPORT_API int ime_event_set_display_language_changed_cb(ime_display_language_ch
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] callback_func @c rotation_degree_changed event callback function
  * @param[in] user_data User data to be passed to the callback function
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
  * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
@@ -1015,12 +1189,17 @@ EXPORT_API int ime_event_set_rotation_degree_changed_cb(ime_rotation_degree_chan
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] callback_func @c accessibility_state_changed event callback function
  * @param[in] user_data User data to be passed to the callback function
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
  * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
@@ -1036,12 +1215,17 @@ EXPORT_API int ime_event_set_accessibility_state_changed_cb(ime_accessibility_st
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] callback_func @c option_window_created event callback function
  * @param[in] user_data User data to be passed to the callback function
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
  * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
@@ -1057,12 +1241,17 @@ EXPORT_API int ime_event_set_option_window_created_cb(ime_option_window_created_
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] callback_func @c option_window_destroyed event callback function
  * @param[in] user_data User data to be passed to the callback function
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
  * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
@@ -1080,12 +1269,17 @@ EXPORT_API int ime_event_set_option_window_destroyed_cb(ime_option_window_destro
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] keycode The key code to be sent
  * @param[in] keymask The modifier key mask
  * @param[in] forward_key The flag to send the key event directly to the edit field
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @post If @a forward_key is @c false, the ime_process_key_event_cb() callback function can compose the text with the key events.
@@ -1099,10 +1293,15 @@ EXPORT_API int ime_send_key_event(ime_key_code_e keycode, ime_key_mask_e keymask
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] str The UTF-8 string to be committed
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @see ime_show_preedit_string, ime_hide_preedit_string, ime_update_preedit_string
@@ -1114,8 +1313,13 @@ EXPORT_API int ime_commit_string(const char *str);
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @see ime_commit_string, ime_hide_preedit_string, ime_update_preedit_string
@@ -1127,8 +1331,13 @@ EXPORT_API int ime_show_preedit_string(void);
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @see ime_commit_string, ime_show_preedit_string, ime_update_preedit_string
@@ -1140,11 +1349,16 @@ EXPORT_API int ime_hide_preedit_string(void);
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] str The UTF-8 string to be updated in preedit
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @see ime_commit_string, ime_show_preedit_string, ime_hide_preedit_string
@@ -1156,11 +1370,16 @@ EXPORT_API int ime_update_preedit_string(const char *str);
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] maxlen_before The maximum length of string to be retrieved before the cursor; -1 means unlimited
  * @param[in] maxlen_after The maximum length of string to be retrieved after the cursor; -1 means unlimited
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
  * @retval #IME_ERROR_NO_CALLBACK_FUNCTION Necessary callback function is not set
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
@@ -1177,12 +1396,17 @@ EXPORT_API int ime_request_surrounding_text(int maxlen_before, int maxlen_after)
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] offset The offset value from the cursor position
  * @param[in] len The length of the text to delete
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @see ime_request_surrounding_text
@@ -1196,9 +1420,14 @@ EXPORT_API int ime_delete_surrounding_text(int offset, int len);
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @return The input panel main window object on success, otherwise NULL
  *
  * @exception #IME_ERROR_NONE Successful
+ * #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
  * #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  * #IME_ERROR_OPERATION_FAILED Operation failed
  *
@@ -1211,6 +1440,10 @@ EXPORT_API Evas_Object* ime_get_main_window(void);
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] portrait_width The width in portrait mode
  * @param[in] portrait_height The height in portrait mode
  * @param[in] landscape_width The width in landscape mode
@@ -1218,6 +1451,7 @@ EXPORT_API Evas_Object* ime_get_main_window(void);
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @see ime_create_cb
@@ -1233,8 +1467,13 @@ EXPORT_API int ime_set_size(int portrait_width, int portrait_height, int landsca
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
  * @retval #IME_ERROR_NO_CALLBACK_FUNCTION Necessary callback function is not set
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  * @retval #IME_ERROR_OPERATION_FAILED Operation failed
@@ -1259,11 +1498,16 @@ EXPORT_API int ime_create_option_window(void);
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] window The option window to destroy
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
  * @retval #IME_ERROR_NO_CALLBACK_FUNCTION Necessary callback function is not set
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
@@ -1286,12 +1530,17 @@ EXPORT_API int ime_destroy_option_window(Evas_Object *window);
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] context The input context information of an associated text input UI control
  * @param[out] layout Layout information
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @post Input panel UI should be drawn or operated by this information accordingly.
@@ -1308,12 +1557,17 @@ EXPORT_API int ime_context_get_layout(ime_context_h context, Ecore_IMF_Input_Pan
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] context The input context information of an associated text input UI control
  * @param[out] layout_variation Layout variation information
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @post Input panel UI should be drawn or operated by this information accordingly.
@@ -1330,12 +1584,17 @@ EXPORT_API int ime_context_get_layout_variation(ime_context_h context, ime_layou
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] context The input context information of an associated text input UI control
  * @param[out] cursor_pos Cursor position information
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @post Input panel UI should be drawn or operated by this information accordingly.
@@ -1352,12 +1611,17 @@ EXPORT_API int ime_context_get_cursor_position(ime_context_h context, int *curso
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] context The input context information of an associated text input UI control
  * @param[out] autocapital_type Autocapital type information
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @post Input panel UI should be drawn or operated by this information accordingly.
@@ -1374,12 +1638,17 @@ EXPORT_API int ime_context_get_autocapital_type(ime_context_h context, Ecore_IMF
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] context The input context information of an associated text input UI control
  * @param[out] return_key_type The @c Return key label type information
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @post Input panel UI should be drawn or operated by this information accordingly.
@@ -1396,6 +1665,10 @@ EXPORT_API int ime_context_get_return_key_type(ime_context_h context, Ecore_IMF_
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] context The input context information of an associated text input UI control
  * @param[out] return_key_state The @c Return key state information \n @c true to enable @c Return key
  * button, @c false to disable @c Return key button
@@ -1403,6 +1676,7 @@ EXPORT_API int ime_context_get_return_key_type(ime_context_h context, Ecore_IMF_
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @post Input panel UI should be drawn or operated by this information accordingly.
@@ -1419,6 +1693,10 @@ EXPORT_API int ime_context_get_return_key_state(ime_context_h context, bool *ret
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] context The input context information of an associated text input UI control
  * @param[out] prediction_mode Prediction mode information \n @c true to allow the predictive
  * text feature if available, @c false to disable the predictive text feature
@@ -1426,6 +1704,7 @@ EXPORT_API int ime_context_get_return_key_state(ime_context_h context, bool *ret
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @post Input panel UI should be drawn or operated by this information accordingly.
@@ -1444,6 +1723,10 @@ EXPORT_API int ime_context_get_prediction_mode(ime_context_h context, bool *pred
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] context The input context information of an associated text input UI control
  * @param[out] password_mode Password mode information \n @c true to indicate that a password being inputted,
  * @c false to indicate non-password edit field.
@@ -1451,6 +1734,7 @@ EXPORT_API int ime_context_get_prediction_mode(ime_context_h context, bool *pred
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @post Input panel UI should be drawn or operated by this information accordingly.
@@ -1470,12 +1754,17 @@ EXPORT_API int ime_context_get_password_mode(ime_context_h context, bool *passwo
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] context The input context information of an associated text input UI control
  * @param[out] input_hint Input hint information
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @post Input panel UI should be drawn or operated by this information accordingly.
@@ -1492,12 +1781,17 @@ EXPORT_API int ime_context_get_input_hint(ime_context_h context, Ecore_IMF_Input
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] context The input context information of an associated text input UI control
  * @param[out] bidi Text bidirectional information
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @post Input panel UI should be drawn or operated by this information accordingly.
@@ -1514,12 +1808,17 @@ EXPORT_API int ime_context_get_bidi_direction(ime_context_h context, Ecore_IMF_B
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] context The input context information of an associated text input UI control
  * @param[out] language Preferred language information
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @post Input panel UI should be drawn or operated by this information accordingly.
@@ -1535,12 +1834,17 @@ EXPORT_API int ime_context_get_language(ime_context_h context, Ecore_IMF_Input_P
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] dev_info The device information from the key event
  * @param[out] dev_name The name of key input device. This can be an empty string if the device name is not available
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @see ime_process_key_event_cb, ime_device_info_get_class, ime_device_info_get_subclass
@@ -1552,12 +1856,17 @@ EXPORT_API int ime_device_info_get_name(ime_device_info_h dev_info, char **dev_n
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] dev_info The device information from the key event
  * @param[out] dev_class The class of key input device. This can be #ECORE_IMF_DEVICE_CLASS_NONE if the device class is not available
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @see ime_process_key_event_cb, ime_device_info_get_name, ime_device_info_get_subclass
@@ -1568,12 +1877,17 @@ EXPORT_API int ime_device_info_get_class(ime_device_info_h dev_info, Ecore_IMF_D
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
  * @param[in] dev_info The device information from the key event
  * @param[out] dev_subclass The subclass of key input device. This can be #ECORE_IMF_DEVICE_SUBCLASS_NONE if the device subclass is not available
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @see ime_process_key_event_cb, ime_device_info_get_name, ime_device_info_get_class
