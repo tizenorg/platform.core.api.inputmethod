@@ -1405,7 +1405,8 @@ EXPORT_API int ime_hide_preedit_string(void);
  *
  * @param[in] str The UTF-8 string to be updated in preedit
  * @paran[in] attrs The Eina_List which has #ime_preedit_attribute lists; @a str can be composed of multiple
- * string attributes: underline, highlight color and reversal color. The @a attrs will be released internally on success
+ * string attributes: underline, highlight color and reversal color. The @a attrs will be released internally
+ * on success and it can be NULL if no attributes to set
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error

@@ -709,8 +709,7 @@ int ime_update_preedit_string(const char *str, Eina_List *attrs)
         }
     }
 
-    //g_core.update_preedit_string(-1, NULL, str, attrv);
-    g_core.update_preedit_string(-1, NULL, str);
+    g_core.update_preedit_string(-1, NULL, str, attrv);
 
     return IME_ERROR_NONE;
 }
