@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+#define Uses_SCIM_ATTRIBUTE
+
+#include <scim.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -658,6 +661,9 @@ int ime_commit_string(const char *str)
     if (!g_running)
         return IME_ERROR_NOT_RUNNING;
 
+    if (!str)
+        return IME_ERROR_INVALID_PARAMETER;
+
     g_core.commit_string(-1, NULL, str);
 
     return IME_ERROR_NONE;
@@ -683,7 +689,7 @@ int ime_hide_preedit_string(void)
     return IME_ERROR_NONE;
 }
 
-int ime_update_preedit_string(const char *str)
+int ime_update_preedit_string(const char *str, Eina_List *attrs)
 {
     if (!g_running)
         return IME_ERROR_NOT_RUNNING;
@@ -691,6 +697,19 @@ int ime_update_preedit_string(const char *str)
     if (!str)
         return IME_ERROR_INVALID_PARAMETER;
 
+    scim::AttributeList attrv;
+    ime_preedit_attribute *attr = NULL;
+
+    if (attrs) {
+        EINA_LIST_FREE(attrs, attr) {
+            if (attr) {
+                attrv.push_back(scim::Attribute(attr->start, attr->length, (scim::AttributeType)attr->type, attr->value));
+                free(attr);
+            }
+        }
+    }
+
+    //g_core.update_preedit_string(-1, NULL, str, attrv);
     g_core.update_preedit_string(-1, NULL, str);
 
     return IME_ERROR_NONE;
@@ -778,13 +797,13 @@ int ime_create_option_window(void)
 
 int ime_destroy_option_window(Evas_Object *window)
 {
+    if (!g_running)
+        return IME_ERROR_NOT_RUNNING;
+
     if (!window) {
         LOGW("Window pointer is null.");
         return IME_ERROR_INVALID_PARAMETER;
     }
-
-    if (!g_running)
-        return IME_ERROR_NOT_RUNNING;
 
     if (!g_event_callback.option_window_created || !g_event_callback.option_window_destroyed) {
         LOGW("ime_create_option_window_cb() and ime_destroy_option_window_cb() callback functions are not set.");
@@ -798,11 +817,11 @@ int ime_destroy_option_window(Evas_Object *window)
 
 int ime_context_get_layout(ime_context_h context, Ecore_IMF_Input_Panel_Layout *layout)
 {
-    if (!context || !layout)
-        return IME_ERROR_INVALID_PARAMETER;
-
     if (!g_running)
         return IME_ERROR_NOT_RUNNING;
+
+    if (!context || !layout)
+        return IME_ERROR_INVALID_PARAMETER;
 
     *layout = context->layout;
 
@@ -811,11 +830,11 @@ int ime_context_get_layout(ime_context_h context, Ecore_IMF_Input_Panel_Layout *
 
 int ime_context_get_layout_variation(ime_context_h context, ime_layout_variation_e *layout_variation)
 {
-    if (!context || !layout_variation)
-        return IME_ERROR_INVALID_PARAMETER;
-
     if (!g_running)
         return IME_ERROR_NOT_RUNNING;
+
+    if (!context || !layout_variation)
+        return IME_ERROR_INVALID_PARAMETER;
 
     *layout_variation = static_cast<ime_layout_variation_e>(context->layout_variation);
 
@@ -824,11 +843,11 @@ int ime_context_get_layout_variation(ime_context_h context, ime_layout_variation
 
 int ime_context_get_cursor_position(ime_context_h context, int *cursor_pos)
 {
-    if (!context || !cursor_pos)
-        return IME_ERROR_INVALID_PARAMETER;
-
     if (!g_running)
         return IME_ERROR_NOT_RUNNING;
+
+    if (!context || !cursor_pos)
+        return IME_ERROR_INVALID_PARAMETER;
 
     *cursor_pos = context->cursor_pos;
 
@@ -837,11 +856,11 @@ int ime_context_get_cursor_position(ime_context_h context, int *cursor_pos)
 
 int ime_context_get_autocapital_type(ime_context_h context, Ecore_IMF_Autocapital_Type *autocapital_type)
 {
-    if (!context || !autocapital_type)
-        return IME_ERROR_INVALID_PARAMETER;
-
     if (!g_running)
         return IME_ERROR_NOT_RUNNING;
+
+    if (!context || !autocapital_type)
+        return IME_ERROR_INVALID_PARAMETER;
 
     *autocapital_type = context->autocapital_type;
 
@@ -850,11 +869,11 @@ int ime_context_get_autocapital_type(ime_context_h context, Ecore_IMF_Autocapita
 
 int ime_context_get_return_key_type(ime_context_h context, Ecore_IMF_Input_Panel_Return_Key_Type *return_key_type)
 {
-    if (!context || !return_key_type)
-        return IME_ERROR_INVALID_PARAMETER;
-
     if (!g_running)
         return IME_ERROR_NOT_RUNNING;
+
+    if (!context || !return_key_type)
+        return IME_ERROR_INVALID_PARAMETER;
 
     *return_key_type = context->return_key_type;
 
@@ -863,11 +882,11 @@ int ime_context_get_return_key_type(ime_context_h context, Ecore_IMF_Input_Panel
 
 int ime_context_get_return_key_state(ime_context_h context, bool *return_key_state)
 {
-    if (!context || !return_key_state)
-        return IME_ERROR_INVALID_PARAMETER;
-
     if (!g_running)
         return IME_ERROR_NOT_RUNNING;
+
+    if (!context || !return_key_state)
+        return IME_ERROR_INVALID_PARAMETER;
 
     *return_key_state = static_cast<bool>(context->return_key_disabled);
 
@@ -876,11 +895,11 @@ int ime_context_get_return_key_state(ime_context_h context, bool *return_key_sta
 
 int ime_context_get_prediction_mode(ime_context_h context, bool *prediction_mode)
 {
-    if (!context || !prediction_mode)
-        return IME_ERROR_INVALID_PARAMETER;
-
     if (!g_running)
         return IME_ERROR_NOT_RUNNING;
+
+    if (!context || !prediction_mode)
+        return IME_ERROR_INVALID_PARAMETER;
 
     *prediction_mode = static_cast<bool>(context->prediction_allow);
 
@@ -889,11 +908,11 @@ int ime_context_get_prediction_mode(ime_context_h context, bool *prediction_mode
 
 int ime_context_get_password_mode(ime_context_h context, bool *password_mode)
 {
-    if (!context || !password_mode)
-        return IME_ERROR_INVALID_PARAMETER;
-
     if (!g_running)
         return IME_ERROR_NOT_RUNNING;
+
+    if (!context || !password_mode)
+        return IME_ERROR_INVALID_PARAMETER;
 
     *password_mode = static_cast<bool>(context->password_mode);
 
@@ -902,11 +921,11 @@ int ime_context_get_password_mode(ime_context_h context, bool *password_mode)
 
 int ime_context_get_input_hint(ime_context_h context, Ecore_IMF_Input_Hints *input_hint)
 {
-    if (!context || !input_hint)
-        return IME_ERROR_INVALID_PARAMETER;
-
     if (!g_running)
         return IME_ERROR_NOT_RUNNING;
+
+    if (!context || !input_hint)
+        return IME_ERROR_INVALID_PARAMETER;
 
     *input_hint = context->input_hint;
 
@@ -915,11 +934,11 @@ int ime_context_get_input_hint(ime_context_h context, Ecore_IMF_Input_Hints *inp
 
 int ime_context_get_bidi_direction(ime_context_h context, Ecore_IMF_BiDi_Direction *bidi)
 {
-    if (!context || !bidi)
-        return IME_ERROR_INVALID_PARAMETER;
-
     if (!g_running)
         return IME_ERROR_NOT_RUNNING;
+
+    if (!context || !bidi)
+        return IME_ERROR_INVALID_PARAMETER;
 
     *bidi = context->bidi_direction;
 
@@ -928,11 +947,11 @@ int ime_context_get_bidi_direction(ime_context_h context, Ecore_IMF_BiDi_Directi
 
 int ime_context_get_language(ime_context_h context, Ecore_IMF_Input_Panel_Lang *language)
 {
-    if (!context || !language)
-        return IME_ERROR_INVALID_PARAMETER;
-
     if (!g_running)
         return IME_ERROR_NOT_RUNNING;
+
+    if (!context || !language)
+        return IME_ERROR_INVALID_PARAMETER;
 
     *language = context->language;
 
@@ -941,11 +960,11 @@ int ime_context_get_language(ime_context_h context, Ecore_IMF_Input_Panel_Lang *
 
 int ime_device_info_get_name(ime_device_info_h dev_info, char **dev_name)
 {
-    if (!dev_info || !dev_name)
-        return IME_ERROR_INVALID_PARAMETER;
-
     if (!g_running)
         return IME_ERROR_NOT_RUNNING;
+
+    if (!dev_info || !dev_name)
+        return IME_ERROR_INVALID_PARAMETER;
 
     if (!dev_info->dev_name)
         *dev_name = strdup("");
@@ -957,11 +976,11 @@ int ime_device_info_get_name(ime_device_info_h dev_info, char **dev_name)
 
 int ime_device_info_get_class(ime_device_info_h dev_info, Ecore_IMF_Device_Class *dev_class)
 {
-    if (!dev_info || !dev_class)
-        return IME_ERROR_INVALID_PARAMETER;
-
     if (!g_running)
         return IME_ERROR_NOT_RUNNING;
+
+    if (!dev_info || !dev_class)
+        return IME_ERROR_INVALID_PARAMETER;
 
     *dev_class = dev_info->dev_class;
 
@@ -970,11 +989,11 @@ int ime_device_info_get_class(ime_device_info_h dev_info, Ecore_IMF_Device_Class
 
 int ime_device_info_get_subclass(ime_device_info_h dev_info, Ecore_IMF_Device_Subclass *dev_subclass)
 {
-    if (!dev_info || !dev_subclass)
-        return IME_ERROR_INVALID_PARAMETER;
-
     if (!g_running)
         return IME_ERROR_NOT_RUNNING;
+
+    if (!dev_info || !dev_subclass)
+        return IME_ERROR_INVALID_PARAMETER;
 
     *dev_subclass = dev_info->dev_subclass;
 

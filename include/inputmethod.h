@@ -86,6 +86,56 @@ typedef enum
 } ime_layout_variation_e;
 
 /**
+ * @brief Enumeration of string attribute type
+ *
+ * @remarks Currently, a font style is available to use.
+ *
+ * @since_tizen 2.4
+ *
+ * @see ime_preedit_attribute, ime_update_preedit_string
+ */
+typedef enum
+{
+    IME_ATTR_NONE, /**< No attribute */
+    IME_ATTR_FONTSTYLE, /**< A font style attribute, e.g., underline, etc. */
+} ime_attribute_type;
+
+/**
+ * @brief Value for #IME_ATTR_FONTSTYLE. Draw a line under the text.
+ * @since_tizen 2.4
+ */
+#define IME_ATTR_FONTSTYLE_UNDERLINE    1
+
+/**
+ * @brief Value for #IME_ATTR_FONTSTYLE. Draw text in highlighted color.
+ * @since_tizen 2.4
+ */
+#define IME_ATTR_FONTSTYLE_HIGHLIGHT    2
+
+/**
+ * @brief Value for #IME_ATTR_FONTSTYLE. Draw text in reversal color.
+ * @since_tizen 2.4
+ */
+#define IME_ATTR_FONTSTYLE_REVERSAL     4
+
+/**
+ * @brief The structure type to contain the attributes for preedit string.
+ *
+ * @remarks A preedit string may have one or more different attributes. This structure describes each attribute of the string.
+ *
+ * @since_tizen 2.4
+ *
+ * @see ime_update_preedit_string, ime_attribute_type
+ */
+typedef struct
+{
+    unsigned int start; /**< The start position in the string of this attribute */
+    unsigned int length; /**< The byte length of this attribute, the range is [start, start+length] */
+    ime_attribute_type type; /**< The type of this attribute */
+    unsigned int value; /**< The value of this attribute */
+} ime_preedit_attribute;
+
+/**
  * @brief Handle of an associated text input UI control's input context.
  *
  * @details This is one of parameters of ime_show_cb() callback function. IME application
@@ -1354,6 +1404,8 @@ EXPORT_API int ime_hide_preedit_string(void);
  * @privilege %http://tizen.org/privilege/ime
  *
  * @param[in] str The UTF-8 string to be updated in preedit
+ * @paran[in] attrs The Eina_List which has #ime_preedit_attribute lists; @a str can be composed of multiple
+ * string attributes: underline, highlight color and reversal color. The @a attrs will be released internally on success
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
@@ -1361,9 +1413,43 @@ EXPORT_API int ime_hide_preedit_string(void);
  * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
- * @see ime_commit_string, ime_show_preedit_string, ime_hide_preedit_string
+ * @see ime_preedit_attribute, ime_commit_string, ime_show_preedit_string, ime_hide_preedit_string
+ *
+ * @code
+ {
+     int ret;
+     Eina_List *list = NULL;
+
+     ime_preedit_attribute *attr = calloc(1, sizeof (ime_preedit_attribute));
+     attr->start = 0;
+     attr->length = 1;
+     attr->type = IME_ATTR_FONTSTYLE;
+     attr->value = IME_ATTR_FONTSTYLE_UNDERLINE;
+     list = eina_list_append(list, attr);
+
+     attr = calloc(1, sizeof (ime_preedit_attribute));
+     attr->start = 1;
+     attr->length = 1;
+     attr->type = IME_ATTR_FONTSTYLE;
+     attr->value = IME_ATTR_FONTSTYLE_HIGHLIGHT;
+     list = eina_list_append(list, attr);
+
+     attr = calloc(1, sizeof (ime_preedit_attribute));
+     attr->start = 2;
+     attr->length = 1;
+     attr->type = IME_ATTR_FONTSTYLE;
+     attr->value = IME_ATTR_FONTSTYLE_REVERSAL;
+     list = eina_list_append(list, attr);
+
+     ret = ime_update_preedit_string("abcd", list);
+     if (ret != IME_ERROR_NONE) {
+         EINA_LIST_FREE(list, attr)
+             free(attr);
+     }
+ }
+ * @endcode
  */
-EXPORT_API int ime_update_preedit_string(const char *str);
+EXPORT_API int ime_update_preedit_string(const char *str, Eina_List *attrs);
 
 /**
  * @brief Requests the surrounding text from the position of the cursor, asynchronously.
