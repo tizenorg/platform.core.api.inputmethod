@@ -626,7 +626,7 @@ typedef struct
  * @return 0 if IME application ends successfully, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_NO_CALLBACK_FUNCTION Necessary callback function is not set
  * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
@@ -723,7 +723,7 @@ EXPORT_API int ime_run(ime_callback_s *basic_cb, void *user_data);
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
@@ -750,7 +750,7 @@ EXPORT_API int ime_event_set_focus_in_cb(ime_focus_in_cb callback_func, void *us
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
@@ -777,7 +777,7 @@ EXPORT_API int ime_event_set_focus_out_cb(ime_focus_out_cb callback_func, void *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
@@ -804,7 +804,7 @@ EXPORT_API int ime_event_set_surrounding_text_updated_cb(ime_surrounding_text_up
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
@@ -831,7 +831,7 @@ EXPORT_API int ime_event_set_input_context_reset_cb(ime_input_context_reset_cb c
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
@@ -858,7 +858,7 @@ EXPORT_API int ime_event_set_cursor_position_updated_cb(ime_cursor_position_upda
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
@@ -885,7 +885,7 @@ EXPORT_API int ime_event_set_language_requested_cb(ime_language_requested_cb cal
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
@@ -912,7 +912,7 @@ EXPORT_API int ime_event_set_language_set_cb(ime_language_set_cb callback_func, 
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
@@ -939,7 +939,7 @@ EXPORT_API int ime_event_set_imdata_set_cb(ime_imdata_set_cb callback_func, void
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
@@ -966,7 +966,7 @@ EXPORT_API int ime_event_set_imdata_requested_cb(ime_imdata_requested_cb callbac
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
@@ -993,7 +993,7 @@ EXPORT_API int ime_event_set_layout_set_cb(ime_layout_set_cb callback_func, void
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
@@ -1020,7 +1020,7 @@ EXPORT_API int ime_event_set_return_key_type_set_cb(ime_return_key_type_set_cb c
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
@@ -1047,7 +1047,7 @@ EXPORT_API int ime_event_set_return_key_state_set_cb(ime_return_key_state_set_cb
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
@@ -1074,7 +1074,7 @@ EXPORT_API int ime_event_set_geometry_requested_cb(ime_geometry_requested_cb cal
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
@@ -1145,7 +1145,7 @@ EXPORT_API int ime_event_set_process_key_event_cb(ime_process_key_event_cb callb
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
@@ -1172,7 +1172,7 @@ EXPORT_API int ime_event_set_display_language_changed_cb(ime_display_language_ch
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
@@ -1199,7 +1199,7 @@ EXPORT_API int ime_event_set_rotation_degree_changed_cb(ime_rotation_degree_chan
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
@@ -1225,7 +1225,7 @@ EXPORT_API int ime_event_set_accessibility_state_changed_cb(ime_accessibility_st
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
@@ -1251,7 +1251,7 @@ EXPORT_API int ime_event_set_option_window_created_cb(ime_option_window_created_
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_OPERATION_FAILED Operation failed
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
@@ -1279,7 +1279,7 @@ EXPORT_API int ime_event_set_option_window_destroyed_cb(ime_option_window_destro
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
- * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @post If @a forward_key is @c false, the ime_process_key_event_cb() callback function can compose the text with the key events.
@@ -1301,7 +1301,7 @@ EXPORT_API int ime_send_key_event(ime_key_code_e keycode, ime_key_mask_e keymask
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
- * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @see ime_show_preedit_string, ime_hide_preedit_string, ime_update_preedit_string
@@ -1319,7 +1319,7 @@ EXPORT_API int ime_commit_string(const char *str);
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
- * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @see ime_commit_string, ime_hide_preedit_string, ime_update_preedit_string
@@ -1337,7 +1337,7 @@ EXPORT_API int ime_show_preedit_string(void);
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
- * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @see ime_commit_string, ime_show_preedit_string, ime_update_preedit_string
@@ -1358,7 +1358,7 @@ EXPORT_API int ime_hide_preedit_string(void);
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @see ime_commit_string, ime_show_preedit_string, ime_hide_preedit_string
@@ -1379,7 +1379,7 @@ EXPORT_API int ime_update_preedit_string(const char *str);
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
- * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_NO_CALLBACK_FUNCTION Necessary callback function is not set
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
@@ -1406,7 +1406,7 @@ EXPORT_API int ime_request_surrounding_text(int maxlen_before, int maxlen_after)
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @see ime_request_surrounding_text
@@ -1427,7 +1427,7 @@ EXPORT_API int ime_delete_surrounding_text(int offset, int len);
  * @return The input panel main window object on success, otherwise NULL
  *
  * @exception #IME_ERROR_NONE Successful
- * #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
+ * #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  * #IME_ERROR_OPERATION_FAILED Operation failed
  *
@@ -1451,7 +1451,7 @@ EXPORT_API Evas_Object* ime_get_main_window(void);
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
- * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @see ime_create_cb
@@ -1473,7 +1473,7 @@ EXPORT_API int ime_set_size(int portrait_width, int portrait_height, int landsca
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
- * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_NO_CALLBACK_FUNCTION Necessary callback function is not set
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  * @retval #IME_ERROR_OPERATION_FAILED Operation failed
@@ -1507,7 +1507,7 @@ EXPORT_API int ime_create_option_window(void);
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_NO_CALLBACK_FUNCTION Necessary callback function is not set
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
@@ -1540,7 +1540,7 @@ EXPORT_API int ime_destroy_option_window(Evas_Object *window);
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @post Input panel UI should be drawn or operated by this information accordingly.
@@ -1567,7 +1567,7 @@ EXPORT_API int ime_context_get_layout(ime_context_h context, Ecore_IMF_Input_Pan
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @post Input panel UI should be drawn or operated by this information accordingly.
@@ -1594,7 +1594,7 @@ EXPORT_API int ime_context_get_layout_variation(ime_context_h context, ime_layou
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @post Input panel UI should be drawn or operated by this information accordingly.
@@ -1621,7 +1621,7 @@ EXPORT_API int ime_context_get_cursor_position(ime_context_h context, int *curso
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @post Input panel UI should be drawn or operated by this information accordingly.
@@ -1648,7 +1648,7 @@ EXPORT_API int ime_context_get_autocapital_type(ime_context_h context, Ecore_IMF
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @post Input panel UI should be drawn or operated by this information accordingly.
@@ -1676,7 +1676,7 @@ EXPORT_API int ime_context_get_return_key_type(ime_context_h context, Ecore_IMF_
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @post Input panel UI should be drawn or operated by this information accordingly.
@@ -1704,7 +1704,7 @@ EXPORT_API int ime_context_get_return_key_state(ime_context_h context, bool *ret
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @post Input panel UI should be drawn or operated by this information accordingly.
@@ -1734,7 +1734,7 @@ EXPORT_API int ime_context_get_prediction_mode(ime_context_h context, bool *pred
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @post Input panel UI should be drawn or operated by this information accordingly.
@@ -1764,7 +1764,7 @@ EXPORT_API int ime_context_get_password_mode(ime_context_h context, bool *passwo
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @post Input panel UI should be drawn or operated by this information accordingly.
@@ -1791,7 +1791,7 @@ EXPORT_API int ime_context_get_input_hint(ime_context_h context, Ecore_IMF_Input
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @post Input panel UI should be drawn or operated by this information accordingly.
@@ -1818,7 +1818,7 @@ EXPORT_API int ime_context_get_bidi_direction(ime_context_h context, Ecore_IMF_B
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @post Input panel UI should be drawn or operated by this information accordingly.
@@ -1844,7 +1844,7 @@ EXPORT_API int ime_context_get_language(ime_context_h context, Ecore_IMF_Input_P
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @see ime_process_key_event_cb, ime_device_info_get_class, ime_device_info_get_subclass
@@ -1866,7 +1866,7 @@ EXPORT_API int ime_device_info_get_name(ime_device_info_h dev_info, char **dev_n
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @see ime_process_key_event_cb, ime_device_info_get_name, ime_device_info_get_subclass
@@ -1887,7 +1887,7 @@ EXPORT_API int ime_device_info_get_class(ime_device_info_h dev_info, Ecore_IMF_D
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
- * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this funtion
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
  * @see ime_process_key_event_cb, ime_device_info_get_name, ime_device_info_get_class
