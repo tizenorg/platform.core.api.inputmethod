@@ -14,9 +14,6 @@
  * limitations under the License.
  */
 
-#define Uses_SCIM_ATTRIBUTE
-
-#include <scim.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

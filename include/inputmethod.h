@@ -47,9 +47,9 @@ typedef enum
     IME_ERROR_NONE = TIZEN_ERROR_NONE, /**< Successful */
     IME_ERROR_INVALID_PARAMETER = TIZEN_ERROR_INVALID_PARAMETER, /**< Invalid parameter */
     IME_ERROR_PERMISSION_DENIED = TIZEN_ERROR_PERMISSION_DENIED, /**< Permission denied */
-    IME_ERROR_NO_CALLBACK_FUNCTION = TIZEN_ERROR_UIX_CLASS | 0x0001, /**< Necessary callback function is not set */
-    IME_ERROR_NOT_RUNNING = TIZEN_ERROR_UIX_CLASS | 0x0002, /**< IME main loop isn't started yet */
-    IME_ERROR_OPERATION_FAILED = TIZEN_ERROR_UIX_CLASS | 0x0003, /**< Operation failed */
+    IME_ERROR_NO_CALLBACK_FUNCTION = TIZEN_ERROR_IME | 0x0001, /**< Necessary callback function is not set */
+    IME_ERROR_NOT_RUNNING = TIZEN_ERROR_IME | 0x0002, /**< IME main loop isn't started yet */
+    IME_ERROR_OPERATION_FAILED = TIZEN_ERROR_IME | 0x0003, /**< Operation failed */
 } ime_error_e;
 
 /**
