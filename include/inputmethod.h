@@ -130,7 +130,7 @@ typedef enum
 typedef struct
 {
     unsigned int start; /**< The start position in the string of this attribute */
-    unsigned int length; /**< The byte length of this attribute, the range is [start, start+length] */
+    unsigned int length; /**< The character length of this attribute, the range is [start, start+length] */
     ime_attribute_type type; /**< The type of this attribute */
     unsigned int value; /**< The value of this attribute */
 } ime_preedit_attribute;
