@@ -7,7 +7,7 @@ SET(maintainer "Ji-hoon Lee <dalton.lee@samsung.com>")
 SET(description "Input Method APIs")
 SET(service "ui")
 SET(submodule "inputmethod")
-SET(dependents "dlog elementary libscl-core isf")
+SET(dependents "capi-base-common dlog elementary ecore-imf libscl-core isf")
 
 SET(Services
         "application"
@@ -93,7 +93,7 @@ INSTALL(
         )
 
 SET(PC_NAME ${fw_name})
-SET(PC_REQUIRED ${pc_dependents})
+SET(PC_REQUIRED ${dependents})
 SET(PC_LDFLAGS -l${fw_name})
 
 CONFIGURE_FILE(
