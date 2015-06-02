@@ -38,7 +38,7 @@ class CCoreEventCallback : public ISCLCoreEventCallback
     void on_update_surrounding_text(sclint ic, const sclchar *text, sclint cursor);
     void on_focus_out(sclint ic, const sclchar *ic_uuid);
     void on_focus_in(sclint ic, const sclchar *ic_uuid);
-    void on_ise_show(sclint ic, const int degree, Ise_Context context);
+    void on_ise_show(sclint ic, const int degree, Ise_Context &context);
     void on_ise_hide(sclint ic, const sclchar *ic_uuid);
     void on_get_geometry(sclu32 *pos_x, sclu32 *pos_y, sclu32 *width, sclu32 *height);
     void on_set_language(Ecore_IMF_Input_Panel_Lang language);
@@ -161,7 +161,7 @@ void CCoreEventCallback::on_focus_in(sclint ic, const sclchar *ic_uuid)
     }
 }
 
-void CCoreEventCallback::on_ise_show(sclint ic, const int degree, Ise_Context context)
+void CCoreEventCallback::on_ise_show(sclint ic, const int degree, Ise_Context &context)
 {
     if (g_basic_callback.show) {
         struct _ime_context input_context;
