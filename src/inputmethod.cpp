@@ -733,14 +733,14 @@ int ime_send_key_event(ime_key_code_e keycode, ime_key_mask_e keymask, bool forw
 
 int ime_commit_string(const char *str)
 {
-    if (!g_running) {
-        LOGW("IME_ERROR_NOT_RUNNING");
-        return IME_ERROR_NOT_RUNNING;
-    }
-
     if (!str) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
+    }
+
+    if (!g_running) {
+        LOGW("IME_ERROR_NOT_RUNNING");
+        return IME_ERROR_NOT_RUNNING;
     }
 
     g_core.commit_string(-1, NULL, str);
@@ -774,14 +774,14 @@ int ime_hide_preedit_string(void)
 
 int ime_update_preedit_string(const char *str, Eina_List *attrs)
 {
-    if (!g_running) {
-        LOGW("IME_ERROR_NOT_RUNNING");
-        return IME_ERROR_NOT_RUNNING;
-    }
-
     if (!str) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
+    }
+
+    if (!g_running) {
+        LOGW("IME_ERROR_NOT_RUNNING");
+        return IME_ERROR_NOT_RUNNING;
     }
 
     scim::AttributeList attrv;
@@ -820,14 +820,14 @@ int ime_request_surrounding_text(int maxlen_before, int maxlen_after)
 
 int ime_delete_surrounding_text(int offset, int len)
 {
-    if (!g_running) {
-        LOGW("IME_ERROR_NOT_RUNNING");
-        return IME_ERROR_NOT_RUNNING;
-    }
-
     if (len <= 0) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
+    }
+
+    if (!g_running) {
+        LOGW("IME_ERROR_NOT_RUNNING");
+        return IME_ERROR_NOT_RUNNING;
     }
 
     g_core.delete_surrounding_text(offset, len);
@@ -860,6 +860,11 @@ Evas_Object* ime_get_main_window(void)
 int ime_set_size(int portrait_width, int portrait_height, int landscape_width, int landscape_height)
 {
     SclSize portrait_size, landscape_size;
+
+    if (portrait_width < 1 || portrait_height < 1 || landscape_width < 1 || landscape_height < 1) {
+        LOGW("IME_ERROR_INVALID_PARAMETER");
+        return IME_ERROR_INVALID_PARAMETER;
+    }
 
     if (!g_running) {
         LOGW("IME_ERROR_NOT_RUNNING");
@@ -899,14 +904,14 @@ int ime_create_option_window(void)
 
 int ime_destroy_option_window(Evas_Object *window)
 {
-    if (!g_running) {
-        LOGW("IME_ERROR_NOT_RUNNING");
-        return IME_ERROR_NOT_RUNNING;
-    }
-
     if (!window) {
         LOGW("Window pointer is null.");
         return IME_ERROR_INVALID_PARAMETER;
+    }
+
+    if (!g_running) {
+        LOGW("IME_ERROR_NOT_RUNNING");
+        return IME_ERROR_NOT_RUNNING;
     }
 
     if (!g_event_callback.option_window_created || !g_event_callback.option_window_destroyed) {
@@ -921,14 +926,14 @@ int ime_destroy_option_window(Evas_Object *window)
 
 int ime_context_get_layout(ime_context_h context, Ecore_IMF_Input_Panel_Layout *layout)
 {
-    if (!g_running) {
-        LOGW("IME_ERROR_NOT_RUNNING");
-        return IME_ERROR_NOT_RUNNING;
-    }
-
     if (!context || !layout) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
+    }
+
+    if (!g_running) {
+        LOGW("IME_ERROR_NOT_RUNNING");
+        return IME_ERROR_NOT_RUNNING;
     }
 
     *layout = context->layout;
@@ -938,14 +943,14 @@ int ime_context_get_layout(ime_context_h context, Ecore_IMF_Input_Panel_Layout *
 
 int ime_context_get_layout_variation(ime_context_h context, ime_layout_variation_e *layout_variation)
 {
-    if (!g_running) {
-        LOGW("IME_ERROR_NOT_RUNNING");
-        return IME_ERROR_NOT_RUNNING;
-    }
-
     if (!context || !layout_variation) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
+    }
+
+    if (!g_running) {
+        LOGW("IME_ERROR_NOT_RUNNING");
+        return IME_ERROR_NOT_RUNNING;
     }
 
     *layout_variation = static_cast<ime_layout_variation_e>(context->layout_variation);
@@ -955,14 +960,14 @@ int ime_context_get_layout_variation(ime_context_h context, ime_layout_variation
 
 int ime_context_get_cursor_position(ime_context_h context, int *cursor_pos)
 {
-    if (!g_running) {
-        LOGW("IME_ERROR_NOT_RUNNING");
-        return IME_ERROR_NOT_RUNNING;
-    }
-
     if (!context || !cursor_pos) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
+    }
+
+    if (!g_running) {
+        LOGW("IME_ERROR_NOT_RUNNING");
+        return IME_ERROR_NOT_RUNNING;
     }
 
     *cursor_pos = context->cursor_pos;
@@ -972,14 +977,14 @@ int ime_context_get_cursor_position(ime_context_h context, int *cursor_pos)
 
 int ime_context_get_autocapital_type(ime_context_h context, Ecore_IMF_Autocapital_Type *autocapital_type)
 {
-    if (!g_running) {
-        LOGW("IME_ERROR_NOT_RUNNING");
-        return IME_ERROR_NOT_RUNNING;
-    }
-
     if (!context || !autocapital_type) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
+    }
+
+    if (!g_running) {
+        LOGW("IME_ERROR_NOT_RUNNING");
+        return IME_ERROR_NOT_RUNNING;
     }
 
     *autocapital_type = context->autocapital_type;
@@ -989,14 +994,14 @@ int ime_context_get_autocapital_type(ime_context_h context, Ecore_IMF_Autocapita
 
 int ime_context_get_return_key_type(ime_context_h context, Ecore_IMF_Input_Panel_Return_Key_Type *return_key_type)
 {
-    if (!g_running) {
-        LOGW("IME_ERROR_NOT_RUNNING");
-        return IME_ERROR_NOT_RUNNING;
-    }
-
     if (!context || !return_key_type) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
+    }
+
+    if (!g_running) {
+        LOGW("IME_ERROR_NOT_RUNNING");
+        return IME_ERROR_NOT_RUNNING;
     }
 
     *return_key_type = context->return_key_type;
@@ -1006,14 +1011,14 @@ int ime_context_get_return_key_type(ime_context_h context, Ecore_IMF_Input_Panel
 
 int ime_context_get_return_key_state(ime_context_h context, bool *return_key_state)
 {
-    if (!g_running) {
-        LOGW("IME_ERROR_NOT_RUNNING");
-        return IME_ERROR_NOT_RUNNING;
-    }
-
     if (!context || !return_key_state) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
+    }
+
+    if (!g_running) {
+        LOGW("IME_ERROR_NOT_RUNNING");
+        return IME_ERROR_NOT_RUNNING;
     }
 
     *return_key_state = static_cast<bool>(context->return_key_disabled);
@@ -1023,14 +1028,14 @@ int ime_context_get_return_key_state(ime_context_h context, bool *return_key_sta
 
 int ime_context_get_prediction_mode(ime_context_h context, bool *prediction_mode)
 {
-    if (!g_running) {
-        LOGW("IME_ERROR_NOT_RUNNING");
-        return IME_ERROR_NOT_RUNNING;
-    }
-
     if (!context || !prediction_mode) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
+    }
+
+    if (!g_running) {
+        LOGW("IME_ERROR_NOT_RUNNING");
+        return IME_ERROR_NOT_RUNNING;
     }
 
     *prediction_mode = static_cast<bool>(context->prediction_allow);
@@ -1040,14 +1045,14 @@ int ime_context_get_prediction_mode(ime_context_h context, bool *prediction_mode
 
 int ime_context_get_password_mode(ime_context_h context, bool *password_mode)
 {
-    if (!g_running) {
-        LOGW("IME_ERROR_NOT_RUNNING");
-        return IME_ERROR_NOT_RUNNING;
-    }
-
     if (!context || !password_mode) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
+    }
+
+    if (!g_running) {
+        LOGW("IME_ERROR_NOT_RUNNING");
+        return IME_ERROR_NOT_RUNNING;
     }
 
     *password_mode = static_cast<bool>(context->password_mode);
@@ -1057,14 +1062,14 @@ int ime_context_get_password_mode(ime_context_h context, bool *password_mode)
 
 int ime_context_get_input_hint(ime_context_h context, Ecore_IMF_Input_Hints *input_hint)
 {
-    if (!g_running) {
-        LOGW("IME_ERROR_NOT_RUNNING");
-        return IME_ERROR_NOT_RUNNING;
-    }
-
     if (!context || !input_hint) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
+    }
+
+    if (!g_running) {
+        LOGW("IME_ERROR_NOT_RUNNING");
+        return IME_ERROR_NOT_RUNNING;
     }
 
     *input_hint = context->input_hint;
@@ -1074,14 +1079,14 @@ int ime_context_get_input_hint(ime_context_h context, Ecore_IMF_Input_Hints *inp
 
 int ime_context_get_bidi_direction(ime_context_h context, Ecore_IMF_BiDi_Direction *bidi)
 {
-    if (!g_running) {
-        LOGW("IME_ERROR_NOT_RUNNING");
-        return IME_ERROR_NOT_RUNNING;
-    }
-
     if (!context || !bidi) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
+    }
+
+    if (!g_running) {
+        LOGW("IME_ERROR_NOT_RUNNING");
+        return IME_ERROR_NOT_RUNNING;
     }
 
     *bidi = context->bidi_direction;
@@ -1091,14 +1096,14 @@ int ime_context_get_bidi_direction(ime_context_h context, Ecore_IMF_BiDi_Directi
 
 int ime_context_get_language(ime_context_h context, Ecore_IMF_Input_Panel_Lang *language)
 {
-    if (!g_running) {
-        LOGW("IME_ERROR_NOT_RUNNING");
-        return IME_ERROR_NOT_RUNNING;
-    }
-
     if (!context || !language) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
+    }
+
+    if (!g_running) {
+        LOGW("IME_ERROR_NOT_RUNNING");
+        return IME_ERROR_NOT_RUNNING;
     }
 
     *language = context->language;
@@ -1108,14 +1113,14 @@ int ime_context_get_language(ime_context_h context, Ecore_IMF_Input_Panel_Lang *
 
 int ime_device_info_get_name(ime_device_info_h dev_info, char **dev_name)
 {
-    if (!g_running) {
-        LOGW("IME_ERROR_NOT_RUNNING");
-        return IME_ERROR_NOT_RUNNING;
-    }
-
     if (!dev_info || !dev_name) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
+    }
+
+    if (!g_running) {
+        LOGW("IME_ERROR_NOT_RUNNING");
+        return IME_ERROR_NOT_RUNNING;
     }
 
     if (!dev_info->dev_name)
@@ -1128,14 +1133,14 @@ int ime_device_info_get_name(ime_device_info_h dev_info, char **dev_name)
 
 int ime_device_info_get_class(ime_device_info_h dev_info, Ecore_IMF_Device_Class *dev_class)
 {
-    if (!g_running) {
-        LOGW("IME_ERROR_NOT_RUNNING");
-        return IME_ERROR_NOT_RUNNING;
-    }
-
     if (!dev_info || !dev_class) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
+    }
+
+    if (!g_running) {
+        LOGW("IME_ERROR_NOT_RUNNING");
+        return IME_ERROR_NOT_RUNNING;
     }
 
     *dev_class = dev_info->dev_class;
@@ -1145,14 +1150,14 @@ int ime_device_info_get_class(ime_device_info_h dev_info, Ecore_IMF_Device_Class
 
 int ime_device_info_get_subclass(ime_device_info_h dev_info, Ecore_IMF_Device_Subclass *dev_subclass)
 {
-    if (!g_running) {
-        LOGW("IME_ERROR_NOT_RUNNING");
-        return IME_ERROR_NOT_RUNNING;
-    }
-
     if (!dev_info || !dev_subclass) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
+    }
+
+    if (!g_running) {
+        LOGW("IME_ERROR_NOT_RUNNING");
+        return IME_ERROR_NOT_RUNNING;
     }
 
     *dev_subclass = dev_info->dev_subclass;
