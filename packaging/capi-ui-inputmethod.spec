@@ -39,7 +39,7 @@ export FFLAGS+=" -DTIZEN_DEBUG_ENABLE -fPIC -fvisibility=hidden"
 rm -rf CMakeFiles
 rm -rf CMakeCache.txt
 MAJORVER=`echo %{version} | awk 'BEGIN {FS="."}{print $1}'`
-cmake . -DCMAKE_INSTALL_PREFIX=/usr -DFULLVER=%{version} -DMAJORVER=${MAJORVER}
+cmake . -DCMAKE_INSTALL_PREFIX=/usr -DFULLVER=%{version} -DMAJORVER=${MAJORVER} -DLIB_INSTALL_DIR:PATH=%{_libdir}
 
 make %{?jobs:-j%jobs}
 
