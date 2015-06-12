@@ -16,6 +16,7 @@ Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
 
 %description
+Input Method Library
 
 
 %package devel
@@ -24,6 +25,7 @@ Group:    Development/Libraries
 Requires: %{name} = %{version}-%{release}
 
 %description devel
+Input Method Library (Development)
 
 
 
