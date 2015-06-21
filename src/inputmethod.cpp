@@ -803,14 +803,14 @@ int ime_update_preedit_string(const char *str, Eina_List *attrs)
 
 int ime_request_surrounding_text(int maxlen_before, int maxlen_after)
 {
-    if (!g_running) {
-        LOGW("IME_ERROR_NOT_RUNNING");
-        return IME_ERROR_NOT_RUNNING;
-    }
-
     if (!g_event_callback.surrounding_text_updated) {
         LOGW("IME_ERROR_NO_CALLBACK_FUNCTION");
         return IME_ERROR_NO_CALLBACK_FUNCTION;
+    }
+
+    if (!g_running) {
+        LOGW("IME_ERROR_NOT_RUNNING");
+        return IME_ERROR_NOT_RUNNING;
     }
 
     g_core.get_surrounding_text(NULL, maxlen_before, maxlen_after);
@@ -884,14 +884,14 @@ int ime_set_size(int portrait_width, int portrait_height, int landscape_width, i
 
 int ime_create_option_window(void)
 {
-    if (!g_running) {
-        LOGW("IME_ERROR_NOT_RUNNING");
-        return IME_ERROR_NOT_RUNNING;
-    }
-
     if (!g_event_callback.option_window_created || !g_event_callback.option_window_destroyed) {
         LOGW("ime_create_option_window_cb() and ime_destroy_option_window_cb() callback functions are not set.");
         return IME_ERROR_NO_CALLBACK_FUNCTION;
+    }
+
+    if (!g_running) {
+        LOGW("IME_ERROR_NOT_RUNNING");
+        return IME_ERROR_NOT_RUNNING;
     }
 
     if (g_core.create_option_window())
@@ -904,6 +904,11 @@ int ime_create_option_window(void)
 
 int ime_destroy_option_window(Evas_Object *window)
 {
+    if (!g_event_callback.option_window_created || !g_event_callback.option_window_destroyed) {
+        LOGW("ime_create_option_window_cb() and ime_destroy_option_window_cb() callback functions are not set.");
+        return IME_ERROR_NO_CALLBACK_FUNCTION;
+    }
+
     if (!window) {
         LOGW("Window pointer is null.");
         return IME_ERROR_INVALID_PARAMETER;
@@ -912,11 +917,6 @@ int ime_destroy_option_window(Evas_Object *window)
     if (!g_running) {
         LOGW("IME_ERROR_NOT_RUNNING");
         return IME_ERROR_NOT_RUNNING;
-    }
-
-    if (!g_event_callback.option_window_created || !g_event_callback.option_window_destroyed) {
-        LOGW("ime_create_option_window_cb() and ime_destroy_option_window_cb() callback functions are not set.");
-        return IME_ERROR_NO_CALLBACK_FUNCTION;
     }
 
     g_core.destroy_option_window(window);
