@@ -1414,6 +1414,8 @@ EXPORT_API int ime_hide_preedit_string(void);
  * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
+ * @post This function is supposed to be followed by the ime_show_preedit_string() function.
+ *
  * @see ime_preedit_attribute, ime_commit_string, ime_show_preedit_string, ime_hide_preedit_string
  *
  * @code
