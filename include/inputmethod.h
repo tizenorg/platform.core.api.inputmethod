@@ -75,7 +75,7 @@ typedef enum
 typedef enum
 {
     IME_LAYOUT_NORMAL_VARIATION_NORMAL = 0, /**< The plain normal layout */
-    IME_LAYOUT_NORMAL_VARIATION_FILENAME, /**< Filename layout; symbols such as '/', '*', '\', '|', '<', '>', '?', '"' and ':' should be disabled */
+    IME_LAYOUT_NORMAL_VARIATION_FILENAME, /**< Filename layout; symbols such as '/', '*', '\', '|', '&lt;', '&gt;', '?', '&quot;' and ':' should be disabled */
     IME_LAYOUT_NORMAL_VARIATION_PERSON_NAME, /**< The name of a person */
     IME_LAYOUT_NUMBERONLY_VARIATION_NORMAL = 0, /**< The plain normal number layout */
     IME_LAYOUT_NUMBERONLY_VARIATION_SIGNED, /**< The number layout to allow a negative sign */
@@ -350,7 +350,7 @@ typedef void (*ime_cursor_position_updated_cb)(int cursor_pos, void *user_data);
  * @privilege %http://tizen.org/privilege/ime
  *
  * @param[in] user_data User data to be passed from the callback registration function
- * @param[out] lang_code Input panel's current input language code (e.g., "en_US")
+ * @param[out] lang_code Input panel's current input language code (e.g., &quot;en_US&quot;)
  *
  * @pre The callback can be registered using ime_event_set_language_requested_cb() function.
  *
