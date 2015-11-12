@@ -46,7 +46,7 @@ class CCoreEventCallback : public ISCLCoreEventCallback
     void on_get_imdata(sclchar **buf, sclu32 *len);
     void on_get_language_locale(sclint ic, sclchar **locale);
     void on_set_return_key_type(Ecore_IMF_Input_Panel_Return_Key_Type type);
-    void on_set_return_key_disable(bool disabled);
+    void on_set_return_key_disable(sclu32 disabled);
     void on_set_layout(Ecore_IMF_Input_Panel_Layout layout);
     void on_reset_input_context(sclint ic, const sclchar *uuid);
     void on_process_key_event(scim::KeyEvent &key, sclu32 *ret);
@@ -251,10 +251,12 @@ void CCoreEventCallback::on_set_return_key_type(Ecore_IMF_Input_Panel_Return_Key
     }
 }
 
-void CCoreEventCallback::on_set_return_key_disable(bool disabled)
+void CCoreEventCallback::on_set_return_key_disable(sclu32 disabled)
 {
+    bool return_key_disabled = !!disabled;
+
     if (g_event_callback.return_key_state_set) {
-        g_event_callback.return_key_state_set(disabled, g_event_callback.return_key_state_set_user_data);
+        g_event_callback.return_key_state_set(return_key_disabled, g_event_callback.return_key_state_set_user_data);
     }
 }
 
