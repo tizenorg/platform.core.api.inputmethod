@@ -1503,6 +1503,28 @@ EXPORT_API int ime_request_surrounding_text(int maxlen_before, int maxlen_after)
 EXPORT_API int ime_delete_surrounding_text(int offset, int len);
 
 /**
+ * @brief Requests to set selection.
+ *
+ * @since_tizen 2.4
+ *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
+ * @param[in] start The start cursor position in text
+ * @param[in] end The end cursor position in text
+ *
+ * @return 0 on success, otherwise a negative error value
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
+ * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
+ *
+ * @see ime_get_selection
+ */
+EXPORT_API int ime_set_selection(int start, int end);
+
+/**
  * @brief This API returns the pointer of input panel main window.
  *
  * @remarks The specific error code can be obtained using the get_last_result() method if this function returns NULL.

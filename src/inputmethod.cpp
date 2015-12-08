@@ -837,6 +837,26 @@ int ime_delete_surrounding_text(int offset, int len)
     return IME_ERROR_NONE;
 }
 
+int ime_set_selection(int start, int end)
+{
+    LOGD ("ime_set_selection");
+
+    if (start < 0) {
+        LOGW("IME_ERROR_INVALID_PARAMETER");
+        return IME_ERROR_INVALID_PARAMETER;
+    }
+
+
+    if (!g_running) {
+        LOGW("IME_ERROR_NOT_RUNNING");
+        return IME_ERROR_NOT_RUNNING;
+    }
+
+    g_core.set_selection(start, end);
+
+    return IME_ERROR_NONE;
+}
+
 Evas_Object* ime_get_main_window(void)
 {
     Evas_Object *win = NULL;
