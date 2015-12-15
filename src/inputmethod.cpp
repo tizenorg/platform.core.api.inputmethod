@@ -36,6 +36,7 @@ class CCoreEventCallback : public ISCLCoreEventCallback
     void on_exit();
     void on_update_cursor_position(sclint ic, const sclchar *ic_uuid, sclint cursor_pos);
     void on_update_surrounding_text(sclint ic, const sclchar *text, sclint cursor);
+    void on_get_selection(sclint ic, const sclchar *text);
     void on_focus_out(sclint ic, const sclchar *ic_uuid);
     void on_focus_in(sclint ic, const sclchar *ic_uuid);
     void on_ise_show(sclint ic, const int degree, Ise_Context &context);
@@ -63,6 +64,7 @@ typedef struct
     ime_focus_in_cb focus_in;   /**< Called when an edit field has focus */
     ime_focus_out_cb focus_out; /**< Called when an edit field loses focus */
     ime_surrounding_text_updated_cb surrounding_text_updated;   /**< Called when an edit field responds to a request with the surrounding text */
+    ime_get_selection_cb get_selection;   /**< Called when an edit field responds to a request with get selection */
     ime_input_context_reset_cb input_context_reset;             /**< Called to reset the input context of an edit field */
     ime_cursor_position_updated_cb cursor_position_updated;     /**< Called when the position of the cursor in an edit field changes */
     ime_language_requested_cb language_requested;   /**< Called when an edit field requests the language from the input panel */
@@ -82,6 +84,7 @@ typedef struct
     void *focus_in_user_data;
     void *focus_out_user_data;
     void *surrounding_text_updated_user_data;
+    void *get_selection_user_data;
     void *input_context_reset_user_data;
     void *cursor_position_updated_user_data;
     void *language_requested_user_data;
@@ -121,13 +124,11 @@ void CCoreEventCallback::on_init()
 
 void CCoreEventCallback::on_run(int argc, char **argv)
 {
-    LOGD ("on_run");
     ime_app_main(argc, argv);
 }
 
 void CCoreEventCallback::on_exit()
 {
-    LOGD ("on_exit");
     if (g_basic_callback.terminate) {
         g_basic_callback.terminate(g_user_data);
     }
@@ -144,8 +145,16 @@ void CCoreEventCallback::on_update_surrounding_text(sclint ic, const sclchar *te
 {
     if (g_event_callback.surrounding_text_updated) {
         g_event_callback.surrounding_text_updated(ic, text, cursor, g_event_callback.surrounding_text_updated_user_data);
-    }
+    } 
 }
+
+void CCoreEventCallback::on_get_selection(sclint ic, const sclchar *text)
+{
+    if (g_event_callback.get_selection) {
+        g_event_callback.get_selection(ic, text, g_event_callback.get_selection_user_data);
+    } 
+}
+
 
 void CCoreEventCallback::on_focus_out(sclint ic, const sclchar *ic_uuid)
 {
@@ -429,6 +438,33 @@ int ime_event_set_surrounding_text_updated_cb(ime_surrounding_text_updated_cb ca
 
     return IME_ERROR_NONE;
 }
+
+int ime_event_get_selection_cb(ime_get_selection_cb callback_func, void *user_data)
+{
+    ime_error_e ret = IME_ERROR_NONE;
+
+    if (!callback_func) {
+        LOGW("IME_ERROR_INVALID_PARAMETER");
+        return IME_ERROR_INVALID_PARAMETER;
+    }
+
+    if (g_running) {
+        LOGW("IME_ERROR_OPERATION_FAILED");
+        return IME_ERROR_OPERATION_FAILED;
+    }
+
+    ret = _check_privilege();
+    if (ret != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", ret);
+        return ret;
+    }
+
+    g_event_callback.get_selection = callback_func;
+    g_event_callback.get_selection_user_data = user_data;
+
+    return IME_ERROR_NONE;
+}
+
 
 int ime_event_set_input_context_reset_cb(ime_input_context_reset_cb callback_func, void *user_data)
 {
@@ -846,6 +882,35 @@ int ime_set_selection(int start, int end)
         return IME_ERROR_INVALID_PARAMETER;
     }
 
+
+    if (!g_running) {
+        LOGW("IME_ERROR_NOT_RUNNING");
+        return IME_ERROR_NOT_RUNNING;
+    }
+
+    g_core.set_selection(start, end);
+
+    return IME_ERROR_NONE;
+}
+
+int ime_get_selection()
+{
+    if (!g_running) {
+        LOGW("IME_ERROR_NOT_RUNNING");
+        return IME_ERROR_NOT_RUNNING;
+    }
+
+    g_core.get_selection(NULL);
+
+    return IME_ERROR_NONE;
+}
+
+int ime_set_selection(int start, int end)
+{
+    if (start < 0) {
+        LOGW("IME_ERROR_INVALID_PARAMETER");
+        return IME_ERROR_INVALID_PARAMETER;
+    }
 
     if (!g_running) {
         LOGW("IME_ERROR_NOT_RUNNING");

@@ -304,6 +304,27 @@ typedef void (*ime_focus_out_cb)(int context_id, void *user_data);
 typedef void (*ime_surrounding_text_updated_cb)(int context_id, const char *text, int cursor_pos, void *user_data);
 
 /**
+ * @brief Called when an associated text input UI control responds to a request with the selected text.
+ *
+ * @remarks The ime_get_selection() must be called to invoke this callback function, asynchronously.
+ *
+ * @since_tizen 3.0
+ *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
+ * @param[in] context_id The input context identification value of an associated text input UI control
+ * @param[in] text The UTF-8 string requested
+ * @param[in] user_data User data to be passed from the callback registration function
+ *
+ * @pre The callback can be registered using ime_event_get_selection_cb() function.
+ *
+ * @see ime_event_get_selection_cb, ime_get_selection
+ */
+typedef void (*ime_get_selection_cb)(int context_id, const char *text, void *user_data);
+
+/**
  * @brief Called to reset the input context of an associated text input UI control.
  *
  * @since_tizen 2.4
@@ -835,6 +856,34 @@ EXPORT_API int ime_event_set_focus_out_cb(ime_focus_out_cb callback_func, void *
  * @see ime_surrounding_text_updated_cb, ime_run
  */
 EXPORT_API int ime_event_set_surrounding_text_updated_cb(ime_surrounding_text_updated_cb callback_func, void *user_data);
+
+/**
+ * @brief Sets @c get selection event callback function.
+ *
+ * @remarks The ime_get_selection_cb() callback function is called when an
+ * associated text input UI control responds to a request with the selected text.
+ *
+ * @since_tizen 3.0
+ *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
+ * @param[in] callback_func @c get_selection event callback function
+ * @param[in] user_data User data to be passed to the callback function
+ *
+ * @return 0 on success, otherwise a negative error value
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
+ * @retval #IME_ERROR_OPERATION_FAILED Operation failed
+ *
+ * @post The ime_run() function should be called to start to run IME application's main loop.
+ *
+ * @see ime_get_selection_cb, ime_run
+ */
+EXPORT_API int ime_event_get_selection_cb(ime_get_selection_cb callback_func, void *user_data);
+
 
 /**
  * @brief Sets #c input_context_reset event callback function.
@@ -1513,6 +1562,47 @@ EXPORT_API int ime_delete_surrounding_text(int offset, int len);
  *
  * @param[in] start The start cursor position in text
  * @param[in] end The end cursor position in text
+ *
+ * @return 0 on success, otherwise a negative error value
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
+ * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
+ *
+ * @see ime_get_selection
+ */
+EXPORT_API int ime_set_selection(int start, int end);
+
+/**
+ * @brief Requests to get selection.
+ *
+ * @since_tizen 3.0
+ *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
+ * @return 0 on success, otherwise a negative error value
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
+ * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
+ *
+ * @see ime_set_selection
+ */
+EXPORT_API int ime_get_selection();
+
+/**
+ * @brief Requests to set selection.
+ *
+ * @since_tizen 3.0
+ *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
+ * @param[in] start The start cursor position in characters
+ * @param[in] end The end cursor position in characters
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_ERROR_NONE No error
