@@ -121,13 +121,13 @@ void CCoreEventCallback::on_init()
 
 void CCoreEventCallback::on_run(int argc, char **argv)
 {
-    LOGD ("on_run");
+    LOGD("on_run");
     ime_app_main(argc, argv);
 }
 
 void CCoreEventCallback::on_exit()
 {
-    LOGD ("on_exit");
+    LOGD("on_exit");
     if (g_basic_callback.terminate) {
         g_basic_callback.terminate(g_user_data);
     }
