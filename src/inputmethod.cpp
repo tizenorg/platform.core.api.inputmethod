@@ -787,10 +787,12 @@ int ime_update_preedit_string(const char *str, Eina_List *attrs)
     }
 
     scim::AttributeList attrv;
+    void *data = NULL;
     ime_preedit_attribute *attr = NULL;
 
     if (attrs) {
-        EINA_LIST_FREE(attrs, attr) {
+        EINA_LIST_FREE(attrs, data) {
+            attr = (ime_preedit_attribute *)data;
             if (attr) {
                 attrv.push_back(scim::Attribute(attr->start, attr->length, (scim::AttributeType)attr->type, attr->value));
                 free(attr);
