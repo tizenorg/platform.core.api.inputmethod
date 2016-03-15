@@ -1,6 +1,6 @@
 Name:       capi-ui-inputmethod
 Summary:    Input Method Library
-Version:    0.0.5
+Version:    0.0.6
 Release:    1
 Group:      Graphics & UI Framework/Input
 License:    Apache-2.0
