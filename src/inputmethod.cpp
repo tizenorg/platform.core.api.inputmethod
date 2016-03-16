@@ -360,7 +360,7 @@ ime_error_e _check_privilege()
         ret = IME_ERROR_PERMISSION_DENIED;
     }
 
-    inputmethod_cynara_finish ();
+    inputmethod_cynara_finish();
 
     return ret;
 }
