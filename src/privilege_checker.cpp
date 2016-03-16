@@ -8,7 +8,6 @@
 
 #include <cynara-client.h>
 #include <cynara-error.h>
-#include <cynara-creds-socket.h>
 #include <cynara-session.h>
 
 #ifdef LOG_TAG

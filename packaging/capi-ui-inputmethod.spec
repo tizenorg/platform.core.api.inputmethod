@@ -1,6 +1,6 @@
 Name:       capi-ui-inputmethod
 Summary:    Input Method Library
-Version:    0.0.5
+Version:    0.0.6
 Release:    1
 Group:      Graphics & UI Framework/Input
 License:    Apache-2.0
@@ -36,8 +36,8 @@ Input Method Library (Development)
 
 
 %build
-export CFLAGS+=" -DTIZEN_DEBUG_ENABLE -fPIC -fvisibility=hidden"
-export CXXFLAGS+=" -DTIZEN_DEBUG_ENABLE -fPIC -fvisibility=hidden"
+export CFLAGS+=" -DTIZEN_DEBUG_ENABLE -fPIC -fvisibility=hidden -Werror"
+export CXXFLAGS+=" -DTIZEN_DEBUG_ENABLE -fPIC -fvisibility=hidden -Werror"
 export FFLAGS+=" -DTIZEN_DEBUG_ENABLE -fPIC -fvisibility=hidden"
 
 rm -rf CMakeFiles
