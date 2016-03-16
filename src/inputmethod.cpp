@@ -19,6 +19,8 @@
 #include <string.h>
 #include <dlog.h>
 #include <sclcore.h>
+#include <unistd.h>
+#include <privilege_checker_private.h>
 #include "inputmethod_private.h"
 #include <inputmethod.h>
 
@@ -341,8 +343,32 @@ void CCoreEventCallback::on_check_option_window_availability(sclboolean *ret)
     }
 }
 
+ime_error_e _check_privilege()
+{
+    char uid[16];
+    ime_error_e ret = IME_ERROR_NONE;
+
+    if (inputmethod_cynara_initialize() == false) {
+        LOGE("inputmethod_cynara_initialize () == false");
+        return IME_ERROR_PERMISSION_DENIED;
+    }
+
+    snprintf(uid, 16, "%d", getuid());
+    if (check_privilege(uid, IME_PRIVILEGE) == false) {
+        LOGE("check_privilege(uid, IME_PRIVILEGE) == false");
+        LOGE("uid : %s.", uid);
+        ret = IME_ERROR_PERMISSION_DENIED;
+    }
+
+    inputmethod_cynara_finish ();
+
+    return ret;
+}
+
 int ime_run(ime_callback_s *basic_cb, void *user_data)
 {
+    ime_error_e retVal = IME_ERROR_NONE;
+
     if (g_running) {
         LOGE("inputmethod main loop is already running.");
         return IME_ERROR_OPERATION_FAILED;
@@ -351,6 +377,12 @@ int ime_run(ime_callback_s *basic_cb, void *user_data)
     if (!basic_cb) {
         LOGE("basic callbacks pointer is null.");
         return IME_ERROR_INVALID_PARAMETER;
+    }
+
+    retVal = _check_privilege();
+    if (retVal != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", retVal);
+        return retVal;
     }
 
     g_basic_callback = *basic_cb;
@@ -378,6 +410,8 @@ int ime_run(ime_callback_s *basic_cb, void *user_data)
 
 int ime_event_set_focus_in_cb(ime_focus_in_cb callback_func, void *user_data)
 {
+    ime_error_e retVal = IME_ERROR_NONE;
+
     if (!callback_func) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
@@ -386,6 +420,12 @@ int ime_event_set_focus_in_cb(ime_focus_in_cb callback_func, void *user_data)
     if (g_running) {
         LOGW("IME_ERROR_OPERATION_FAILED");
         return IME_ERROR_OPERATION_FAILED;
+    }
+
+    retVal = _check_privilege();
+    if (retVal != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", retVal);
+        return retVal;
     }
 
     g_event_callback.focus_in = callback_func;
@@ -396,6 +436,8 @@ int ime_event_set_focus_in_cb(ime_focus_in_cb callback_func, void *user_data)
 
 int ime_event_set_focus_out_cb(ime_focus_out_cb callback_func, void *user_data)
 {
+    ime_error_e retVal = IME_ERROR_NONE;
+
     if (!callback_func) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
@@ -404,6 +446,12 @@ int ime_event_set_focus_out_cb(ime_focus_out_cb callback_func, void *user_data)
     if (g_running) {
         LOGW("IME_ERROR_OPERATION_FAILED");
         return IME_ERROR_OPERATION_FAILED;
+    }
+
+    retVal = _check_privilege();
+    if (retVal != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", retVal);
+        return retVal;
     }
 
     g_event_callback.focus_out = callback_func;
@@ -414,6 +462,8 @@ int ime_event_set_focus_out_cb(ime_focus_out_cb callback_func, void *user_data)
 
 int ime_event_set_surrounding_text_updated_cb(ime_surrounding_text_updated_cb callback_func, void *user_data)
 {
+    ime_error_e retVal = IME_ERROR_NONE;
+
     if (!callback_func) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
@@ -422,6 +472,12 @@ int ime_event_set_surrounding_text_updated_cb(ime_surrounding_text_updated_cb ca
     if (g_running) {
         LOGW("IME_ERROR_OPERATION_FAILED");
         return IME_ERROR_OPERATION_FAILED;
+    }
+
+    retVal = _check_privilege();
+    if (retVal != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", retVal);
+        return retVal;
     }
 
     g_event_callback.surrounding_text_updated = callback_func;
@@ -432,6 +488,8 @@ int ime_event_set_surrounding_text_updated_cb(ime_surrounding_text_updated_cb ca
 
 int ime_event_set_input_context_reset_cb(ime_input_context_reset_cb callback_func, void *user_data)
 {
+    ime_error_e retVal = IME_ERROR_NONE;
+
     if (!callback_func) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
@@ -440,6 +498,12 @@ int ime_event_set_input_context_reset_cb(ime_input_context_reset_cb callback_fun
     if (g_running) {
         LOGW("IME_ERROR_OPERATION_FAILED");
         return IME_ERROR_OPERATION_FAILED;
+    }
+
+    retVal = _check_privilege();
+    if (retVal != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", retVal);
+        return retVal;
     }
 
     g_event_callback.input_context_reset = callback_func;
@@ -450,6 +514,8 @@ int ime_event_set_input_context_reset_cb(ime_input_context_reset_cb callback_fun
 
 int ime_event_set_cursor_position_updated_cb(ime_cursor_position_updated_cb callback_func, void *user_data)
 {
+    ime_error_e retVal = IME_ERROR_NONE;
+
     if (!callback_func) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
@@ -458,6 +524,12 @@ int ime_event_set_cursor_position_updated_cb(ime_cursor_position_updated_cb call
     if (g_running) {
         LOGW("IME_ERROR_OPERATION_FAILED");
         return IME_ERROR_OPERATION_FAILED;
+    }
+
+    retVal = _check_privilege();
+    if (retVal != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", retVal);
+        return retVal;
     }
 
     g_event_callback.cursor_position_updated = callback_func;
@@ -468,6 +540,8 @@ int ime_event_set_cursor_position_updated_cb(ime_cursor_position_updated_cb call
 
 int ime_event_set_language_requested_cb(ime_language_requested_cb callback_func, void *user_data)
 {
+    ime_error_e retVal = IME_ERROR_NONE;
+
     if (!callback_func) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
@@ -476,6 +550,12 @@ int ime_event_set_language_requested_cb(ime_language_requested_cb callback_func,
     if (g_running) {
         LOGW("IME_ERROR_OPERATION_FAILED");
         return IME_ERROR_OPERATION_FAILED;
+    }
+
+    retVal = _check_privilege();
+    if (retVal != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", retVal);
+        return retVal;
     }
 
     g_event_callback.language_requested = callback_func;
@@ -486,6 +566,8 @@ int ime_event_set_language_requested_cb(ime_language_requested_cb callback_func,
 
 int ime_event_set_language_set_cb(ime_language_set_cb callback_func, void *user_data)
 {
+    ime_error_e retVal = IME_ERROR_NONE;
+
     if (!callback_func) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
@@ -494,6 +576,12 @@ int ime_event_set_language_set_cb(ime_language_set_cb callback_func, void *user_
     if (g_running) {
         LOGW("IME_ERROR_OPERATION_FAILED");
         return IME_ERROR_OPERATION_FAILED;
+    }
+
+    retVal = _check_privilege();
+    if (retVal != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", retVal);
+        return retVal;
     }
 
     g_event_callback.language_set = callback_func;
@@ -504,6 +592,8 @@ int ime_event_set_language_set_cb(ime_language_set_cb callback_func, void *user_
 
 int ime_event_set_imdata_set_cb(ime_imdata_set_cb callback_func, void *user_data)
 {
+    ime_error_e retVal = IME_ERROR_NONE;
+
     if (!callback_func) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
@@ -512,6 +602,12 @@ int ime_event_set_imdata_set_cb(ime_imdata_set_cb callback_func, void *user_data
     if (g_running) {
         LOGW("IME_ERROR_OPERATION_FAILED");
         return IME_ERROR_OPERATION_FAILED;
+    }
+
+    retVal = _check_privilege();
+    if (retVal != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", retVal);
+        return retVal;
     }
 
     g_event_callback.imdata_set = callback_func;
@@ -522,6 +618,8 @@ int ime_event_set_imdata_set_cb(ime_imdata_set_cb callback_func, void *user_data
 
 int ime_event_set_imdata_requested_cb(ime_imdata_requested_cb callback_func, void *user_data)
 {
+    ime_error_e retVal = IME_ERROR_NONE;
+
     if (!callback_func) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
@@ -530,6 +628,12 @@ int ime_event_set_imdata_requested_cb(ime_imdata_requested_cb callback_func, voi
     if (g_running) {
         LOGW("IME_ERROR_OPERATION_FAILED");
         return IME_ERROR_OPERATION_FAILED;
+    }
+
+    retVal = _check_privilege();
+    if (retVal != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", retVal);
+        return retVal;
     }
 
     g_event_callback.imdata_requested = callback_func;
@@ -540,6 +644,8 @@ int ime_event_set_imdata_requested_cb(ime_imdata_requested_cb callback_func, voi
 
 int ime_event_set_layout_set_cb(ime_layout_set_cb callback_func, void *user_data)
 {
+    ime_error_e retVal = IME_ERROR_NONE;
+
     if (!callback_func) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
@@ -548,6 +654,12 @@ int ime_event_set_layout_set_cb(ime_layout_set_cb callback_func, void *user_data
     if (g_running) {
         LOGW("IME_ERROR_OPERATION_FAILED");
         return IME_ERROR_OPERATION_FAILED;
+    }
+
+    retVal = _check_privilege();
+    if (retVal != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", retVal);
+        return retVal;
     }
 
     g_event_callback.layout_set = callback_func;
@@ -558,6 +670,8 @@ int ime_event_set_layout_set_cb(ime_layout_set_cb callback_func, void *user_data
 
 int ime_event_set_return_key_type_set_cb(ime_return_key_type_set_cb callback_func, void *user_data)
 {
+    ime_error_e retVal = IME_ERROR_NONE;
+
     if (!callback_func) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
@@ -566,6 +680,12 @@ int ime_event_set_return_key_type_set_cb(ime_return_key_type_set_cb callback_fun
     if (g_running) {
         LOGW("IME_ERROR_OPERATION_FAILED");
         return IME_ERROR_OPERATION_FAILED;
+    }
+
+    retVal = _check_privilege();
+    if (retVal != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", retVal);
+        return retVal;
     }
 
     g_event_callback.return_key_type_set = callback_func;
@@ -576,6 +696,8 @@ int ime_event_set_return_key_type_set_cb(ime_return_key_type_set_cb callback_fun
 
 int ime_event_set_return_key_state_set_cb(ime_return_key_state_set_cb callback_func, void *user_data)
 {
+    ime_error_e retVal = IME_ERROR_NONE;
+
     if (!callback_func) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
@@ -584,6 +706,12 @@ int ime_event_set_return_key_state_set_cb(ime_return_key_state_set_cb callback_f
     if (g_running) {
         LOGW("IME_ERROR_OPERATION_FAILED");
         return IME_ERROR_OPERATION_FAILED;
+    }
+
+    retVal = _check_privilege();
+    if (retVal != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", retVal);
+        return retVal;
     }
 
     g_event_callback.return_key_state_set = callback_func;
@@ -594,6 +722,8 @@ int ime_event_set_return_key_state_set_cb(ime_return_key_state_set_cb callback_f
 
 int ime_event_set_geometry_requested_cb(ime_geometry_requested_cb callback_func, void *user_data)
 {
+    ime_error_e retVal = IME_ERROR_NONE;
+
     if (!callback_func) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
@@ -602,6 +732,12 @@ int ime_event_set_geometry_requested_cb(ime_geometry_requested_cb callback_func,
     if (g_running) {
         LOGW("IME_ERROR_OPERATION_FAILED");
         return IME_ERROR_OPERATION_FAILED;
+    }
+
+    retVal = _check_privilege();
+    if (retVal != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", retVal);
+        return retVal;
     }
 
     g_event_callback.geometry_requested = callback_func;
@@ -612,6 +748,8 @@ int ime_event_set_geometry_requested_cb(ime_geometry_requested_cb callback_func,
 
 int ime_event_set_process_key_event_cb(ime_process_key_event_cb callback_func, void *user_data)
 {
+    ime_error_e retVal = IME_ERROR_NONE;
+
     if (!callback_func) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
@@ -620,6 +758,12 @@ int ime_event_set_process_key_event_cb(ime_process_key_event_cb callback_func, v
     if (g_running) {
         LOGW("IME_ERROR_OPERATION_FAILED");
         return IME_ERROR_OPERATION_FAILED;
+    }
+
+    retVal = _check_privilege();
+    if (retVal != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", retVal);
+        return retVal;
     }
 
     g_event_callback.process_key_event = callback_func;
@@ -630,6 +774,8 @@ int ime_event_set_process_key_event_cb(ime_process_key_event_cb callback_func, v
 
 int ime_event_set_display_language_changed_cb(ime_display_language_changed_cb callback_func, void *user_data)
 {
+    ime_error_e retVal = IME_ERROR_NONE;
+
     if (!callback_func) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
@@ -638,6 +784,12 @@ int ime_event_set_display_language_changed_cb(ime_display_language_changed_cb ca
     if (g_running) {
         LOGW("IME_ERROR_OPERATION_FAILED");
         return IME_ERROR_OPERATION_FAILED;
+    }
+
+    retVal = _check_privilege();
+    if (retVal != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", retVal);
+        return retVal;
     }
 
     g_event_callback.display_language_changed = callback_func;
@@ -648,6 +800,8 @@ int ime_event_set_display_language_changed_cb(ime_display_language_changed_cb ca
 
 int ime_event_set_rotation_degree_changed_cb(ime_rotation_degree_changed_cb callback_func, void *user_data)
 {
+    ime_error_e retVal = IME_ERROR_NONE;
+
     if (!callback_func) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
@@ -656,6 +810,12 @@ int ime_event_set_rotation_degree_changed_cb(ime_rotation_degree_changed_cb call
     if (g_running) {
         LOGW("IME_ERROR_OPERATION_FAILED");
         return IME_ERROR_OPERATION_FAILED;
+    }
+
+    retVal = _check_privilege();
+    if (retVal != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", retVal);
+        return retVal;
     }
 
     g_event_callback.rotation_degree_changed = callback_func;
@@ -666,6 +826,8 @@ int ime_event_set_rotation_degree_changed_cb(ime_rotation_degree_changed_cb call
 
 int ime_event_set_accessibility_state_changed_cb(ime_accessibility_state_changed_cb callback_func, void *user_data)
 {
+    ime_error_e retVal = IME_ERROR_NONE;
+
     if (!callback_func) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
@@ -674,6 +836,12 @@ int ime_event_set_accessibility_state_changed_cb(ime_accessibility_state_changed
     if (g_running) {
         LOGW("IME_ERROR_OPERATION_FAILED");
         return IME_ERROR_OPERATION_FAILED;
+    }
+
+    retVal = _check_privilege();
+    if (retVal != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", retVal);
+        return retVal;
     }
 
     g_event_callback.accessibility_state_changed = callback_func;
@@ -684,6 +852,8 @@ int ime_event_set_accessibility_state_changed_cb(ime_accessibility_state_changed
 
 int ime_event_set_option_window_created_cb(ime_option_window_created_cb callback_func, void *user_data)
 {
+    ime_error_e retVal = IME_ERROR_NONE;
+
     if (!callback_func) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
@@ -692,6 +862,12 @@ int ime_event_set_option_window_created_cb(ime_option_window_created_cb callback
     if (g_running) {
         LOGW("IME_ERROR_OPERATION_FAILED");
         return IME_ERROR_OPERATION_FAILED;
+    }
+
+    retVal = _check_privilege();
+    if (retVal != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", retVal);
+        return retVal;
     }
 
     g_event_callback.option_window_created = callback_func;
@@ -702,6 +878,8 @@ int ime_event_set_option_window_created_cb(ime_option_window_created_cb callback
 
 int ime_event_set_option_window_destroyed_cb(ime_option_window_destroyed_cb callback_func, void *user_data)
 {
+    ime_error_e retVal = IME_ERROR_NONE;
+
     if (!callback_func) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
@@ -712,6 +890,12 @@ int ime_event_set_option_window_destroyed_cb(ime_option_window_destroyed_cb call
         return IME_ERROR_OPERATION_FAILED;
     }
 
+    retVal = _check_privilege();
+    if (retVal != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", retVal);
+        return retVal;
+    }
+
     g_event_callback.option_window_destroyed = callback_func;
     g_event_callback.option_window_destroyed_user_data = user_data;
 
@@ -720,9 +904,17 @@ int ime_event_set_option_window_destroyed_cb(ime_option_window_destroyed_cb call
 
 int ime_send_key_event(ime_key_code_e keycode, ime_key_mask_e keymask, bool forward_key)
 {
+    ime_error_e retVal = IME_ERROR_NONE;
+
     if (!g_running) {
         LOGW("IME_ERROR_NOT_RUNNING");
         return IME_ERROR_NOT_RUNNING;
+    }
+
+    retVal = _check_privilege();
+    if (retVal != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", retVal);
+        return retVal;
     }
 
     if (forward_key)
@@ -735,6 +927,8 @@ int ime_send_key_event(ime_key_code_e keycode, ime_key_mask_e keymask, bool forw
 
 int ime_commit_string(const char *str)
 {
+    ime_error_e retVal = IME_ERROR_NONE;
+
     if (!str) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
@@ -743,6 +937,12 @@ int ime_commit_string(const char *str)
     if (!g_running) {
         LOGW("IME_ERROR_NOT_RUNNING");
         return IME_ERROR_NOT_RUNNING;
+    }
+
+    retVal = _check_privilege();
+    if (retVal != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", retVal);
+        return retVal;
     }
 
     g_core.commit_string(-1, NULL, str);
@@ -752,9 +952,17 @@ int ime_commit_string(const char *str)
 
 int ime_show_preedit_string(void)
 {
+    ime_error_e retVal = IME_ERROR_NONE;
+
     if (!g_running) {
         LOGW("IME_ERROR_NOT_RUNNING");
         return IME_ERROR_NOT_RUNNING;
+    }
+
+    retVal = _check_privilege();
+    if (retVal != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", retVal);
+        return retVal;
     }
 
     g_core.show_preedit_string(-1, NULL);
@@ -764,9 +972,17 @@ int ime_show_preedit_string(void)
 
 int ime_hide_preedit_string(void)
 {
+    ime_error_e retVal = IME_ERROR_NONE;
+
     if (!g_running) {
         LOGW("IME_ERROR_NOT_RUNNING");
         return IME_ERROR_NOT_RUNNING;
+    }
+
+    retVal = _check_privilege();
+    if (retVal != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", retVal);
+        return retVal;
     }
 
     g_core.hide_preedit_string(-1, NULL);
@@ -776,6 +992,8 @@ int ime_hide_preedit_string(void)
 
 int ime_update_preedit_string(const char *str, Eina_List *attrs)
 {
+    ime_error_e retVal = IME_ERROR_NONE;
+
     if (!str) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
@@ -784,6 +1002,12 @@ int ime_update_preedit_string(const char *str, Eina_List *attrs)
     if (!g_running) {
         LOGW("IME_ERROR_NOT_RUNNING");
         return IME_ERROR_NOT_RUNNING;
+    }
+
+    retVal = _check_privilege();
+    if (retVal != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", retVal);
+        return retVal;
     }
 
     scim::AttributeList attrv;
@@ -807,6 +1031,8 @@ int ime_update_preedit_string(const char *str, Eina_List *attrs)
 
 int ime_request_surrounding_text(int maxlen_before, int maxlen_after)
 {
+    ime_error_e retVal = IME_ERROR_NONE;
+
     if (!g_event_callback.surrounding_text_updated) {
         LOGW("IME_ERROR_NO_CALLBACK_FUNCTION");
         return IME_ERROR_NO_CALLBACK_FUNCTION;
@@ -817,6 +1043,12 @@ int ime_request_surrounding_text(int maxlen_before, int maxlen_after)
         return IME_ERROR_NOT_RUNNING;
     }
 
+    retVal = _check_privilege();
+    if (retVal != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", retVal);
+        return retVal;
+    }
+
     g_core.get_surrounding_text(NULL, maxlen_before, maxlen_after);
 
     return IME_ERROR_NONE;
@@ -824,6 +1056,8 @@ int ime_request_surrounding_text(int maxlen_before, int maxlen_after)
 
 int ime_delete_surrounding_text(int offset, int len)
 {
+    ime_error_e retVal = IME_ERROR_NONE;
+
     if (len <= 0) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
@@ -834,6 +1068,12 @@ int ime_delete_surrounding_text(int offset, int len)
         return IME_ERROR_NOT_RUNNING;
     }
 
+    retVal = _check_privilege();
+    if (retVal != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", retVal);
+        return retVal;
+    }
+
     g_core.delete_surrounding_text(offset, len);
 
     return IME_ERROR_NONE;
@@ -841,11 +1081,20 @@ int ime_delete_surrounding_text(int offset, int len)
 
 Evas_Object* ime_get_main_window(void)
 {
+    ime_error_e retVal = IME_ERROR_NONE;
+
     Evas_Object *win = NULL;
 
     if (!g_running) {
         set_last_result(IME_ERROR_NOT_RUNNING);
         LOGW("IME_ERROR_NOT_RUNNING");
+        return NULL;
+    }
+
+    retVal = _check_privilege();
+    if (retVal != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", retVal);
+        set_last_result(retVal);
         return NULL;
     }
 
@@ -863,6 +1112,8 @@ Evas_Object* ime_get_main_window(void)
 
 int ime_set_size(int portrait_width, int portrait_height, int landscape_width, int landscape_height)
 {
+    ime_error_e retVal = IME_ERROR_NONE;
+
     SclSize portrait_size, landscape_size;
 
     if (portrait_width < 1 || portrait_height < 1 || landscape_width < 1 || landscape_height < 1) {
@@ -873,6 +1124,12 @@ int ime_set_size(int portrait_width, int portrait_height, int landscape_width, i
     if (!g_running) {
         LOGW("IME_ERROR_NOT_RUNNING");
         return IME_ERROR_NOT_RUNNING;
+    }
+
+    retVal = _check_privilege();
+    if (retVal != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", retVal);
+        return retVal;
     }
 
     portrait_size.width = portrait_width;
@@ -888,6 +1145,8 @@ int ime_set_size(int portrait_width, int portrait_height, int landscape_width, i
 
 int ime_create_option_window(void)
 {
+    ime_error_e retVal = IME_ERROR_NONE;
+
     if (!g_event_callback.option_window_created || !g_event_callback.option_window_destroyed) {
         LOGW("ime_create_option_window_cb() and ime_destroy_option_window_cb() callback functions are not set.");
         return IME_ERROR_NO_CALLBACK_FUNCTION;
@@ -896,6 +1155,12 @@ int ime_create_option_window(void)
     if (!g_running) {
         LOGW("IME_ERROR_NOT_RUNNING");
         return IME_ERROR_NOT_RUNNING;
+    }
+
+    retVal = _check_privilege();
+    if (retVal != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", retVal);
+        return retVal;
     }
 
     if (g_core.create_option_window())
@@ -908,6 +1173,8 @@ int ime_create_option_window(void)
 
 int ime_destroy_option_window(Evas_Object *window)
 {
+    ime_error_e retVal = IME_ERROR_NONE;
+
     if (!g_event_callback.option_window_created || !g_event_callback.option_window_destroyed) {
         LOGW("ime_create_option_window_cb() and ime_destroy_option_window_cb() callback functions are not set.");
         return IME_ERROR_NO_CALLBACK_FUNCTION;
@@ -923,6 +1190,12 @@ int ime_destroy_option_window(Evas_Object *window)
         return IME_ERROR_NOT_RUNNING;
     }
 
+    retVal = _check_privilege();
+    if (retVal != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", retVal);
+        return retVal;
+    }
+
     g_core.destroy_option_window(window);
 
     return IME_ERROR_NONE;
@@ -930,6 +1203,8 @@ int ime_destroy_option_window(Evas_Object *window)
 
 int ime_context_get_layout(ime_context_h context, Ecore_IMF_Input_Panel_Layout *layout)
 {
+    ime_error_e retVal = IME_ERROR_NONE;
+
     if (!context || !layout) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
@@ -940,6 +1215,12 @@ int ime_context_get_layout(ime_context_h context, Ecore_IMF_Input_Panel_Layout *
         return IME_ERROR_NOT_RUNNING;
     }
 
+    retVal = _check_privilege();
+    if (retVal != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", retVal);
+        return retVal;
+    }
+
     *layout = context->layout;
 
     return IME_ERROR_NONE;
@@ -947,6 +1228,8 @@ int ime_context_get_layout(ime_context_h context, Ecore_IMF_Input_Panel_Layout *
 
 int ime_context_get_layout_variation(ime_context_h context, ime_layout_variation_e *layout_variation)
 {
+    ime_error_e retVal = IME_ERROR_NONE;
+
     if (!context || !layout_variation) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
@@ -957,6 +1240,12 @@ int ime_context_get_layout_variation(ime_context_h context, ime_layout_variation
         return IME_ERROR_NOT_RUNNING;
     }
 
+    retVal = _check_privilege();
+    if (retVal != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", retVal);
+        return retVal;
+    }
+
     *layout_variation = static_cast<ime_layout_variation_e>(context->layout_variation);
 
     return IME_ERROR_NONE;
@@ -964,6 +1253,8 @@ int ime_context_get_layout_variation(ime_context_h context, ime_layout_variation
 
 int ime_context_get_cursor_position(ime_context_h context, int *cursor_pos)
 {
+    ime_error_e retVal = IME_ERROR_NONE;
+
     if (!context || !cursor_pos) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
@@ -974,6 +1265,12 @@ int ime_context_get_cursor_position(ime_context_h context, int *cursor_pos)
         return IME_ERROR_NOT_RUNNING;
     }
 
+    retVal = _check_privilege();
+    if (retVal != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", retVal);
+        return retVal;
+    }
+
     *cursor_pos = context->cursor_pos;
 
     return IME_ERROR_NONE;
@@ -981,6 +1278,8 @@ int ime_context_get_cursor_position(ime_context_h context, int *cursor_pos)
 
 int ime_context_get_autocapital_type(ime_context_h context, Ecore_IMF_Autocapital_Type *autocapital_type)
 {
+    ime_error_e retVal = IME_ERROR_NONE;
+
     if (!context || !autocapital_type) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
@@ -991,6 +1290,12 @@ int ime_context_get_autocapital_type(ime_context_h context, Ecore_IMF_Autocapita
         return IME_ERROR_NOT_RUNNING;
     }
 
+    retVal = _check_privilege();
+    if (retVal != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", retVal);
+        return retVal;
+    }
+
     *autocapital_type = context->autocapital_type;
 
     return IME_ERROR_NONE;
@@ -998,6 +1303,8 @@ int ime_context_get_autocapital_type(ime_context_h context, Ecore_IMF_Autocapita
 
 int ime_context_get_return_key_type(ime_context_h context, Ecore_IMF_Input_Panel_Return_Key_Type *return_key_type)
 {
+    ime_error_e retVal = IME_ERROR_NONE;
+
     if (!context || !return_key_type) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
@@ -1008,6 +1315,12 @@ int ime_context_get_return_key_type(ime_context_h context, Ecore_IMF_Input_Panel
         return IME_ERROR_NOT_RUNNING;
     }
 
+    retVal = _check_privilege();
+    if (retVal != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", retVal);
+        return retVal;
+    }
+
     *return_key_type = context->return_key_type;
 
     return IME_ERROR_NONE;
@@ -1015,6 +1328,8 @@ int ime_context_get_return_key_type(ime_context_h context, Ecore_IMF_Input_Panel
 
 int ime_context_get_return_key_state(ime_context_h context, bool *return_key_state)
 {
+    ime_error_e retVal = IME_ERROR_NONE;
+
     if (!context || !return_key_state) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
@@ -1025,6 +1340,12 @@ int ime_context_get_return_key_state(ime_context_h context, bool *return_key_sta
         return IME_ERROR_NOT_RUNNING;
     }
 
+    retVal = _check_privilege();
+    if (retVal != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", retVal);
+        return retVal;
+    }
+
     *return_key_state = static_cast<bool>(context->return_key_disabled);
 
     return IME_ERROR_NONE;
@@ -1032,6 +1353,8 @@ int ime_context_get_return_key_state(ime_context_h context, bool *return_key_sta
 
 int ime_context_get_prediction_mode(ime_context_h context, bool *prediction_mode)
 {
+    ime_error_e retVal = IME_ERROR_NONE;
+
     if (!context || !prediction_mode) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
@@ -1042,6 +1365,12 @@ int ime_context_get_prediction_mode(ime_context_h context, bool *prediction_mode
         return IME_ERROR_NOT_RUNNING;
     }
 
+    retVal = _check_privilege();
+    if (retVal != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", retVal);
+        return retVal;
+    }
+
     *prediction_mode = static_cast<bool>(context->prediction_allow);
 
     return IME_ERROR_NONE;
@@ -1049,6 +1378,8 @@ int ime_context_get_prediction_mode(ime_context_h context, bool *prediction_mode
 
 int ime_context_get_password_mode(ime_context_h context, bool *password_mode)
 {
+    ime_error_e retVal = IME_ERROR_NONE;
+
     if (!context || !password_mode) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
@@ -1059,6 +1390,12 @@ int ime_context_get_password_mode(ime_context_h context, bool *password_mode)
         return IME_ERROR_NOT_RUNNING;
     }
 
+    retVal = _check_privilege();
+    if (retVal != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", retVal);
+        return retVal;
+    }
+
     *password_mode = static_cast<bool>(context->password_mode);
 
     return IME_ERROR_NONE;
@@ -1066,6 +1403,8 @@ int ime_context_get_password_mode(ime_context_h context, bool *password_mode)
 
 int ime_context_get_input_hint(ime_context_h context, Ecore_IMF_Input_Hints *input_hint)
 {
+    ime_error_e retVal = IME_ERROR_NONE;
+
     if (!context || !input_hint) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
@@ -1076,6 +1415,12 @@ int ime_context_get_input_hint(ime_context_h context, Ecore_IMF_Input_Hints *inp
         return IME_ERROR_NOT_RUNNING;
     }
 
+    retVal = _check_privilege();
+    if (retVal != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", retVal);
+        return retVal;
+    }
+
     *input_hint = context->input_hint;
 
     return IME_ERROR_NONE;
@@ -1083,6 +1428,8 @@ int ime_context_get_input_hint(ime_context_h context, Ecore_IMF_Input_Hints *inp
 
 int ime_context_get_bidi_direction(ime_context_h context, Ecore_IMF_BiDi_Direction *bidi)
 {
+    ime_error_e retVal = IME_ERROR_NONE;
+
     if (!context || !bidi) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
@@ -1093,6 +1440,12 @@ int ime_context_get_bidi_direction(ime_context_h context, Ecore_IMF_BiDi_Directi
         return IME_ERROR_NOT_RUNNING;
     }
 
+    retVal = _check_privilege();
+    if (retVal != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", retVal);
+        return retVal;
+    }
+
     *bidi = context->bidi_direction;
 
     return IME_ERROR_NONE;
@@ -1100,6 +1453,8 @@ int ime_context_get_bidi_direction(ime_context_h context, Ecore_IMF_BiDi_Directi
 
 int ime_context_get_language(ime_context_h context, Ecore_IMF_Input_Panel_Lang *language)
 {
+    ime_error_e retVal = IME_ERROR_NONE;
+
     if (!context || !language) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
@@ -1110,6 +1465,12 @@ int ime_context_get_language(ime_context_h context, Ecore_IMF_Input_Panel_Lang *
         return IME_ERROR_NOT_RUNNING;
     }
 
+    retVal = _check_privilege();
+    if (retVal != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", retVal);
+        return retVal;
+    }
+
     *language = context->language;
 
     return IME_ERROR_NONE;
@@ -1117,6 +1478,8 @@ int ime_context_get_language(ime_context_h context, Ecore_IMF_Input_Panel_Lang *
 
 int ime_device_info_get_name(ime_device_info_h dev_info, char **dev_name)
 {
+    ime_error_e retVal = IME_ERROR_NONE;
+
     if (!dev_info || !dev_name) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
@@ -1125,6 +1488,12 @@ int ime_device_info_get_name(ime_device_info_h dev_info, char **dev_name)
     if (!g_running) {
         LOGW("IME_ERROR_NOT_RUNNING");
         return IME_ERROR_NOT_RUNNING;
+    }
+
+    retVal = _check_privilege();
+    if (retVal != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", retVal);
+        return retVal;
     }
 
     if (!dev_info->dev_name)
@@ -1137,6 +1506,8 @@ int ime_device_info_get_name(ime_device_info_h dev_info, char **dev_name)
 
 int ime_device_info_get_class(ime_device_info_h dev_info, Ecore_IMF_Device_Class *dev_class)
 {
+    ime_error_e retVal = IME_ERROR_NONE;
+
     if (!dev_info || !dev_class) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
@@ -1147,6 +1518,12 @@ int ime_device_info_get_class(ime_device_info_h dev_info, Ecore_IMF_Device_Class
         return IME_ERROR_NOT_RUNNING;
     }
 
+    retVal = _check_privilege();
+    if (retVal != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", retVal);
+        return retVal;
+    }
+
     *dev_class = dev_info->dev_class;
 
     return IME_ERROR_NONE;
@@ -1154,6 +1531,8 @@ int ime_device_info_get_class(ime_device_info_h dev_info, Ecore_IMF_Device_Class
 
 int ime_device_info_get_subclass(ime_device_info_h dev_info, Ecore_IMF_Device_Subclass *dev_subclass)
 {
+    ime_error_e retVal = IME_ERROR_NONE;
+
     if (!dev_info || !dev_subclass) {
         LOGW("IME_ERROR_INVALID_PARAMETER");
         return IME_ERROR_INVALID_PARAMETER;
@@ -1162,6 +1541,12 @@ int ime_device_info_get_subclass(ime_device_info_h dev_info, Ecore_IMF_Device_Su
     if (!g_running) {
         LOGW("IME_ERROR_NOT_RUNNING");
         return IME_ERROR_NOT_RUNNING;
+    }
+
+    retVal = _check_privilege();
+    if (retVal != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", retVal);
+        return retVal;
     }
 
     *dev_subclass = dev_info->dev_subclass;

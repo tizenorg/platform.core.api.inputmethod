@@ -12,6 +12,8 @@ BuildRequires:  pkgconfig(elementary)
 BuildRequires:  pkgconfig(ecore-imf)
 BuildRequires:  pkgconfig(libscl-core)
 BuildRequires:  pkgconfig(isf)
+BuildRequires:  pkgconfig(cynara-client)
+BuildRequires:  pkgconfig(cynara-session)
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
 
