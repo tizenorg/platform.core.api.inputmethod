@@ -7,7 +7,7 @@ SET(maintainer "Ji-hoon Lee <dalton.lee@samsung.com>")
 SET(description "Input Method APIs")
 SET(service "ui")
 SET(submodule "inputmethod")
-SET(dependents "capi-base-common dlog elementary ecore-imf libscl-core isf")
+SET(dependents "capi-base-common dlog elementary ecore-imf libscl-core isf cynara-client cynara-session")
 SET(LIBDIR ${LIB_INSTALL_DIR})
 
 SET(Services
