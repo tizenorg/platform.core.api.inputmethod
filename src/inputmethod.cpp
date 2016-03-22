@@ -355,8 +355,7 @@ ime_error_e _check_privilege()
 
     snprintf(uid, 16, "%d", getuid());
     if (check_privilege(uid, IME_PRIVILEGE) == false) {
-        LOGE("check_privilege(uid, IME_PRIVILEGE) == false");
-        LOGE("uid : %s.", uid);
+        LOGE("check_privilege(uid, IME_PRIVILEGE) == false. uid : %s", uid);
         ret = IME_ERROR_PERMISSION_DENIED;
     }
 

@@ -26,7 +26,9 @@ bool
 inputmethod_cynara_initialize()
 {
     int ret = cynara_initialize(&p_cynara, NULL);
-    LOGD("[inputmethod_cynara_initialize]_check_privilege returned %d.", ret);
+    if (ret != CYNARA_API_SUCCESS)
+        LOGW("Failed to call cynara_initialize (). ret : %d.", ret);
+
     return ret == CYNARA_API_SUCCESS;
 }
 
@@ -49,7 +51,7 @@ check_privilege(const char *uid, const char *privilege)
         return false;
     }
 
-    fp = fopen("/proc/self/attr/current", "r");
+    fp = fopen(smack_label, "r");
     if (fp != NULL) {
         if (fread(smack_label, 1, sizeof(smack_label), fp) <= 0)
             LOGW("Error : fread");
@@ -60,12 +62,13 @@ check_privilege(const char *uid, const char *privilege)
     pid_t pid = getpid();
     char *session = cynara_session_from_pid(pid);
     int ret = cynara_check(p_cynara, smack_label, session, uid, privilege);
-    LOGD("[check_privilege]_check_privilege returned %d.", ret);
     if (session)
         free(session);
 
-    if (ret != CYNARA_API_ACCESS_ALLOWED)
+    if (ret != CYNARA_API_ACCESS_ALLOWED) {
+        LOGW("Access denied. The result of cynara_check() : %d.", ret);
         return false;
+    }
     return true;
 }
 
