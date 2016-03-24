@@ -36,7 +36,7 @@
  * @details Defines the list of keys supported by the system.
  * Note that certain keys may not be available on all devices.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  */
 typedef enum
 {
@@ -277,7 +277,7 @@ typedef enum
  * The key masks indicate which modifier keys is pressed down during the keyboard hit.
  * The special IME_KEY_MASK_RELEASED indicates the key release event.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  */
 typedef enum
 {

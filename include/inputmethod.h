@@ -40,7 +40,7 @@ extern "C" {
 /**
  * @brief Enumeration for input method function error
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  */
 typedef enum
 {
@@ -55,7 +55,7 @@ typedef enum
 /**
  * @brief Enumeration of the option window type
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @see ime_option_window_created_cb
  */
@@ -68,7 +68,7 @@ typedef enum
 /**
  * @brief Enumeration of layout variation
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @see ime_context_get_layout_variation
  */
@@ -90,7 +90,7 @@ typedef enum
  *
  * @remarks Currently, a font style is available to use.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @see ime_preedit_attribute, ime_update_preedit_string
  */
@@ -102,19 +102,19 @@ typedef enum
 
 /**
  * @brief Value for #IME_ATTR_FONTSTYLE. Draw a line under the text.
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  */
 #define IME_ATTR_FONTSTYLE_UNDERLINE    1
 
 /**
  * @brief Value for #IME_ATTR_FONTSTYLE. Draw text in highlighted color.
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  */
 #define IME_ATTR_FONTSTYLE_HIGHLIGHT    2
 
 /**
  * @brief Value for #IME_ATTR_FONTSTYLE. Draw text in reversal color.
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  */
 #define IME_ATTR_FONTSTYLE_REVERSAL     4
 
@@ -123,7 +123,7 @@ typedef enum
  *
  * @remarks A preedit string may have one or more different attributes. This structure describes each attribute of the string.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @see ime_update_preedit_string, ime_attribute_type
  */
@@ -141,7 +141,7 @@ typedef struct
  * @details This is one of parameters of ime_show_cb() callback function. IME application
  * should configure its input panel with this structure information.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @see ime_context_get_layout, ime_context_get_layout_variation, ime_context_get_cursor_position,
  * ime_context_get_autocapital_type, ime_context_get_return_key_type, ime_context_get_return_key_state,
@@ -156,7 +156,7 @@ typedef struct _ime_context *ime_context_h;
  * @details This is one of parameters of ime_process_key_event_cb() callback function. IME application
  * may distinguish the key event by using this if necessary.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @see ime_process_key_event_cb, ime_device_info_get_name, ime_device_info_get_class, ime_device_info_get_subclass
  */
@@ -168,7 +168,7 @@ typedef struct _ime_device_info *ime_device_info_h;
  * @remarks This callback function is mandatory and must be registered using ime_run(). The
  * ime_get_main_window() can be used to get the created input panel window.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -188,7 +188,7 @@ typedef void (*ime_create_cb)(void *user_data);
  * @remarks This callback function is mandatory and must be registered using ime_run(). The
  * ime_get_main_window() can be used to get the created input panel window.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -207,7 +207,7 @@ typedef void (*ime_terminate_cb)(void *user_data);
  * IME application should configure its input panel with #ime_context_h structure information.
  * The ime_get_main_window() can be used to get the created input panel window.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -232,7 +232,7 @@ typedef void (*ime_show_cb)(int context_id, ime_context_h context, void *user_da
  * @remarks This callback function is mandatory and must be registered using ime_run(). The
  * ime_get_main_window() can be used to get the created input panel window.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -248,7 +248,7 @@ typedef void (*ime_hide_cb)(int context_id, void *user_data);
 /**
  * @brief Called when an associated text input UI control has focus.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -266,7 +266,7 @@ typedef void (*ime_focus_in_cb)(int context_id, void *user_data);
 /**
  * @brief Called when an associated text input UI control loses focus.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -286,7 +286,7 @@ typedef void (*ime_focus_out_cb)(int context_id, void *user_data);
  *
  * @remarks The ime_request_surrounding_text() must be called to invoke this callback function, asynchronously.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -306,7 +306,7 @@ typedef void (*ime_surrounding_text_updated_cb)(int context_id, const char *text
 /**
  * @brief Called to reset the input context of an associated text input UI control.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -323,7 +323,7 @@ typedef void (*ime_input_context_reset_cb)(void *user_data);
 /**
  * @brief Called when the position of the cursor in an associated text input UI control changes.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -343,7 +343,7 @@ typedef void (*ime_cursor_position_updated_cb)(int cursor_pos, void *user_data);
  *
  * @remarks The allocated @a lang_code will be released internally.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -365,7 +365,7 @@ typedef void (*ime_language_requested_cb)(void *user_data, char **lang_code);
  * through #ime_context_h. This callback function will be only called when the client
  * application changes the edit field's language attribute after the input panel is shown.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -386,7 +386,7 @@ typedef void (*ime_language_set_cb)(Ecore_IMF_Input_Panel_Lang language, void *u
  * @details This API is used by the applications to deliver the specific data to the input panel.
  * The data format MUST be negotiated by both application and input panel.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -410,7 +410,7 @@ typedef void (*ime_imdata_set_cb)(void *data, unsigned int data_length, void *us
  *
  * @remarks The allocated @a data will be released internally.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -433,7 +433,7 @@ typedef void (*ime_imdata_requested_cb)(void *user_data, void **data, unsigned i
  * through #ime_context_h. This callback function will be only called when the client
  * application changes the edit field's layout attribute after the input panel is shown.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -457,7 +457,7 @@ typedef void (*ime_layout_set_cb)(Ecore_IMF_Input_Panel_Layout layout, void *use
  * application changes the edit field's @c Return key type attribute after the input panel
  * is shown.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -481,7 +481,7 @@ typedef void (*ime_return_key_type_set_cb)(Ecore_IMF_Input_Panel_Return_Key_Type
  * application changes the edit field's @c Return key disable attribute after the input panel
  * is shown.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -499,7 +499,7 @@ typedef void (*ime_return_key_state_set_cb)(bool disabled, void *user_data);
 /**
  * @brief Called when an associated text input UI control requests the position and size from the input panel.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -541,7 +541,7 @@ typedef bool (*ime_process_key_event_cb)(ime_key_code_e keycode, ime_key_mask_e 
 /**
  * @brief Called when the system display language is changed.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -559,7 +559,7 @@ typedef void (*ime_display_language_changed_cb)(const char *language, void *user
 /**
  * @brief Called when the device is rotated.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -577,7 +577,7 @@ typedef void (*ime_rotation_degree_changed_cb)(int degree, void *user_data);
 /**
  * @brief Called when Accessibility in Settings application is on or off.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -598,7 +598,7 @@ typedef void (*ime_accessibility_state_changed_cb)(bool state, void *user_data);
  * @remarks if Input panel requests to open the option window, @a type will be #IME_OPTION_WINDOW_TYPE_KEYBOARD.
  * And if Settings application requests to open it, @a type will be #IME_OPTION_WINDOW_TYPE_SETTING_APPLICATION.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -618,7 +618,7 @@ typedef void (*ime_option_window_created_cb)(Evas_Object *window, ime_option_win
 /**
  * @brief Called to destroy the option window.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -639,7 +639,7 @@ typedef void (*ime_option_window_destroyed_cb)(Evas_Object *window, void *user_d
  *
  * @remarks These four callback functions are mandatory for IME application.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @see ime_run
  */
@@ -664,7 +664,7 @@ typedef struct
  * ime_terminate_cb(), ime_show_cb(), and ime_hide_cb() callback functions
  * are mandatory for IME application.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -761,7 +761,7 @@ EXPORT_API int ime_run(ime_callback_s *basic_cb, void *user_data);
  * @remarks The ime_focus_in_cb() callback function is called when an associated text input
  * UI control has focus.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -788,7 +788,7 @@ EXPORT_API int ime_event_set_focus_in_cb(ime_focus_in_cb callback_func, void *us
  * @remarks The ime_focus_out_cb() callback function is called when an associated text input
  * UI control loses focus.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -815,7 +815,7 @@ EXPORT_API int ime_event_set_focus_out_cb(ime_focus_out_cb callback_func, void *
  * @remarks The ime_surrounding_text_updated_cb() callback function is called when an
  * associated text input UI control responds to a request with the surrounding text.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -842,7 +842,7 @@ EXPORT_API int ime_event_set_surrounding_text_updated_cb(ime_surrounding_text_up
  * @remarks The ime_input_context_reset_cb() callback function is called to reset the input
  * context of an associated text input UI control.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -869,7 +869,7 @@ EXPORT_API int ime_event_set_input_context_reset_cb(ime_input_context_reset_cb c
  * @remarks The ime_cursor_position_updated_cb() callback function is called when the position
  * of the cursor in an associated text input UI control changes.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -896,7 +896,7 @@ EXPORT_API int ime_event_set_cursor_position_updated_cb(ime_cursor_position_upda
  * @remarks The ime_language_requested_cb() callback function is called when an associated
  * text input UI control requests the language from the input panel.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -923,7 +923,7 @@ EXPORT_API int ime_event_set_language_requested_cb(ime_language_requested_cb cal
  * @remarks The ime_language_set_cb() callback function is called to set the preferred
  * language to the input panel.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -950,7 +950,7 @@ EXPORT_API int ime_event_set_language_set_cb(ime_language_set_cb callback_func, 
  * @remarks The ime_imdata_set_cb() callback function is called to set the application
  * specific data to deliver to the input panel.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -977,7 +977,7 @@ EXPORT_API int ime_event_set_imdata_set_cb(ime_imdata_set_cb callback_func, void
  * @remarks The ime_imdata_requested_cb() callback function is called when an associated
  * text input UI control requests the application specific data from the input panel.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -1004,7 +1004,7 @@ EXPORT_API int ime_event_set_imdata_requested_cb(ime_imdata_requested_cb callbac
  * @remarks The ime_layout_set_cb() callback function is called when an associated text input
  * UI control requests the input panel to set its layout.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -1031,7 +1031,7 @@ EXPORT_API int ime_event_set_layout_set_cb(ime_layout_set_cb callback_func, void
  * @remarks The ime_return_key_type_set_cb() callback function is called when an associated
  * text input UI control requests the input panel to set the @c Return key label.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -1058,7 +1058,7 @@ EXPORT_API int ime_event_set_return_key_type_set_cb(ime_return_key_type_set_cb c
  * @remarks The ime_return_key_state_set_cb() callback function is called when an associated
  * text input UI control requests the input panel to enable or disable the @c Return key state.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -1085,7 +1085,7 @@ EXPORT_API int ime_event_set_return_key_state_set_cb(ime_return_key_state_set_cb
  * @remarks The ime_geometry_requested_cb() callback function is called when an associated
  * text input UI control requests the position and size from the input panel.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -1112,7 +1112,7 @@ EXPORT_API int ime_event_set_geometry_requested_cb(ime_geometry_requested_cb cal
  * @remarks The ime_process_key_event_cb() callback function is called when the key event
  * is received from the external keyboard devices or ime_send_key_event() function.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -1183,7 +1183,7 @@ EXPORT_API int ime_event_set_process_key_event_cb(ime_process_key_event_cb callb
  * @remarks The ime_display_language_changed_cb() callback function is called when the system
  * display language is changed.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -1210,7 +1210,7 @@ EXPORT_API int ime_event_set_display_language_changed_cb(ime_display_language_ch
  * @remarks The ime_rotation_degree_changed_cb() callback function is called when the device
  * is rotated.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -1237,7 +1237,7 @@ EXPORT_API int ime_event_set_rotation_degree_changed_cb(ime_rotation_degree_chan
  * @remarks The ime_accessibility_state_changed_cb() callback function is called when
  * Accessibility in Settings application is on or off.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -1263,7 +1263,7 @@ EXPORT_API int ime_event_set_accessibility_state_changed_cb(ime_accessibility_st
  *
  * @remarks The ime_option_window_created_cb() callback function is called to create the option window.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -1289,7 +1289,7 @@ EXPORT_API int ime_event_set_option_window_created_cb(ime_option_window_created_
  *
  * @remarks The ime_option_window_destroyed_cb() callback function is called to destroy the option window.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -1317,7 +1317,7 @@ EXPORT_API int ime_event_set_option_window_destroyed_cb(ime_option_window_destro
  * If @a forward_key is @c true, this key event goes to the edit filed directly. And if @a forward_key
  * is @c false, the ime_process_key_event_cb() callback function receives the key event before the edit field.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -1341,7 +1341,7 @@ EXPORT_API int ime_send_key_event(ime_key_code_e keycode, ime_key_mask_e keymask
 /**
  * @brief Sends the text to the associated text input UI control.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -1361,7 +1361,7 @@ EXPORT_API int ime_commit_string(const char *str);
 /**
  * @brief Requests to show preedit string.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -1379,7 +1379,7 @@ EXPORT_API int ime_show_preedit_string(void);
 /**
  * @brief Requests to hide preedit string.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -1397,7 +1397,7 @@ EXPORT_API int ime_hide_preedit_string(void);
 /**
  * @brief Updates a new preedit string.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -1457,7 +1457,7 @@ EXPORT_API int ime_update_preedit_string(const char *str, Eina_List *attrs);
 /**
  * @brief Requests the surrounding text from the position of the cursor, asynchronously.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -1483,7 +1483,7 @@ EXPORT_API int ime_request_surrounding_text(int maxlen_before, int maxlen_after)
 /**
  * @brief Requests to delete surrounding text.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -1507,7 +1507,7 @@ EXPORT_API int ime_delete_surrounding_text(int offset, int len);
  *
  * @remarks The specific error code can be obtained using the get_last_result() method if this function returns NULL.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -1527,7 +1527,7 @@ EXPORT_API Evas_Object* ime_get_main_window(void);
 /**
  * @brief This API updates the input panel window's size information.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -1554,7 +1554,7 @@ EXPORT_API int ime_set_size(int portrait_width, int portrait_height, int landsca
  * function calls ime_option_window_created_cb() callback function with
  * #IME_OPTION_WINDOW_TYPE_KEYBOARD parameter.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -1585,7 +1585,7 @@ EXPORT_API int ime_create_option_window(void);
  * @details The input panel can call this function to close the option window which
  * is created from either the input panel or Settings application.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -1617,7 +1617,7 @@ EXPORT_API int ime_destroy_option_window(Evas_Object *window);
  * @details Each edit field has various attributes for input panel. This function can be
  * called to get the layout information in ime_show_cb() callback function.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -1644,7 +1644,7 @@ EXPORT_API int ime_context_get_layout(ime_context_h context, Ecore_IMF_Input_Pan
  * @details Each edit field has various attributes for input panel. This function can be
  * called to get the layout variation information in ime_show_cb() callback function.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -1671,7 +1671,7 @@ EXPORT_API int ime_context_get_layout_variation(ime_context_h context, ime_layou
  * @details Each edit field has various attributes for input panel. This function can be
  * called to get the cursor position information in ime_show_cb() callback function.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -1698,7 +1698,7 @@ EXPORT_API int ime_context_get_cursor_position(ime_context_h context, int *curso
  * @details Each edit field has various attributes for input panel. This function can be
  * called to get the autocapital type information in ime_show_cb() callback function.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -1725,7 +1725,7 @@ EXPORT_API int ime_context_get_autocapital_type(ime_context_h context, Ecore_IMF
  * @details Each edit field has various attributes for input panel. This function can be
  * called to get the @c Return key label type information in ime_show_cb() callback function.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -1752,7 +1752,7 @@ EXPORT_API int ime_context_get_return_key_type(ime_context_h context, Ecore_IMF_
  * @details Each edit field has various attributes for input panel. This function can be
  * called to get the @c Return key state information in ime_show_cb() callback function.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -1780,7 +1780,7 @@ EXPORT_API int ime_context_get_return_key_state(ime_context_h context, bool *ret
  * @details Each edit field has various attributes for input panel. This function can be
  * called to get the prediction mode information in ime_show_cb() callback function.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -1810,7 +1810,7 @@ EXPORT_API int ime_context_get_prediction_mode(ime_context_h context, bool *pred
  *
  * @remarks If @a password_mode is @c true, the input panel is advised not to support the predictive text.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -1841,7 +1841,7 @@ EXPORT_API int ime_context_get_password_mode(ime_context_h context, bool *passwo
  * @remarks @a input_hint is a bit-wise value which recommends the input panel provide
  * an auto completion and so on if it is capable of supporting such features.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -1868,7 +1868,7 @@ EXPORT_API int ime_context_get_input_hint(ime_context_h context, Ecore_IMF_Input
  * @details Each edit field has various attributes for input panel. This function can be
  * called to get the bidirectional information in ime_show_cb() callback function.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -1895,7 +1895,7 @@ EXPORT_API int ime_context_get_bidi_direction(ime_context_h context, Ecore_IMF_B
  * @details Each edit field has various attributes for input panel. This function can be
  * called to get the preferred language information in ime_show_cb() callback function.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -1921,7 +1921,7 @@ EXPORT_API int ime_context_get_language(ime_context_h context, Ecore_IMF_Input_P
  *
  * @remarks @a dev_name must be released using free().
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -1943,7 +1943,7 @@ EXPORT_API int ime_device_info_get_name(ime_device_info_h dev_info, char **dev_n
 /**
  * @brief Gets the device class of the key event.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -1964,7 +1964,7 @@ EXPORT_API int ime_device_info_get_class(ime_device_info_h dev_info, Ecore_IMF_D
 /**
  * @brief Gets the device subclass of the key event.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
