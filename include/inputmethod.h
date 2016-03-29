@@ -42,14 +42,13 @@ extern "C" {
  *
  * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  */
-typedef enum
-{
-    IME_ERROR_NONE = TIZEN_ERROR_NONE, /**< Successful */
-    IME_ERROR_INVALID_PARAMETER = TIZEN_ERROR_INVALID_PARAMETER, /**< Invalid parameter */
-    IME_ERROR_PERMISSION_DENIED = TIZEN_ERROR_PERMISSION_DENIED, /**< Permission denied */
-    IME_ERROR_NO_CALLBACK_FUNCTION = TIZEN_ERROR_IME | 0x0001, /**< Necessary callback function is not set */
-    IME_ERROR_NOT_RUNNING = TIZEN_ERROR_IME | 0x0002, /**< IME main loop isn't started yet */
-    IME_ERROR_OPERATION_FAILED = TIZEN_ERROR_IME | 0x0003, /**< Operation failed */
+typedef enum {
+	IME_ERROR_NONE = TIZEN_ERROR_NONE, /**< Successful */
+	IME_ERROR_INVALID_PARAMETER = TIZEN_ERROR_INVALID_PARAMETER, /**< Invalid parameter */
+	IME_ERROR_PERMISSION_DENIED = TIZEN_ERROR_PERMISSION_DENIED, /**< Permission denied */
+	IME_ERROR_NO_CALLBACK_FUNCTION = TIZEN_ERROR_IME | 0x0001, /**< Necessary callback function is not set */
+	IME_ERROR_NOT_RUNNING = TIZEN_ERROR_IME | 0x0002, /**< IME main loop isn't started yet */
+	IME_ERROR_OPERATION_FAILED = TIZEN_ERROR_IME | 0x0003, /**< Operation failed */
 } ime_error_e;
 
 /**
@@ -59,10 +58,9 @@ typedef enum
  *
  * @see ime_option_window_created_cb
  */
-typedef enum
-{
-    IME_OPTION_WINDOW_TYPE_KEYBOARD,  /**< Open from Keyboard */
-    IME_OPTION_WINDOW_TYPE_SETTING_APPLICATION, /**< Open from Setting application */
+typedef enum {
+	IME_OPTION_WINDOW_TYPE_KEYBOARD,  /**< Open from Keyboard */
+	IME_OPTION_WINDOW_TYPE_SETTING_APPLICATION, /**< Open from Setting application */
 } ime_option_window_type_e;
 
 /**
@@ -72,17 +70,16 @@ typedef enum
  *
  * @see ime_context_get_layout_variation
  */
-typedef enum
-{
-    IME_LAYOUT_NORMAL_VARIATION_NORMAL = 0, /**< The plain normal layout */
-    IME_LAYOUT_NORMAL_VARIATION_FILENAME, /**< Filename layout; symbols such as '/', '*', '\', '|', '&lt;', '&gt;', '?', '&quot;' and ':' should be disabled */
-    IME_LAYOUT_NORMAL_VARIATION_PERSON_NAME, /**< The name of a person */
-    IME_LAYOUT_NUMBERONLY_VARIATION_NORMAL = 0, /**< The plain normal number layout */
-    IME_LAYOUT_NUMBERONLY_VARIATION_SIGNED, /**< The number layout to allow a negative sign */
-    IME_LAYOUT_NUMBERONLY_VARIATION_DECIMAL, /**< The number layout to allow decimal point to provide fractional value */
-    IME_LAYOUT_NUMBERONLY_VARIATION_SIGNED_AND_DECIMAL, /**< The number layout to allow decimal point and negative sign */
-    IME_LAYOUT_PASSWORD_VARIATION_NORMAL = 0, /**< The normal password layout */
-    IME_LAYOUT_PASSWORD_VARIATION_NUMBERONLY, /**< The password layout to allow only number */
+typedef enum {
+	IME_LAYOUT_NORMAL_VARIATION_NORMAL = 0, /**< The plain normal layout */
+	IME_LAYOUT_NORMAL_VARIATION_FILENAME, /**< Filename layout; symbols such as '/', '*', '\', '|', '&lt;', '&gt;', '?', '&quot;' and ':' should be disabled */
+	IME_LAYOUT_NORMAL_VARIATION_PERSON_NAME, /**< The name of a person */
+	IME_LAYOUT_NUMBERONLY_VARIATION_NORMAL = 0, /**< The plain normal number layout */
+	IME_LAYOUT_NUMBERONLY_VARIATION_SIGNED, /**< The number layout to allow a negative sign */
+	IME_LAYOUT_NUMBERONLY_VARIATION_DECIMAL, /**< The number layout to allow decimal point to provide fractional value */
+	IME_LAYOUT_NUMBERONLY_VARIATION_SIGNED_AND_DECIMAL, /**< The number layout to allow decimal point and negative sign */
+	IME_LAYOUT_PASSWORD_VARIATION_NORMAL = 0, /**< The normal password layout */
+	IME_LAYOUT_PASSWORD_VARIATION_NUMBERONLY, /**< The password layout to allow only number */
 } ime_layout_variation_e;
 
 /**
@@ -94,10 +91,9 @@ typedef enum
  *
  * @see ime_preedit_attribute, ime_update_preedit_string
  */
-typedef enum
-{
-    IME_ATTR_NONE, /**< No attribute */
-    IME_ATTR_FONTSTYLE, /**< A font style attribute, e.g., underline, etc. */
+typedef enum {
+	IME_ATTR_NONE, /**< No attribute */
+	IME_ATTR_FONTSTYLE, /**< A font style attribute, e.g., underline, etc. */
 } ime_attribute_type;
 
 /**
@@ -127,12 +123,11 @@ typedef enum
  *
  * @see ime_update_preedit_string, ime_attribute_type
  */
-typedef struct
-{
-    unsigned int start; /**< The start position in the string of this attribute */
-    unsigned int length; /**< The character length of this attribute, the range is [start, start+length] */
-    ime_attribute_type type; /**< The type of this attribute */
-    unsigned int value; /**< The value of this attribute */
+typedef struct {
+	unsigned int start; /**< The start position in the string of this attribute */
+	unsigned int length; /**< The character length of this attribute, the range is [start, start+length] */
+	ime_attribute_type type; /**< The type of this attribute */
+	unsigned int value; /**< The value of this attribute */
 } ime_preedit_attribute;
 
 /**
@@ -643,12 +638,11 @@ typedef void (*ime_option_window_destroyed_cb)(Evas_Object *window, void *user_d
  *
  * @see ime_run
  */
-typedef struct
-{
-    ime_create_cb create;       /**< Called when the input panel is created */
-    ime_terminate_cb terminate; /**< Called when the input panel is terminated */
-    ime_show_cb show;           /**< Called when the input panel is requested to show itself */
-    ime_hide_cb hide;           /**< Called when the input panel is requested to hide itself */
+typedef struct {
+	ime_create_cb create;       /**< Called when the input panel is created */
+	ime_terminate_cb terminate; /**< Called when the input panel is terminated */
+	ime_show_cb show;           /**< Called when the input panel is requested to show itself */
+	ime_hide_cb hide;           /**< Called when the input panel is requested to hide itself */
 } ime_callback_s;
 
 /**
@@ -702,54 +696,54 @@ typedef struct
 
  static void inputmethod_create_cb(void *user_data)
  {
-     Evas_Object *ime_win = NULL;
+	 Evas_Object *ime_win = NULL;
 
-     ime_set_size(480, 400, 800, 400);
-     ime_win = ime_get_main_window();
-     if (ime_win) {
-         // Prepare before showing IME window.
-     }
+	 ime_set_size(480, 400, 800, 400);
+	 ime_win = ime_get_main_window();
+	 if (ime_win) {
+		 // Prepare before showing IME window.
+	 }
  }
 
  static void inputmethod_show_cb(int context_id, ime_context_h context, void *user_data)
  {
-     Ecore_IMF_Input_Panel_Layout layout;
-     ime_layout_variation_e layout_variation;
-     Evas_Object *ime_win;
+	 Ecore_IMF_Input_Panel_Layout layout;
+	 ime_layout_variation_e layout_variation;
+	 Evas_Object *ime_win;
 
-     ime_context_get_layout(context, &layout);
-     ime_context_get_layout_variation(context, &layout_variation);
+	 ime_context_get_layout(context, &layout);
+	 ime_context_get_layout_variation(context, &layout_variation);
 
-     ime_win = ime_get_main_window();
-     if (ime_win) {
-         // Compose IME UI properly with the context information and show.
+	 ime_win = ime_get_main_window();
+	 if (ime_win) {
+		 // Compose IME UI properly with the context information and show.
 
-         evas_object_show(ime_win);
-     }
+		 evas_object_show(ime_win);
+	 }
  }
 
  static void inputmethod_hide_cb(int context_id, void *user_data)
  {
-     Evas_Object *ime_win = ime_get_main_window();
-     if (ime_win) {
-         evas_object_hide(ime_win);
-     }
+	 Evas_Object *ime_win = ime_get_main_window();
+	 if (ime_win) {
+		 evas_object_hide(ime_win);
+	 }
  }
 
  void ime_app_main(int argc, char **argv)
  {
-     ime_callback_s basic_callback = {
-         inputmethod_create_cb,
-         inputmethod_terminate_cb,
-         inputmethod_show_cb,
-         inputmethod_hide_cb,
-     };
+	 ime_callback_s basic_callback = {
+		 inputmethod_create_cb,
+		 inputmethod_terminate_cb,
+		 inputmethod_show_cb,
+		 inputmethod_hide_cb,
+	 };
 
-     ime_event_set_focus_in_cb(inputmethod_focus_in_cb, NULL);
-     ime_event_set_focus_out_cb(inputmethod_focus_out_cb, NULL);
-     ime_event_set_cursor_position_updated_cb(inputmethod_cursor_position_updated_cb, NULL);
+	 ime_event_set_focus_in_cb(inputmethod_focus_in_cb, NULL);
+	 ime_event_set_focus_out_cb(inputmethod_focus_out_cb, NULL);
+	 ime_event_set_cursor_position_updated_cb(inputmethod_cursor_position_updated_cb, NULL);
 
-     ime_run(&basic_callback, NULL);
+	 ime_run(&basic_callback, NULL);
  }
  * @endcode
  */
@@ -1139,39 +1133,39 @@ EXPORT_API int ime_event_set_geometry_requested_cb(ime_geometry_requested_cb cal
 
  static bool inputmethod_process_key_event_cb(ime_key_code_e keycode, ime_key_mask_e keymask, void *user_data);
  {
-     if (keymask & IME_KEY_MASK_CONTROL) {
-         return false; // e.g., Cotrol+C key event would be forwarded to UI control of the client application
-     }
-     if (keymask & IME_KEY_MASK_ALT) {
-         return false;
-     }
+	 if (keymask & IME_KEY_MASK_CONTROL) {
+		 return false; // e.g., Cotrol+C key event would be forwarded to UI control of the client application
+	 }
+	 if (keymask & IME_KEY_MASK_ALT) {
+		 return false;
+	 }
 
-     if (!(keymask & IME_KEY_MASK_RELEASED)) { // The key is pressed
-         if (keycode == IME_KEY_1) {
-             ime_update_preedit_string("1"); // Show "1" preedit string
-             return true;
-         }
-         else if (keycode == IME_KEY_2) {
-             ime_commit_string("12"); // Input "12" string
-             return true;
-         }
-     }
+	 if (!(keymask & IME_KEY_MASK_RELEASED)) { // The key is pressed
+		 if (keycode == IME_KEY_1) {
+			 ime_update_preedit_string("1"); // Show "1" preedit string
+			 return true;
+		 }
+		 else if (keycode == IME_KEY_2) {
+			 ime_commit_string("12"); // Input "12" string
+			 return true;
+		 }
+	 }
 
-     return false;
+	 return false;
  }
 
  void ime_app_main(int argc, char **argv)
  {
-     ime_callback_s basic_callback = {
-         inputmethod_create_cb,
-         inputmethod_terminate_cb,
-         inputmethod_show_cb,
-         inputmethod_hide_cb,
-     };
+	 ime_callback_s basic_callback = {
+		 inputmethod_create_cb,
+		 inputmethod_terminate_cb,
+		 inputmethod_show_cb,
+		 inputmethod_hide_cb,
+	 };
 
-     ime_event_set_process_key_event_cb(inputmethod_process_key_event_cb, NULL);
+	 ime_event_set_process_key_event_cb(inputmethod_process_key_event_cb, NULL);
 
-     ime_run(&basic_callback, NULL);
+	 ime_run(&basic_callback, NULL);
  }
  * @endcode
  */
@@ -1420,35 +1414,35 @@ EXPORT_API int ime_hide_preedit_string(void);
  *
  * @code
  {
-     int ret;
-     Eina_List *list = NULL;
+	 int ret;
+	 Eina_List *list = NULL;
 
-     ime_preedit_attribute *attr = calloc(1, sizeof (ime_preedit_attribute));
-     attr->start = 0;
-     attr->length = 1;
-     attr->type = IME_ATTR_FONTSTYLE;
-     attr->value = IME_ATTR_FONTSTYLE_UNDERLINE;
-     list = eina_list_append(list, attr);
+	 ime_preedit_attribute *attr = calloc(1, sizeof (ime_preedit_attribute));
+	 attr->start = 0;
+	 attr->length = 1;
+	 attr->type = IME_ATTR_FONTSTYLE;
+	 attr->value = IME_ATTR_FONTSTYLE_UNDERLINE;
+	 list = eina_list_append(list, attr);
 
-     attr = calloc(1, sizeof (ime_preedit_attribute));
-     attr->start = 1;
-     attr->length = 1;
-     attr->type = IME_ATTR_FONTSTYLE;
-     attr->value = IME_ATTR_FONTSTYLE_HIGHLIGHT;
-     list = eina_list_append(list, attr);
+	 attr = calloc(1, sizeof (ime_preedit_attribute));
+	 attr->start = 1;
+	 attr->length = 1;
+	 attr->type = IME_ATTR_FONTSTYLE;
+	 attr->value = IME_ATTR_FONTSTYLE_HIGHLIGHT;
+	 list = eina_list_append(list, attr);
 
-     attr = calloc(1, sizeof (ime_preedit_attribute));
-     attr->start = 2;
-     attr->length = 1;
-     attr->type = IME_ATTR_FONTSTYLE;
-     attr->value = IME_ATTR_FONTSTYLE_REVERSAL;
-     list = eina_list_append(list, attr);
+	 attr = calloc(1, sizeof (ime_preedit_attribute));
+	 attr->start = 2;
+	 attr->length = 1;
+	 attr->type = IME_ATTR_FONTSTYLE;
+	 attr->value = IME_ATTR_FONTSTYLE_REVERSAL;
+	 list = eina_list_append(list, attr);
 
-     ret = ime_update_preedit_string("abcd", list);
-     if (ret != IME_ERROR_NONE) {
-         EINA_LIST_FREE(list, attr)
-             free(attr);
-     }
+	 ret = ime_update_preedit_string("abcd", list);
+	 if (ret != IME_ERROR_NONE) {
+		 EINA_LIST_FREE(list, attr)
+			 free(attr);
+	 }
  }
  * @endcode
  */
@@ -1991,5 +1985,5 @@ EXPORT_API int ime_device_info_get_subclass(ime_device_info_h dev_info, Ecore_IM
 }
 #endif
 
-#endif // __TIZEN_UIX_INPUTMETHOD_H__
+#endif /* __TIZEN_UIX_INPUTMETHOD_H__ */
 

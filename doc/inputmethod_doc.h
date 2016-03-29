@@ -32,5 +32,5 @@
  * Tizen provides a framework to create such input method editors. Such extra input methods can be selected from Settings.
  */
 
-#endif // __TIZEN_UIX_INPUTMETHOD_DOC_H__
+#endif /* __TIZEN_UIX_INPUTMETHOD_DOC_H__ */
 
