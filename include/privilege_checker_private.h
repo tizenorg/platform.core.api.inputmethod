@@ -7,4 +7,4 @@ bool inputmethod_cynara_initialize();
 void inputmethod_cynara_finish();
 bool check_privilege(const char *uid, const char *privilege);
 
-#endif //__PRIVILEGE_CHECKER_H
+#endif /*__PRIVILEGE_CHECKER_H */
