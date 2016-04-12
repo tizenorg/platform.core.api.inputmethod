@@ -1162,8 +1162,9 @@ int ime_create_option_window(void)
         return retVal;
     }
 
-    if (g_core.create_option_window())
+    if (g_core.create_option_window()) {
         return IME_ERROR_NONE;
+    }
     else {
         LOGW("IME_ERROR_OPERATION_FAILED");
         return IME_ERROR_OPERATION_FAILED;
