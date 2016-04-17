@@ -290,8 +290,7 @@ void CCoreEventCallback::on_process_key_event(scim::KeyEvent &key, sclu32 *ret)
             else
                 *ret = 0;
         }
-    }
-    else {
+    } else {
         if (ret) {
             *ret = 0;
         }
@@ -1100,8 +1099,7 @@ Evas_Object* ime_get_main_window(void)
     win = static_cast<Evas_Object*>(g_core.get_main_window());
     if (win) {
         set_last_result(IME_ERROR_NONE);
-    }
-    else {
+    } else {
         set_last_result(IME_ERROR_OPERATION_FAILED);
         LOGW("IME_ERROR_OPERATION_FAILED");
     }
@@ -1164,8 +1162,7 @@ int ime_create_option_window(void)
 
     if (g_core.create_option_window()) {
         return IME_ERROR_NONE;
-    }
-    else {
+    } else {
         LOGW("IME_ERROR_OPERATION_FAILED");
         return IME_ERROR_OPERATION_FAILED;
     }
