@@ -23,7 +23,7 @@
  */
 
 #include <tizen.h>
-#include "inputmethod_keydef.h"
+#include <inputmethod_keydef.h>
 
 #include <Ecore_IMF.h>
 #include <Evas.h>
@@ -56,7 +56,7 @@ typedef enum {
  *
  * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
- * @see ime_option_window_created_cb
+ * @see ime_option_window_created_cb()
  */
 typedef enum {
 	IME_OPTION_WINDOW_TYPE_KEYBOARD,  /**< Open from Keyboard */
@@ -68,7 +68,7 @@ typedef enum {
  *
  * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
- * @see ime_context_get_layout_variation
+ * @see ime_context_get_layout_variation()
  */
 typedef enum {
 	IME_LAYOUT_NORMAL_VARIATION_NORMAL = 0, /**< The plain normal layout */
@@ -89,7 +89,8 @@ typedef enum {
  *
  * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
- * @see ime_preedit_attribute, ime_update_preedit_string
+ * @see ime_preedit_attribute()
+ * @see ime_update_preedit_string()
  */
 typedef enum {
 	IME_ATTR_NONE, /**< No attribute */
@@ -121,7 +122,8 @@ typedef enum {
  *
  * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
- * @see ime_update_preedit_string, ime_attribute_type
+ * @see ime_update_preedit_string()
+ * @see ime_attribute_type
  */
 typedef struct {
 	unsigned int start; /**< The start position in the string of this attribute */
@@ -138,10 +140,17 @@ typedef struct {
  *
  * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
- * @see ime_context_get_layout, ime_context_get_layout_variation, ime_context_get_cursor_position,
- * ime_context_get_autocapital_type, ime_context_get_return_key_type, ime_context_get_return_key_state,
- * ime_context_get_prediction_mode, ime_context_get_password_mode, ime_context_get_input_hint,
- * ime_context_get_bidi_direction, ime_context_get_language
+ * @see ime_context_get_layout()
+ * @see ime_context_get_layout_variation()
+ * @see ime_context_get_cursor_position()
+ * @see ime_context_get_autocapital_type()
+ * @see ime_context_get_return_key_type()
+ * @see ime_context_get_return_key_state()
+ * @see ime_context_get_prediction_mode()
+ * @see ime_context_get_password_mode()
+ * @see ime_context_get_input_hint()
+ * @see ime_context_get_bidi_direction()
+ * @see ime_context_get_language()
  */
 typedef struct _ime_context *ime_context_h;
 
@@ -153,7 +162,10 @@ typedef struct _ime_context *ime_context_h;
  *
  * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
- * @see ime_process_key_event_cb, ime_device_info_get_name, ime_device_info_get_class, ime_device_info_get_subclass
+ * @see ime_process_key_event_cb()
+ * @see ime_device_info_get_name()
+ * @see ime_device_info_get_class()
+ * @see ime_device_info_get_subclass()
  */
 typedef struct _ime_device_info *ime_device_info_h;
 
@@ -173,7 +185,9 @@ typedef struct _ime_device_info *ime_device_info_h;
  *
  * @pre The ime_run() function calls this callback function.
  *
- * @see ime_run, ime_set_size, ime_get_main_window
+ * @see ime_run()
+ * @see ime_set_size()
+ * @see ime_get_main_window()
  */
 typedef void (*ime_create_cb)(void *user_data);
 
@@ -191,7 +205,8 @@ typedef void (*ime_create_cb)(void *user_data);
  *
  * @param[in] user_data User data to be passed from the callback registration function
  *
- * @see ime_run, ime_get_main_window
+ * @see ime_run()
+ * @see ime_get_main_window()
  */
 typedef void (*ime_terminate_cb)(void *user_data);
 
@@ -212,12 +227,19 @@ typedef void (*ime_terminate_cb)(void *user_data);
  * @param[in] context The input context information handle
  * @param[in] user_data User data to be passed from the callback registration function
  *
- * @see ime_run, ime_get_main_window, ime_context_get_layout,
- * ime_context_get_layout_variation, ime_context_get_cursor_position,
- * ime_context_get_autocapital_type, ime_context_get_return_key_type,
- * ime_context_get_return_key_state, ime_context_get_prediction_mode,
- * ime_context_get_password_mode, ime_context_get_input_hint,
- * ime_context_get_bidi_direction, ime_context_get_language
+ * @see ime_run()
+ * @see ime_get_main_window()
+ * @see ime_context_get_layout()
+ * @see ime_context_get_layout_variation()
+ * @see ime_context_get_cursor_position()
+ * @see ime_context_get_autocapital_type()
+ * @see ime_context_get_return_key_type()
+ * @see ime_context_get_return_key_state()
+ * @see ime_context_get_prediction_mode()
+ * @see ime_context_get_password_mode()
+ * @see ime_context_get_input_hint()
+ * @see ime_context_get_bidi_direction()
+ * @see ime_context_get_language()
  */
 typedef void (*ime_show_cb)(int context_id, ime_context_h context, void *user_data);
 
@@ -236,7 +258,8 @@ typedef void (*ime_show_cb)(int context_id, ime_context_h context, void *user_da
  * @param[in] context_id The input context identification value of an associated text input UI control
  * @param[in] user_data User data to be passed from the callback registration function
  *
- * @see ime_run, ime_get_main_window
+ * @see ime_run()
+ * @see ime_get_main_window()
  */
 typedef void (*ime_hide_cb)(int context_id, void *user_data);
 
@@ -254,7 +277,7 @@ typedef void (*ime_hide_cb)(int context_id, void *user_data);
  *
  * @pre The callback can be registered using ime_event_set_focus_in_cb() function.
  *
- * @see ime_event_set_focus_in_cb
+ * @see ime_event_set_focus_in_cb()
  */
 typedef void (*ime_focus_in_cb)(int context_id, void *user_data);
 
@@ -272,7 +295,7 @@ typedef void (*ime_focus_in_cb)(int context_id, void *user_data);
  *
  * @pre The callback can be registered using ime_event_set_focus_out_cb() function.
  *
- * @see ime_event_set_focus_out_cb
+ * @see ime_event_set_focus_out_cb()
  */
 typedef void (*ime_focus_out_cb)(int context_id, void *user_data);
 
@@ -294,7 +317,8 @@ typedef void (*ime_focus_out_cb)(int context_id, void *user_data);
  *
  * @pre The callback can be registered using ime_event_set_surrounding_text_updated_cb() function.
  *
- * @see ime_event_set_surrounding_text_updated_cb, ime_request_surrounding_text
+ * @see ime_event_set_surrounding_text_updated_cb()
+ * @see ime_request_surrounding_text()
  */
 typedef void (*ime_surrounding_text_updated_cb)(int context_id, const char *text, int cursor_pos, void *user_data);
 
@@ -311,7 +335,7 @@ typedef void (*ime_surrounding_text_updated_cb)(int context_id, const char *text
  *
  * @pre The callback can be registered using ime_event_set_input_context_reset_cb() function.
  *
- * @see ime_event_set_input_context_reset_cb
+ * @see ime_event_set_input_context_reset_cb()
  */
 typedef void (*ime_input_context_reset_cb)(void *user_data);
 
@@ -329,7 +353,7 @@ typedef void (*ime_input_context_reset_cb)(void *user_data);
  *
  * @pre The callback can be registered using ime_event_set_cursor_position_updated_cb() function.
  *
- * @see ime_event_set_cursor_position_updated_cb
+ * @see ime_event_set_cursor_position_updated_cb()
  */
 typedef void (*ime_cursor_position_updated_cb)(int cursor_pos, void *user_data);
 
@@ -349,7 +373,7 @@ typedef void (*ime_cursor_position_updated_cb)(int cursor_pos, void *user_data);
  *
  * @pre The callback can be registered using ime_event_set_language_requested_cb() function.
  *
- * @see ime_event_set_language_requested_cb
+ * @see ime_event_set_language_requested_cb()
  */
 typedef void (*ime_language_requested_cb)(void *user_data, char **lang_code);
 
@@ -371,7 +395,7 @@ typedef void (*ime_language_requested_cb)(void *user_data, char **lang_code);
  *
  * @pre The callback can be registered using ime_event_set_language_set_cb() function.
  *
- * @see ime_event_set_language_set_cb
+ * @see ime_event_set_language_set_cb()
  */
 typedef void (*ime_language_set_cb)(Ecore_IMF_Input_Panel_Lang language, void *user_data);
 
@@ -393,7 +417,7 @@ typedef void (*ime_language_set_cb)(Ecore_IMF_Input_Panel_Lang language, void *u
  *
  * @pre The callback can be registered using ime_event_set_imdata_set_cb() function.
  *
- * @see ime_event_set_imdata_set_cb
+ * @see ime_event_set_imdata_set_cb()
  */
 typedef void (*ime_imdata_set_cb)(void *data, unsigned int data_length, void *user_data);
 
@@ -417,7 +441,7 @@ typedef void (*ime_imdata_set_cb)(void *data, unsigned int data_length, void *us
  *
  * @pre The callback can be registered using ime_event_set_imdata_requested_cb() function.
  *
- * @see ime_event_set_imdata_requested_cb
+ * @see ime_event_set_imdata_requested_cb()
  */
 typedef void (*ime_imdata_requested_cb)(void *user_data, void **data, unsigned int *data_length);
 
@@ -439,7 +463,7 @@ typedef void (*ime_imdata_requested_cb)(void *user_data, void **data, unsigned i
  *
  * @pre The callback can be registered using ime_event_set_layout_set_cb() function.
  *
- * @see ime_event_set_layout_set_cb
+ * @see ime_event_set_layout_set_cb()
  */
 typedef void (*ime_layout_set_cb)(Ecore_IMF_Input_Panel_Layout layout, void *user_data);
 
@@ -463,7 +487,7 @@ typedef void (*ime_layout_set_cb)(Ecore_IMF_Input_Panel_Layout layout, void *use
  *
  * @pre The callback can be registered using ime_event_set_return_key_type_set_cb() function.
  *
- * @see ime_event_set_return_key_type_set_cb
+ * @see ime_event_set_return_key_type_set_cb()
  */
 typedef void (*ime_return_key_type_set_cb)(Ecore_IMF_Input_Panel_Return_Key_Type type, void *user_data);
 
@@ -487,7 +511,7 @@ typedef void (*ime_return_key_type_set_cb)(Ecore_IMF_Input_Panel_Return_Key_Type
  *
  * @pre The callback can be registered using ime_event_set_return_key_state_set_cb() function.
  *
- * @see ime_event_set_return_key_state_set_cb
+ * @see ime_event_set_return_key_state_set_cb()
  */
 typedef void (*ime_return_key_state_set_cb)(bool disabled, void *user_data);
 
@@ -508,7 +532,7 @@ typedef void (*ime_return_key_state_set_cb)(bool disabled, void *user_data);
  *
  * @pre The callback can be registered using ime_event_set_geometry_requested_cb() function.
  *
- * @see ime_event_set_geometry_requested_cb
+ * @see ime_event_set_geometry_requested_cb()
  */
 typedef void (*ime_geometry_requested_cb)(void *user_data, int *x, int *y, int *w, int *h);
 
@@ -528,8 +552,15 @@ typedef void (*ime_geometry_requested_cb)(void *user_data, int *x, int *y, int *
  *
  * @pre The callback can be registered using ime_event_set_process_key_event_cb() function.
  *
- * @see ime_event_set_process_key_event_cb, ime_device_info_get_name, ime_device_info_get_class, ime_device_info_get_subclass,
- * ime_send_key_event, ime_commit_string, ime_show_preedit_string, ime_hide_preedit_string, ime_update_preedit_string
+ * @see ime_event_set_process_key_event_cb()
+ * @see ime_device_info_get_name()
+ * @see ime_device_info_get_class()
+ * @see ime_device_info_get_subclass()
+ * @see ime_send_key_event()
+ * @see ime_commit_string()
+ * @see ime_show_preedit_string()
+ * @see ime_hide_preedit_string()
+ * @see ime_update_preedit_string()
  */
 typedef bool (*ime_process_key_event_cb)(ime_key_code_e keycode, ime_key_mask_e keymask, ime_device_info_h dev_info, void *user_data);
 
@@ -547,7 +578,7 @@ typedef bool (*ime_process_key_event_cb)(ime_key_code_e keycode, ime_key_mask_e 
  *
  * @pre The callback can be registered using ime_event_set_display_language_changed_cb() function.
  *
- * @see ime_event_set_display_language_changed_cb
+ * @see ime_event_set_display_language_changed_cb()
  */
 typedef void (*ime_display_language_changed_cb)(const char *language, void *user_data);
 
@@ -565,7 +596,7 @@ typedef void (*ime_display_language_changed_cb)(const char *language, void *user
  *
  * @pre The callback can be registered using ime_event_set_rotation_degree_changed_cb() function.
  *
- * @see ime_event_set_rotation_degree_changed_cb
+ * @see ime_event_set_rotation_degree_changed_cb()
  */
 typedef void (*ime_rotation_degree_changed_cb)(int degree, void *user_data);
 
@@ -583,7 +614,7 @@ typedef void (*ime_rotation_degree_changed_cb)(int degree, void *user_data);
  *
  * @pre The callback can be registered using ime_event_set_accessibility_state_changed_cb() function.
  *
- * @see ime_event_set_accessibility_state_changed_cb
+ * @see ime_event_set_accessibility_state_changed_cb()
  */
 typedef void (*ime_accessibility_state_changed_cb)(bool state, void *user_data);
 
@@ -606,7 +637,8 @@ typedef void (*ime_accessibility_state_changed_cb)(bool state, void *user_data);
  * @pre The callback can be registered using ime_event_set_option_window_created_cb() function. The
  * ime_create_option_window() calls this callback function or Settings application can call this callback function.
  *
- * @see ime_event_set_option_window_created_cb, ime_create_option_window
+ * @see ime_event_set_option_window_created_cb()
+ * @see ime_create_option_window()
  */
 typedef void (*ime_option_window_created_cb)(Evas_Object *window, ime_option_window_type_e type, void *user_data);
 
@@ -625,7 +657,7 @@ typedef void (*ime_option_window_created_cb)(Evas_Object *window, ime_option_win
  * @pre The callback can be registered using ime_event_set_option_window_destroyed_cb() function.
  * ime_destroy_option_window() calls this callback function.
  *
- * @see ime_event_set_option_window_destroyed_cb
+ * @see ime_event_set_option_window_destroyed_cb()
  */
 typedef void (*ime_option_window_destroyed_cb)(Evas_Object *window, void *user_data);
 
@@ -636,7 +668,7 @@ typedef void (*ime_option_window_destroyed_cb)(Evas_Object *window, void *user_d
  *
  * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
- * @see ime_run
+ * @see ime_run()
  */
 typedef struct {
 	ime_create_cb create;       /**< Called when the input panel is created */
@@ -676,14 +708,24 @@ typedef struct {
  *
  * @pre The ime_event_set_***() functions can be called to set the event handling callback functions.
  *
- * @see ime_callback_s, ime_event_set_focus_in_cb, ime_event_set_focus_out_cb,
- * ime_event_set_surrounding_text_updated_cb, ime_event_set_input_context_reset_cb,
- * ime_event_set_cursor_position_updated_cb, ime_event_set_language_requested_cb,
- * ime_event_set_language_set_cb, ime_event_set_imdata_set_cb, ime_event_set_layout_set_cb,
- * ime_event_set_return_key_type_set_cb, ime_event_set_return_key_state_set_cb,
- * ime_event_set_geometry_requested_cb, ime_event_set_display_language_changed_cb,
- * ime_event_set_rotation_degree_changed_cb, ime_event_set_accessibility_state_changed_cb,
- * ime_event_set_option_window_created_cb, ime_event_set_option_window_destroyed_cb
+ * @see ime_callback_s()
+ * @see ime_event_set_focus_in_cb()
+ * @see ime_event_set_focus_out_cb()
+ * @see ime_event_set_surrounding_text_updated_cb()
+ * @see ime_event_set_input_context_reset_cb()
+ * @see ime_event_set_cursor_position_updated_cb()
+ * @see ime_event_set_language_requested_cb()
+ * @see ime_event_set_language_set_cb()
+ * @see ime_event_set_imdata_set_cb()
+ * @see ime_event_set_layout_set_cb()
+ * @see ime_event_set_return_key_type_set_cb()
+ * @see ime_event_set_return_key_state_set_cb()
+ * @see ime_event_set_geometry_requested_cb()
+ * @see ime_event_set_display_language_changed_cb()
+ * @see ime_event_set_rotation_degree_changed_cb()
+ * @see ime_event_set_accessibility_state_changed_cb()
+ * @see ime_event_set_option_window_created_cb()
+ * @see ime_event_set_option_window_destroyed_cb()
  *
  * @code
  static void inputmethod_create_cb(void *user_data);
@@ -772,7 +814,8 @@ EXPORT_API int ime_run(ime_callback_s *basic_cb, void *user_data);
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
  *
- * @see ime_focus_in_cb, ime_run
+ * @see ime_focus_in_cb()
+ * @see ime_run()
  */
 EXPORT_API int ime_event_set_focus_in_cb(ime_focus_in_cb callback_func, void *user_data);
 
@@ -799,7 +842,8 @@ EXPORT_API int ime_event_set_focus_in_cb(ime_focus_in_cb callback_func, void *us
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
  *
- * @see ime_focus_out_cb, ime_run
+ * @see ime_focus_out_cb()
+ * @see ime_run()
  */
 EXPORT_API int ime_event_set_focus_out_cb(ime_focus_out_cb callback_func, void *user_data);
 
@@ -826,7 +870,8 @@ EXPORT_API int ime_event_set_focus_out_cb(ime_focus_out_cb callback_func, void *
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
  *
- * @see ime_surrounding_text_updated_cb, ime_run
+ * @see ime_surrounding_text_updated_cb()
+ * @see ime_run()
  */
 EXPORT_API int ime_event_set_surrounding_text_updated_cb(ime_surrounding_text_updated_cb callback_func, void *user_data);
 
@@ -853,7 +898,8 @@ EXPORT_API int ime_event_set_surrounding_text_updated_cb(ime_surrounding_text_up
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
  *
- * @see ime_input_context_reset_cb, ime_run
+ * @see ime_input_context_reset_cb()
+ * @see ime_run()
  */
 EXPORT_API int ime_event_set_input_context_reset_cb(ime_input_context_reset_cb callback_func, void *user_data);
 
@@ -880,7 +926,8 @@ EXPORT_API int ime_event_set_input_context_reset_cb(ime_input_context_reset_cb c
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
  *
- * @see ime_cursor_position_updated_cb, ime_run
+ * @see ime_cursor_position_updated_cb()
+ * @see ime_run()
  */
 EXPORT_API int ime_event_set_cursor_position_updated_cb(ime_cursor_position_updated_cb callback_func, void *user_data);
 
@@ -907,7 +954,8 @@ EXPORT_API int ime_event_set_cursor_position_updated_cb(ime_cursor_position_upda
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
  *
- * @see ime_language_requested_cb, ime_run
+ * @see ime_language_requested_cb()
+ * @see ime_run()
  */
 EXPORT_API int ime_event_set_language_requested_cb(ime_language_requested_cb callback_func, void *user_data);
 
@@ -934,7 +982,8 @@ EXPORT_API int ime_event_set_language_requested_cb(ime_language_requested_cb cal
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
  *
- * @see ime_language_set_cb, ime_run
+ * @see ime_language_set_cb()
+ * @see ime_run()
  */
 EXPORT_API int ime_event_set_language_set_cb(ime_language_set_cb callback_func, void *user_data);
 
@@ -961,7 +1010,9 @@ EXPORT_API int ime_event_set_language_set_cb(ime_language_set_cb callback_func, 
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
  *
- * @see ime_imdata_set_cb, ime_event_set_imdata_requested_cb, ime_run
+ * @see ime_imdata_set_cb()
+ * @see ime_event_set_imdata_requested_cb()
+ * @see ime_run()
  */
 EXPORT_API int ime_event_set_imdata_set_cb(ime_imdata_set_cb callback_func, void *user_data);
 
@@ -988,7 +1039,9 @@ EXPORT_API int ime_event_set_imdata_set_cb(ime_imdata_set_cb callback_func, void
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
  *
- * @see ime_imdata_requested_cb, ime_event_set_imdata_set_cb, ime_run
+ * @see ime_imdata_requested_cb()
+ * @see ime_event_set_imdata_set_cb()
+ * @see ime_run()
  */
 EXPORT_API int ime_event_set_imdata_requested_cb(ime_imdata_requested_cb callback_func, void *user_data);
 
@@ -1015,7 +1068,8 @@ EXPORT_API int ime_event_set_imdata_requested_cb(ime_imdata_requested_cb callbac
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
  *
- * @see ime_layout_set_cb, ime_run
+ * @see ime_layout_set_cb()
+ * @see ime_run()
  */
 EXPORT_API int ime_event_set_layout_set_cb(ime_layout_set_cb callback_func, void *user_data);
 
@@ -1042,7 +1096,8 @@ EXPORT_API int ime_event_set_layout_set_cb(ime_layout_set_cb callback_func, void
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
  *
- * @see ime_return_key_type_set_cb, ime_run
+ * @see ime_return_key_type_set_cb()
+ * @see ime_run()
  */
 EXPORT_API int ime_event_set_return_key_type_set_cb(ime_return_key_type_set_cb callback_func, void *user_data);
 
@@ -1069,7 +1124,8 @@ EXPORT_API int ime_event_set_return_key_type_set_cb(ime_return_key_type_set_cb c
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
  *
- * @see ime_return_key_state_set_cb, ime_run
+ * @see ime_return_key_state_set_cb()
+ * @see ime_run()
  */
 EXPORT_API int ime_event_set_return_key_state_set_cb(ime_return_key_state_set_cb callback_func, void *user_data);
 
@@ -1096,7 +1152,8 @@ EXPORT_API int ime_event_set_return_key_state_set_cb(ime_return_key_state_set_cb
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
  *
- * @see ime_geometry_requested_cb, ime_run
+ * @see ime_geometry_requested_cb()
+ * @see ime_run()
  */
 EXPORT_API int ime_event_set_geometry_requested_cb(ime_geometry_requested_cb callback_func, void *user_data);
 
@@ -1123,7 +1180,8 @@ EXPORT_API int ime_event_set_geometry_requested_cb(ime_geometry_requested_cb cal
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
  *
- * @see ime_process_key_event_cb, ime_run
+ * @see ime_process_key_event_cb()
+ * @see ime_run()
  *
  * @code
  static void inputmethod_create_cb(void *user_data);
@@ -1194,7 +1252,8 @@ EXPORT_API int ime_event_set_process_key_event_cb(ime_process_key_event_cb callb
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
  *
- * @see ime_display_language_changed_cb, ime_run
+ * @see ime_display_language_changed_cb()
+ * @see ime_run()
  */
 EXPORT_API int ime_event_set_display_language_changed_cb(ime_display_language_changed_cb callback_func, void *user_data);
 
@@ -1221,7 +1280,8 @@ EXPORT_API int ime_event_set_display_language_changed_cb(ime_display_language_ch
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
  *
- * @see ime_rotation_degree_changed_cb, ime_run
+ * @see ime_rotation_degree_changed_cb()
+ * @see ime_run()
  */
 EXPORT_API int ime_event_set_rotation_degree_changed_cb(ime_rotation_degree_changed_cb callback_func, void *user_data);
 
@@ -1248,7 +1308,8 @@ EXPORT_API int ime_event_set_rotation_degree_changed_cb(ime_rotation_degree_chan
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
  *
- * @see ime_accessibility_state_changed_cb, ime_run
+ * @see ime_accessibility_state_changed_cb()
+ * @see ime_run()
  */
 EXPORT_API int ime_event_set_accessibility_state_changed_cb(ime_accessibility_state_changed_cb callback_func, void *user_data);
 
@@ -1274,7 +1335,8 @@ EXPORT_API int ime_event_set_accessibility_state_changed_cb(ime_accessibility_st
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
  *
- * @see ime_option_window_created_cb, ime_run
+ * @see ime_option_window_created_cb()
+ * @see ime_run()
  */
 EXPORT_API int ime_event_set_option_window_created_cb(ime_option_window_created_cb callback_func, void *user_data);
 
@@ -1300,7 +1362,8 @@ EXPORT_API int ime_event_set_option_window_created_cb(ime_option_window_created_
  *
  * @post The ime_run() function should be called to start to run IME application's main loop.
  *
- * @see ime_option_window_destroyed_cb, ime_run
+ * @see ime_option_window_destroyed_cb()
+ * @see ime_run()
  */
 EXPORT_API int ime_event_set_option_window_destroyed_cb(ime_option_window_destroyed_cb callback_func, void *user_data);
 
@@ -1328,7 +1391,9 @@ EXPORT_API int ime_event_set_option_window_destroyed_cb(ime_option_window_destro
  *
  * @post If @a forward_key is @c false, the ime_process_key_event_cb() callback function can compose the text with the key events.
  *
- * @see ime_key_code_e, ime_key_mask_e, ime_process_key_event_cb
+ * @see ime_key_code_e
+ * @see ime_key_mask_e
+ * @see ime_process_key_event_cb()
  */
 EXPORT_API int ime_send_key_event(ime_key_code_e keycode, ime_key_mask_e keymask, bool forward_key);
 
@@ -1348,7 +1413,9 @@ EXPORT_API int ime_send_key_event(ime_key_code_e keycode, ime_key_mask_e keymask
  * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
- * @see ime_show_preedit_string, ime_hide_preedit_string, ime_update_preedit_string
+ * @see ime_show_preedit_string()
+ * @see ime_hide_preedit_string()
+ * @see ime_update_preedit_string()
  */
 EXPORT_API int ime_commit_string(const char *str);
 
@@ -1366,7 +1433,9 @@ EXPORT_API int ime_commit_string(const char *str);
  * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
- * @see ime_commit_string, ime_hide_preedit_string, ime_update_preedit_string
+ * @see ime_commit_string()
+ * @see ime_hide_preedit_string()
+ * @see ime_update_preedit_string()
  */
 EXPORT_API int ime_show_preedit_string(void);
 
@@ -1384,7 +1453,9 @@ EXPORT_API int ime_show_preedit_string(void);
  * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
- * @see ime_commit_string, ime_show_preedit_string, ime_update_preedit_string
+ * @see ime_commit_string()
+ * @see ime_show_preedit_string()
+ * @see ime_update_preedit_string()
  */
 EXPORT_API int ime_hide_preedit_string(void);
 
@@ -1410,7 +1481,10 @@ EXPORT_API int ime_hide_preedit_string(void);
  *
  * @post This function is supposed to be followed by the ime_show_preedit_string() function.
  *
- * @see ime_preedit_attribute, ime_commit_string, ime_show_preedit_string, ime_hide_preedit_string
+ * @see ime_preedit_attribute
+ * @see ime_commit_string()
+ * @see ime_show_preedit_string()
+ * @see ime_hide_preedit_string()
  *
  * @code
  {
@@ -1470,7 +1544,9 @@ EXPORT_API int ime_update_preedit_string(const char *str, Eina_List *attrs);
  *
  * @post The requested surrounding text can be received using the ime_surrounding_text_updated_cb() callback function.
  *
- * @see ime_delete_surrounding_text, ime_event_set_surrounding_text_updated_cb, ime_surrounding_text_updated_cb
+ * @see ime_delete_surrounding_text()
+ * @see ime_event_set_surrounding_text_updated_cb()
+ * @see ime_surrounding_text_updated_cb()
  */
 EXPORT_API int ime_request_surrounding_text(int maxlen_before, int maxlen_after);
 
@@ -1492,9 +1568,35 @@ EXPORT_API int ime_request_surrounding_text(int maxlen_before, int maxlen_after)
  * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
- * @see ime_request_surrounding_text
+ * @see ime_request_surrounding_text()
  */
 EXPORT_API int ime_delete_surrounding_text(int offset, int len);
+
+/**
+ * @brief Gets the surrounding text from the position of the cursor, synchronously.
+ *
+ * @remarks @a text must be released using free().
+ *
+ * @since_tizen 3.0
+ *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
+ * @param[in] maxlen_before The maximum length of string to be retrieved before the cursor; -1 means unlimited
+ * @param[in] maxlen_after The maximum length of string to be retrieved after the cursor; -1 means unlimited
+ * @param[out] text The surrounding text
+ * @param[out] cursor_pos The cursor position
+ *
+ * @return 0 on success, otherwise a negative error value
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
+ * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
+ *
+ * @see ime_delete_surrounding_text()
+ */
+EXPORT_API int ime_get_surrounding_text(int maxlen_before, int maxlen_after, char **text, int *cursor_pos);
 
 /**
  * @brief This API returns the pointer of input panel main window.
@@ -1514,7 +1616,10 @@ EXPORT_API int ime_delete_surrounding_text(int offset, int len);
  * #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  * #IME_ERROR_OPERATION_FAILED Operation failed
  *
- * @see ime_create_cb, ime_terminate_cb, ime_show_cb, ime_hide_cb
+ * @see ime_create_cb()
+ * @see ime_terminate_cb()
+ * @see ime_show_cb()
+ * @see ime_hide_cb()
  */
 EXPORT_API Evas_Object* ime_get_main_window(void);
 
@@ -1537,7 +1642,7 @@ EXPORT_API Evas_Object* ime_get_main_window(void);
  * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
- * @see ime_create_cb
+ * @see ime_create_cb()
  */
 EXPORT_API int ime_set_size(int portrait_width, int portrait_height, int landscape_width, int landscape_height);
 
@@ -1569,7 +1674,9 @@ EXPORT_API int ime_set_size(int portrait_width, int portrait_height, int landsca
  * create the option window. And ime_destroy_option_window() function can be called
  * to close the option window.
  *
- * @see ime_event_set_option_window_created_cb, ime_option_window_created_cb, ime_destroy_option_window
+ * @see ime_event_set_option_window_created_cb()
+ * @see ime_option_window_created_cb()
+ * @see ime_destroy_option_window()
  */
 EXPORT_API int ime_create_option_window(void);
 
@@ -1601,7 +1708,9 @@ EXPORT_API int ime_create_option_window(void);
  * @post This function calls ime_option_window_destroyed_cb() callback function
  * to destroy the option window.
  *
- * @see ime_event_set_option_window_destroyed_cb, ime_option_window_destroyed_cb, ime_create_option_window
+ * @see ime_event_set_option_window_destroyed_cb()
+ * @see ime_option_window_destroyed_cb()
+ * @see ime_create_option_window()
  */
 EXPORT_API int ime_destroy_option_window(Evas_Object *window);
 
@@ -1628,7 +1737,8 @@ EXPORT_API int ime_destroy_option_window(Evas_Object *window);
  *
  * @post Input panel UI should be drawn or operated by this information accordingly.
  *
- * @see ime_show_cb, ime_layout_set_cb
+ * @see ime_show_cb()
+ * @see ime_layout_set_cb()
  */
 EXPORT_API int ime_context_get_layout(ime_context_h context, Ecore_IMF_Input_Panel_Layout *layout);
 
@@ -1655,7 +1765,8 @@ EXPORT_API int ime_context_get_layout(ime_context_h context, Ecore_IMF_Input_Pan
  *
  * @post Input panel UI should be drawn or operated by this information accordingly.
  *
- * @see ime_show_cb, ime_layout_variation_e
+ * @see ime_show_cb()
+ * @see ime_layout_variation_e
  */
 EXPORT_API int ime_context_get_layout_variation(ime_context_h context, ime_layout_variation_e *layout_variation);
 
@@ -1682,7 +1793,8 @@ EXPORT_API int ime_context_get_layout_variation(ime_context_h context, ime_layou
  *
  * @post Input panel UI should be drawn or operated by this information accordingly.
  *
- * @see ime_show_cb, ime_cursor_position_updated_cb
+ * @see ime_show_cb()
+ * @see ime_cursor_position_updated_cb()
  */
 EXPORT_API int ime_context_get_cursor_position(ime_context_h context, int *cursor_pos);
 
@@ -1709,7 +1821,7 @@ EXPORT_API int ime_context_get_cursor_position(ime_context_h context, int *curso
  *
  * @post Input panel UI should be drawn or operated by this information accordingly.
  *
- * @see ime_show_cb
+ * @see ime_show_cb()
  */
 EXPORT_API int ime_context_get_autocapital_type(ime_context_h context, Ecore_IMF_Autocapital_Type *autocapital_type);
 
@@ -1736,7 +1848,8 @@ EXPORT_API int ime_context_get_autocapital_type(ime_context_h context, Ecore_IMF
  *
  * @post Input panel UI should be drawn or operated by this information accordingly.
  *
- * @see ime_show_cb, ime_return_key_type_set_cb
+ * @see ime_show_cb()
+ * @see ime_return_key_type_set_cb()
  */
 EXPORT_API int ime_context_get_return_key_type(ime_context_h context, Ecore_IMF_Input_Panel_Return_Key_Type *return_key_type);
 
@@ -1764,7 +1877,8 @@ EXPORT_API int ime_context_get_return_key_type(ime_context_h context, Ecore_IMF_
  *
  * @post Input panel UI should be drawn or operated by this information accordingly.
  *
- * @see ime_show_cb, ime_return_key_state_set_cb
+ * @see ime_show_cb()
+ * @see ime_return_key_state_set_cb()
  */
 EXPORT_API int ime_context_get_return_key_state(ime_context_h context, bool *return_key_state);
 
@@ -1792,7 +1906,7 @@ EXPORT_API int ime_context_get_return_key_state(ime_context_h context, bool *ret
  *
  * @post Input panel UI should be drawn or operated by this information accordingly.
  *
- * @see ime_show_cb
+ * @see ime_show_cb()
  */
 EXPORT_API int ime_context_get_prediction_mode(ime_context_h context, bool *prediction_mode);
 
@@ -1822,7 +1936,7 @@ EXPORT_API int ime_context_get_prediction_mode(ime_context_h context, bool *pred
  *
  * @post Input panel UI should be drawn or operated by this information accordingly.
  *
- * @see ime_show_cb
+ * @see ime_show_cb()
  */
 EXPORT_API int ime_context_get_password_mode(ime_context_h context, bool *password_mode);
 
@@ -1852,7 +1966,7 @@ EXPORT_API int ime_context_get_password_mode(ime_context_h context, bool *passwo
  *
  * @post Input panel UI should be drawn or operated by this information accordingly.
  *
- * @see ime_show_cb
+ * @see ime_show_cb()
  */
 EXPORT_API int ime_context_get_input_hint(ime_context_h context, Ecore_IMF_Input_Hints *input_hint);
 
@@ -1879,7 +1993,7 @@ EXPORT_API int ime_context_get_input_hint(ime_context_h context, Ecore_IMF_Input
  *
  * @post Input panel UI should be drawn or operated by this information accordingly.
  *
- * @see ime_show_cb
+ * @see ime_show_cb()
  */
 EXPORT_API int ime_context_get_bidi_direction(ime_context_h context, Ecore_IMF_BiDi_Direction *bidi);
 
@@ -1906,7 +2020,7 @@ EXPORT_API int ime_context_get_bidi_direction(ime_context_h context, Ecore_IMF_B
  *
  * @post Input panel UI should be drawn or operated by this information accordingly.
  *
- * @see ime_show_cb
+ * @see ime_show_cb()
  */
 EXPORT_API int ime_context_get_language(ime_context_h context, Ecore_IMF_Input_Panel_Lang *language);
 
@@ -1930,7 +2044,9 @@ EXPORT_API int ime_context_get_language(ime_context_h context, Ecore_IMF_Input_P
  * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
- * @see ime_process_key_event_cb, ime_device_info_get_class, ime_device_info_get_subclass
+ * @see ime_process_key_event_cb()
+ * @see ime_device_info_get_class()
+ * @see ime_device_info_get_subclass()
  */
 EXPORT_API int ime_device_info_get_name(ime_device_info_h dev_info, char **dev_name);
 
@@ -1952,7 +2068,9 @@ EXPORT_API int ime_device_info_get_name(ime_device_info_h dev_info, char **dev_n
  * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
- * @see ime_process_key_event_cb, ime_device_info_get_name, ime_device_info_get_subclass
+ * @see ime_process_key_event_cb()
+ * @see ime_device_info_get_name()
+ * @see ime_device_info_get_subclass()
  */
 EXPORT_API int ime_device_info_get_class(ime_device_info_h dev_info, Ecore_IMF_Device_Class *dev_class);
 /**
@@ -1973,7 +2091,9 @@ EXPORT_API int ime_device_info_get_class(ime_device_info_h dev_info, Ecore_IMF_D
  * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
  *
- * @see ime_process_key_event_cb, ime_device_info_get_name, ime_device_info_get_class
+ * @see ime_process_key_event_cb()
+ * @see ime_device_info_get_name()
+ * @see ime_device_info_get_class()
  */
 EXPORT_API int ime_device_info_get_subclass(ime_device_info_h dev_info, Ecore_IMF_Device_Subclass *dev_subclass);
 

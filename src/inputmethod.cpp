@@ -1077,6 +1077,36 @@ int ime_delete_surrounding_text(int offset, int len)
     return IME_ERROR_NONE;
 }
 
+int ime_get_surrounding_text(int maxlen_before, int maxlen_after, char **text, int *cursor_pos)
+{
+    ime_error_e retVal = IME_ERROR_NONE;
+
+    if (!text || !cursor_pos) {
+        LOGW("IME_ERROR_INVALID_PARAMETER");
+        return IME_ERROR_INVALID_PARAMETER;
+    }
+
+    if (!g_running) {
+        LOGW("IME_ERROR_NOT_RUNNING");
+        return IME_ERROR_NOT_RUNNING;
+    }
+
+    retVal = _check_privilege();
+    if (retVal != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", retVal);
+        return retVal;
+    }
+
+    int cursor = 0;
+
+    g_core.get_surrounding_text(maxlen_before, maxlen_after, text, cursor);
+
+    if (cursor_pos)
+        *cursor_pos = cursor;
+
+    return IME_ERROR_NONE;
+}
+
 Evas_Object* ime_get_main_window(void)
 {
     ime_error_e retVal = IME_ERROR_NONE;
