@@ -1497,6 +1497,30 @@ EXPORT_API int ime_request_surrounding_text(int maxlen_before, int maxlen_after)
 EXPORT_API int ime_delete_surrounding_text(int offset, int len);
 
 /**
+ * @brief Gets the surrounding text from the position of the cursor, synchronously.
+ *
+ * @since_tizen 3.0
+ *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
+ * @param[in] maxlen_before The maximum length of string to be retrieved before the cursor; -1 means unlimited
+ * @param[in] maxlen_after The maximum length of string to be retrieved after the cursor; -1 means unlimited
+ * @param[out] text The surrounding text
+ * @param[out] cursor_pos The cursor position
+ *
+ * @return 0 on success, otherwise a negative error value
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
+ * @retval #IME_ERROR_NO_CALLBACK_FUNCTION Necessary callback function is not set
+ * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
+ *
+ * @see ime_delete_surrounding_text
+ */
+EXPORT_API int ime_get_surrounding_text(int maxlen_before, int maxlen_after, char **text, int *cursor_pos);
+
+/**
  * @brief This API returns the pointer of input panel main window.
  *
  * @remarks The specific error code can be obtained using the get_last_result() method if this function returns NULL.
