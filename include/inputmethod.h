@@ -49,6 +49,7 @@ typedef enum {
 	IME_ERROR_NO_CALLBACK_FUNCTION = TIZEN_ERROR_IME | 0x0001, /**< Necessary callback function is not set */
 	IME_ERROR_NOT_RUNNING = TIZEN_ERROR_IME | 0x0002, /**< IME main loop isn't started yet */
 	IME_ERROR_OPERATION_FAILED = TIZEN_ERROR_IME | 0x0003, /**< Operation failed */
+	IME_ERROR_OUT_OF_MEMORY = TIZEN_ERROR_OUT_OF_MEMORY, /**< out of memory */
 } ime_error_e;
 
 /**
@@ -1593,6 +1594,7 @@ EXPORT_API int ime_delete_surrounding_text(int offset, int len);
  * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
  * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_ERROR_NOT_RUNNING IME main loop isn't started yet
+ * @retval #IME_ERROR_OUT_OF_MEMORY Fail to obtain text because out of memory
  *
  * @see ime_delete_surrounding_text()
  */
