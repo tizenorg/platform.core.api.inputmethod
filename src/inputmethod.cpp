@@ -1099,7 +1099,11 @@ int ime_get_surrounding_text(int maxlen_before, int maxlen_after, char **text, i
 
     int cursor = 0;
 
-    g_core.get_surrounding_text(maxlen_before, maxlen_after, text, cursor);
+    int ret = g_core.get_surrounding_text(maxlen_before, maxlen_after, text, cursor);
+    if (ret == -1) {
+        LOGW("IME_ERROR_OUR_OF_MEMORY");
+        return IME_ERROR_OUT_OF_MEMORY;
+    }
 
     if (cursor_pos)
         *cursor_pos = cursor;
