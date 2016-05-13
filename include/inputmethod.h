@@ -24,6 +24,7 @@
 
 #include <tizen.h>
 #include <inputmethod_keydef.h>
+#include <inputmethod_evtdef.h>
 
 #include <Ecore_IMF.h>
 #include <Evas.h>
@@ -169,6 +170,18 @@ typedef struct _ime_context *ime_context_h;
  * @see ime_device_info_get_subclass()
  */
 typedef struct _ime_device_info *ime_device_info_h;
+
+/**
+ * @brief Enumeration of unconventional input devices
+ *
+ * @since_tizen 3.0
+ *
+ * @see ime_event_set_process_input_device_event_cb
+ */
+typedef enum {
+    IME_INPUT_DEVICE_TYPE_NONE, /**< Undefined unconventional input device */
+    IME_INPUT_DEVICE_TYPE_ROTARY,
+} ime_input_device_type_e;
 
 /**
  * @brief Called when the input panel is created.
@@ -661,6 +674,27 @@ typedef void (*ime_option_window_created_cb)(Evas_Object *window, ime_option_win
  * @see ime_event_set_option_window_destroyed_cb()
  */
 typedef void (*ime_option_window_destroyed_cb)(Evas_Object *window, void *user_data);
+
+/**
+ * @brief Called when the input event is received from an unconventional input device that does not generate key events.
+ *
+ * @details This function processes the input event before an associated text input UI control does.
+ *
+ * @remarks @a device_type contains the information what kind of unconventional input device generated the given event,
+ * and the void pointer type @a input_data contains the device-specific input event data.
+ * The @a input_data parameter needs to be casted into an appropriate event structure pointer type.
+ * Refer inputmethod_evtdef.h for the list of event structures for each unconventional input devices.
+ *
+ * @param[in] device_type The unconventional input device type
+ * @param[in] input_data The device_type specific input data
+ *
+ * @return @c true if the event is processed properly.
+ *
+ * @pre The callback can be registered using ime_event_set_input_device_event_cb() function.
+ *
+ * @see ime_event_set_process_input_device_event_cb
+ */
+typedef bool(*ime_process_input_device_event_cb)(ime_input_device_type_e device_type, void *input_data, void *user_data);
 
 /**
  * @brief The structure type to contain the set of the essential callback functions for IME application lifecycle and appearance.
@@ -2118,6 +2152,63 @@ EXPORT_API int ime_device_info_get_class(ime_device_info_h dev_info, Ecore_IMF_D
  * @see ime_device_info_get_class()
  */
 EXPORT_API int ime_device_info_get_subclass(ime_device_info_h dev_info, Ecore_IMF_Device_Subclass *dev_subclass);
+
+/**
+ * @brief Sets @c process_input_device_event event callback function.
+ *
+ * @remarks The ime_process_input_device_event_cb() callback function is called when the event
+ * is received from unconventional input devices that needs to be handled by keyboard engines.
+ *
+ * @since_tizen 3.0
+ *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/ime
+ *
+ * @param[in] callback_func @c process_key_event event callback function
+ * @param[in] user_data User data to be passed to the callback function
+ *
+ * @return 0 on success, otherwise a negative error value
+ * @retval #IME_ERROR_NONE No error
+ * @retval #IME_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
+ * @retval #IME_ERROR_OPERATION_FAILED Operation failed
+ *
+ * @post The ime_run() function should be called to start to run IME application's main loop.
+ *
+ * @see ime_process_input_device_event_cb, ime_run
+ *
+ * @code
+ static void inputmethod_create_cb(void *user_data);
+ static void inputmethod_terminate_cb(void *user_data);
+ static void inputmethod_show_cb(int context_id, ime_context_h context, void *user_data);
+ static void inputmethod_hide_cb(int context_id, void *user_data);
+
+ static bool inputmethod_process_input_device_event_cb(ime_input_device_type_e device_type, void *input_data, void *user_data);
+ {
+    if (device_type == IME_INPUT_DEVICE_TYPE_ROTARY) {
+        printf("Input device type is rotary\n");
+        return true;
+    }
+    return false;
+ }
+
+ void ime_app_main(int argc, char **argv)
+ {
+    ime_callback_s basic_callback = {
+        inputmethod_create_cb,
+        inputmethod_terminate_cb,
+        inputmethod_show_cb,
+        inputmethod_hide_cb,
+    };
+
+    ime_event_set_process_input_device_event_cb(inputmethod_process_input_device_event_cb, NULL);
+
+    ime_run(&basic_callback, NULL);
+ }
+ * @endcode
+ */
+EXPORT_API int ime_event_set_process_input_device_event_cb(ime_process_input_device_event_cb callback_func, void *user_data);
 
 /**
  * @}
