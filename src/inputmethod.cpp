@@ -58,6 +58,9 @@ class CCoreEventCallback : public ISCLCoreEventCallback
     void on_create_option_window(sclwindow window, SCLOptionWindowType type);
     void on_destroy_option_window(sclwindow window);
     void on_check_option_window_availability(sclboolean *ret);
+#ifdef TIZEN_WEARABLE
+    void on_process_input_device_event(sclu32 &type, sclchar *data, size_t &len, sclu32 *ret);
+#endif
 };
 
 typedef struct
@@ -81,6 +84,9 @@ typedef struct
     ime_accessibility_state_changed_cb accessibility_state_changed; /**< Called when Accessibility in Settings application is on or off */
     ime_option_window_created_cb option_window_created;     /**< Called to create the option window */
     ime_option_window_destroyed_cb option_window_destroyed; /**< Called to destroy the option window */
+#ifdef TIZEN_WEARABLE
+    ime_process_input_device_event_cb process_input_device_event;   /**< Called when the event is received from the unconventional input devices */
+#endif
     void *focus_in_user_data;
     void *focus_out_user_data;
     void *surrounding_text_updated_user_data;
@@ -100,7 +106,17 @@ typedef struct
     void *accessibility_state_changed_user_data;
     void *option_window_created_user_data;
     void *option_window_destroyed_user_data;
+#ifdef TIZEN_WEARABLE
+    void *process_input_device_event_user_data;
+#endif
 } ime_event_callback_s;
+
+#ifdef TIZEN_WEARABLE
+typedef struct {
+    ime_input_device_type_e device_type;
+    void *event_data;
+} ime_device_event_s;
+#endif
 
 static ime_callback_s g_basic_callback = {NULL};
 static ime_event_callback_s g_event_callback = {NULL};
@@ -341,6 +357,45 @@ void CCoreEventCallback::on_check_option_window_availability(sclboolean *ret)
             *ret = false;
     }
 }
+
+#ifdef TIZEN_WEARABLE
+void CCoreEventCallback::on_process_input_device_event(sclu32 &type, sclchar *data, size_t &len, sclu32 *ret)
+{
+    typedef struct {
+        int ecore_event_id;
+        ime_input_device_type_e device_type;
+    } ime_device_type_conv_table;
+
+    ime_device_type_conv_table conv_table[] = {
+        { ECORE_EVENT_DETENT_ROTATE , IME_INPUT_DEVICE_TYPE_ROTARY },
+    };
+
+    ime_input_device_type_e device_type = IME_INPUT_DEVICE_TYPE_NONE;
+    for (unsigned int loop = 0; loop < sizeof(conv_table) / sizeof(ime_device_type_conv_table); loop++) {
+        if ((unsigned int)(conv_table[loop].ecore_event_id) == type) {
+            device_type = conv_table[loop].device_type;
+        }
+    }
+
+    if (g_event_callback.process_input_device_event) {
+        ime_device_event_s device_event;
+        device_event.device_type = device_type;
+        device_event.event_data = static_cast<void*>(data);
+        void *input_data = static_cast<void*>(&device_event);
+        void *user_data = g_event_callback.process_input_device_event_user_data;
+
+        g_event_callback.process_input_device_event(device_type, input_data, user_data);
+
+        if (ret) {
+            *ret = 1;
+        }
+    } else {
+        if (ret) {
+            *ret = 0;
+        }
+    }
+}
+#endif
 
 ime_error_e _check_privilege()
 {
@@ -1610,4 +1665,105 @@ int ime_device_info_get_subclass(ime_device_info_h dev_info, Ecore_IMF_Device_Su
     return IME_ERROR_NONE;
 }
 
+#ifdef TIZEN_WEARABLE
+int ime_event_set_process_input_device_event_cb(ime_process_input_device_event_cb callback_func, void *user_data)
+{
+    ime_error_e retVal = IME_ERROR_NONE;
 
+    if (!callback_func) {
+        LOGW("IME_ERROR_INVALID_PARAMETER");
+        return IME_ERROR_INVALID_PARAMETER;
+    }
+
+    if (g_running) {
+        LOGW("IME_ERROR_OPERATION_FAILED");
+        return IME_ERROR_OPERATION_FAILED;
+    }
+
+    retVal = _check_privilege();
+    if (retVal != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", retVal);
+        return retVal;
+    }
+
+    g_event_callback.process_input_device_event = callback_func;
+    g_event_callback.process_input_device_event_user_data = user_data;
+
+    return IME_ERROR_NONE;
+}
+
+/* Functions for Rotary input device event */
+int ime_input_device_rotary_get_direction(ime_input_device_event_h event_handle, ime_input_device_rotary_direction_e *direction)
+{
+    ime_error_e retVal = IME_ERROR_NONE;
+
+    if (!event_handle || !direction) {
+        LOGW("IME_ERROR_INVALID_PARAMETER");
+        return IME_ERROR_INVALID_PARAMETER;
+    }
+
+    ime_device_event_s *device_event = static_cast<ime_device_event_s*>(event_handle);
+    if (device_event->device_type != IME_INPUT_DEVICE_TYPE_ROTARY) {
+        LOGW("IME_ERROR_INVALID_PARAMETER");
+        return IME_ERROR_INVALID_PARAMETER;
+    }
+
+    if (g_running) {
+        LOGW("IME_ERROR_OPERATION_FAILED");
+        return IME_ERROR_OPERATION_FAILED;
+    }
+
+    retVal = _check_privilege();
+    if (retVal != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", retVal);
+        return retVal;
+    }
+
+    Ecore_Event_Detent_Rotate *rotary_device_event =
+        static_cast<Ecore_Event_Detent_Rotate*>(device_event->event_data);
+    if (rotary_device_event) {
+        if (rotary_device_event->direction == ECORE_DETENT_DIRECTION_CLOCKWISE) {
+            *direction = IME_INPUT_DEVICE_ROTARY_DIRECTION_CLOCKWISE;
+        } else if (rotary_device_event->direction == ECORE_DETENT_DIRECTION_COUNTER_CLOCKWISE) {
+            *direction = IME_INPUT_DEVICE_ROTARY_DIRECTION_COUNTER_CLOCKWISE;
+        }
+    }
+
+    return IME_ERROR_NONE;
+}
+
+int ime_input_device_rotary_get_timestamp(ime_input_device_event_h event_handle, unsigned int *timestamp)
+{
+    ime_error_e retVal = IME_ERROR_NONE;
+
+    if (!event_handle || !timestamp) {
+        LOGW("IME_ERROR_INVALID_PARAMETER");
+        return IME_ERROR_INVALID_PARAMETER;
+    }
+
+    ime_device_event_s *device_event = static_cast<ime_device_event_s*>(event_handle);
+    if (device_event->device_type != IME_INPUT_DEVICE_TYPE_ROTARY) {
+        LOGW("IME_ERROR_INVALID_PARAMETER");
+        return IME_ERROR_INVALID_PARAMETER;
+    }
+
+    if (g_running) {
+        LOGW("IME_ERROR_OPERATION_FAILED");
+        return IME_ERROR_OPERATION_FAILED;
+    }
+
+    retVal = _check_privilege();
+    if (retVal != IME_ERROR_NONE) {
+        LOGE("_check_privilege returned %d.", retVal);
+        return retVal;
+    }
+
+    Ecore_Event_Detent_Rotate *rotary_device_event =
+        static_cast<Ecore_Event_Detent_Rotate*>(device_event->event_data);
+    if (rotary_device_event) {
+        *timestamp = rotary_device_event->timestamp;
+    }
+
+    return IME_ERROR_NONE;
+}
+#endif

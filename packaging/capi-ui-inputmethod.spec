@@ -36,14 +36,24 @@ Input Method Library (Development)
 
 
 %build
+
 export CFLAGS+=" -DTIZEN_DEBUG_ENABLE -fPIC -fvisibility=hidden -Werror"
 export CXXFLAGS+=" -DTIZEN_DEBUG_ENABLE -fPIC -fvisibility=hidden -Werror"
 export FFLAGS+=" -DTIZEN_DEBUG_ENABLE -fPIC -fvisibility=hidden"
 
+%if "%{?profile}" == "wearable"
+export CFLAGS="$CFLAGS -DTIZEN_WEARABLE"
+export CXXFLAGS="$CXXFLAGS -DTIZEN_WEARABLE"
+export FFLAGS="$FFLAGS -DTIZEN_WEARABLE"
+%endif
+
 rm -rf CMakeFiles
 rm -rf CMakeCache.txt
 MAJORVER=`echo %{version} | awk 'BEGIN {FS="."}{print $1}'`
-cmake . -DCMAKE_INSTALL_PREFIX=/usr -DFULLVER=%{version} -DMAJORVER=${MAJORVER} -DLIB_INSTALL_DIR:PATH=%{_libdir}
+cmake . -DCMAKE_INSTALL_PREFIX=/usr -DFULLVER=%{version} -DMAJORVER=${MAJORVER} -DLIB_INSTALL_DIR:PATH=%{_libdir} \
+%if "%{?profile}" == "wearable"
+    -DTIZEN_WEARABLE=YES \
+%endif
 
 make %{?jobs:-j%jobs}
 
