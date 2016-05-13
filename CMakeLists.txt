@@ -54,6 +54,11 @@ SET(VERSION ${version})
 
 SET(INC_DIR include)
 INCLUDE_DIRECTORIES(${INC_DIR})
+IF (TIZEN_WEARABLE)
+    INCLUDE_DIRECTORIES(${INC_DIR}/wearable)
+ELSE ()
+    INCLUDE_DIRECTORIES(${INC_DIR}/default)
+ENDIF (TIZEN_WEARABLE)
 
 INCLUDE(FindPkgConfig)
 pkg_check_modules(${fw_name} REQUIRED ${dependents})
@@ -92,6 +97,22 @@ INSTALL(
         PATTERN "*_private.h" EXCLUDE
         PATTERN "${INC_DIR}/*.h"
         )
+
+IF (TIZEN_WEARABLE)
+    INSTALL(
+        DIRECTORY ${INC_DIR}/wearable/ DESTINATION include
+        FILES_MATCHING
+        PATTERN "*_private.h" EXCLUDE
+        PATTERN "${INC_DIR}/wearable/*.h"
+        )
+ELSE ()
+    INSTALL(
+        DIRECTORY ${INC_DIR}/default/ DESTINATION include
+        FILES_MATCHING
+        PATTERN "*_private.h" EXCLUDE
+        PATTERN "${INC_DIR}/default/*.h"
+        )
+ENDIF (TIZEN_WEARABLE)
 
 SET(PC_NAME ${fw_name})
 SET(PC_REQUIRED ${dependents})
