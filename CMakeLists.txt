@@ -54,6 +54,11 @@ SET(VERSION ${version})
 
 SET(INC_DIR include)
 INCLUDE_DIRECTORIES(${INC_DIR})
+IF (TIZEN_WEARABLE)
+    INCLUDE_DIRECTORIES(${INC_DIR}/wearable)
+ELSE ()
+    INCLUDE_DIRECTORIES(${INC_DIR}/default)
+ENDIF (TIZEN_WEARABLE)
 
 INCLUDE(FindPkgConfig)
 pkg_check_modules(${fw_name} REQUIRED ${dependents})
