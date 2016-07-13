@@ -1675,7 +1675,7 @@ int ime_event_set_process_input_device_event_cb(ime_process_input_device_event_c
         return IME_ERROR_INVALID_PARAMETER;
     }
 
-    if (g_running) {
+    if (!g_running) {
         LOGW("IME_ERROR_OPERATION_FAILED");
         return IME_ERROR_OPERATION_FAILED;
     }
@@ -1696,7 +1696,7 @@ int ime_event_unset_process_input_device_event_cb(void)
 {
     ime_error_e retVal = IME_ERROR_NONE;
 
-    if (g_running) {
+    if (!g_running) {
         LOGW("IME_ERROR_OPERATION_FAILED");
         return IME_ERROR_OPERATION_FAILED;
     }
@@ -1729,7 +1729,7 @@ int ime_input_device_rotary_get_direction(ime_input_device_event_h event_handle,
         return IME_ERROR_INVALID_PARAMETER;
     }
 
-    if (g_running) {
+    if (!g_running) {
         LOGW("IME_ERROR_OPERATION_FAILED");
         return IME_ERROR_OPERATION_FAILED;
     }
