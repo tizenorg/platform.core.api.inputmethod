@@ -22,6 +22,10 @@
  * @brief This file contains definitions for unconventional input device events.
  */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * @addtogroup CAPI_UIX_INPUTMETHOD_MODULE
  * @{
@@ -197,6 +201,10 @@ EXPORT_API int ime_event_unset_process_input_device_event_cb(void);
  * @endcode
  */
 EXPORT_API int ime_input_device_rotary_get_direction(ime_input_device_event_h event_handle, ime_input_device_rotary_direction_e *direction);
+
+#ifdef __cplusplus
+}
+#endif
 
 /**
  * @}
